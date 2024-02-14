@@ -9,6 +9,7 @@ An online E-store system built in Java 11=> and ___ _replace with other platform
 - Duncan French
 - MEMBER3
 - MEMBER4
+- Joshua Bay
 
 
 ## Prerequisites
