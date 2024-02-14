@@ -6,7 +6,7 @@ An online E-store system built in Java 11=> and ___ _replace with other platform
 ## Team
 
 - MEMBER1
-- MEMBER2
+- Duncan French
 - MEMBER3
 - MEMBER4
 
