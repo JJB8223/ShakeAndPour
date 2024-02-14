@@ -5,8 +5,8 @@ An online E-store system built in Java 11=> and ___ _replace with other platform
   
 ## Team
 
-- David Dobbins
 - Akhil Devarapalli
+- David Dobbins
 - Duncan French
 - Matthew Morrison
 - Joshua Bay
