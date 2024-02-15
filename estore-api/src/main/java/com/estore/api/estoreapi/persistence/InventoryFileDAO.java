@@ -100,7 +100,8 @@ public class InventoryFileDAO  implements InventoryDAO{
     @Override
     public Product createProduct(Product Product) throws IOException {
         // create new product object, assign the next unique id to it
-        Product newP = new Product(nextId(), Product.getName());
+        Product newP = new Product(nextId(), Product.getName(), Product.getPrice(),
+                Product.getQuantity());
         inventory.put(newP.getId(), newP);
         save();
         return newP;
