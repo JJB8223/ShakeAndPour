@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -79,8 +80,19 @@ public class InventoryControllerTest {
         ResponseEntity<Product[]> response = inventoryController.getProducts();
 
         // analyze
-        assertEquals(HttpStatus.CREATED,response.getStatusCode());
-        assertEquals(p,response.getBody());
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertEquals(products,response.getBody());
     }
+    @Test
+    public void testGetProductsHandleException() throws IOException { // getProducts may throw IOException
+        // Setup
+        // When getProducts is called on the Mock InventoryDAO, throw an IOException
+        doThrow(new IOException()).when(mockInventoryDAO).getProducts();
 
+        // Invoke
+        ResponseEntity<Product[]> response = inventoryController.getProducts();
+
+        // Analyze
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,response.getStatusCode());
+    }
 }
