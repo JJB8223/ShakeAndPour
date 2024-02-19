@@ -3,11 +3,13 @@ package com.estore.api.estoreapi.persistence;
 import com.estore.api.estoreapi.model.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
@@ -15,6 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Matthew Morrison
  */
+@Component
 public class InventoryFileDAO  implements InventoryDAO{
     private static final Logger LOG = Logger.getLogger(InventoryFileDAO.class.getName());
 
@@ -30,13 +33,34 @@ public class InventoryFileDAO  implements InventoryDAO{
     private String filename;    // Filename to read from and write to
 
 
-    public InventoryFileDAO(@Value("${inventory.file") String filename,
-                            ObjectMapper objectMapper){
+    public InventoryFileDAO(@Value("${inventory.file}") String filename, ObjectMapper objectMapper) throws IOException{
         this.filename = filename;
         this.objectMapper = objectMapper;
         // TODO load function
+        load();
 
     }
+
+    private boolean load() throws IOException {
+        inventory = new TreeMap<>();
+        nextId = 0;
+
+        // Deserializes the JSON objects from the file into an array of products
+        // readValue will throw an IOException if there's an issue with the file
+        // or reading from the file
+        Product[] ProductArray = objectMapper.readValue(new File(filename),Product[].class);
+
+        // Add each Product to the tree map and keep track of the greatest id
+        for (Product product : ProductArray) {
+            inventory.put(product.getId(),product);
+            if (product.getId() > nextId)
+                nextId = product.getId();
+        }
+        // Make the next id one greater than the maximum from the file
+        ++nextId;
+        return true;
+    }
+
 
     /**
      * Generates the next id for a new {@linkplain Product Product}

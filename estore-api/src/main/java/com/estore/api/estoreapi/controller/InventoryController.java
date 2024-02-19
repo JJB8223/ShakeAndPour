@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class InventoryController{
     private static final Logger LOG = Logger.getLogger(InventoryController.class.getName());
 
-    private InventoryDAO InventoryDao;
+    private InventoryDAO inventoryDao;
 
     /**
      * Creates a REST API controller to reponds to requests
@@ -27,7 +27,9 @@ public class InventoryController{
      * <br>
      * This dependency is injected by the Spring Framework
      */
-    public InventoryController(InventoryDAO InventoryDao){this.InventoryDao = InventoryDao;}
+    public InventoryController(InventoryDAO inventoryDao){
+        this.inventoryDao = inventoryDao;
+    }
 
 
     /**
@@ -44,7 +46,7 @@ public class InventoryController{
     public ResponseEntity<Product> createProduct(@RequestBody Product Product) throws IOException {
         LOG.info("POST /inventory/product " + Product);
         try {
-            Product createdProduct = InventoryDao.createProduct(Product);
+            Product createdProduct = inventoryDao.createProduct(Product);
             if (createdProduct == null) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
