@@ -121,6 +121,16 @@ public class InventoryFileDAO  implements InventoryDAO{
         return true;
     }
 
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
+    public Product[] getProducts() {
+        synchronized(inventory) {
+            return getInventory();
+        }
+    }
+
     @Override
     public Product createProduct(Product Product) throws IOException {
         synchronized(inventory) {

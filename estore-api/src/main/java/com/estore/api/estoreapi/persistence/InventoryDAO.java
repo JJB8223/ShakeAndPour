@@ -8,6 +8,7 @@ import java.io.IOException;
  * Defines the interface for Inventory object persistence
  *
  * @author Matthew Morrison msm8275
+ * @author David Dobbins dpd8504
  */
 public interface InventoryDAO {
     /**
@@ -22,4 +23,14 @@ public interface InventoryDAO {
      * @throws IOException if an issue with underlying storage
      */
     Product createProduct(Product Product) throws IOException;
+    /**
+     * Retrieves all {@linkplain Product Products}
+     * 
+     * @return An array of {@link Product Product} objects, may be empty
+     * 
+     * @throws IOException if an issue with underlying storage
+     */
+    Product[] getProducts() throws IOException;
+
+
 }
