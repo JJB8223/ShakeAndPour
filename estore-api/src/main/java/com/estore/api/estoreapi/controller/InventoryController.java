@@ -6,6 +6,7 @@ import com.estore.api.estoreapi.persistence.InventoryDAO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -52,6 +53,31 @@ public class InventoryController{
             }
             return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
         } catch(IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Updates the {@linkplain Product Product} with the provided {@linkplain Product Product} object, if it exists
+     * 
+     * @param Product The {@link Product Product} to update
+     * 
+     * @return ResponseEntity with updated {@link Product Product} object and HTTP status of OK if updated<br>
+     * ResponseEntity with HTTP status of NOT_FOUND if not found<br>
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @PutMapping("")
+    public ResponseEntity<Product> updateProduct(@RequestBody Product Product) {
+        LOG.info("PUT /products " + Product);
+        try {
+            Product status = inventoryDao.updateProduct(Product);
+            if (status == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(status, HttpStatus.OK);
+            }
+        } catch (IOException e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

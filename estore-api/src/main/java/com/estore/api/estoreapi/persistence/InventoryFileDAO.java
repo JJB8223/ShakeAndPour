@@ -132,4 +132,25 @@ public class InventoryFileDAO  implements InventoryDAO{
             return newP;
         }
     }
+
+    /**
+     * Updates and saves a {@linkplain Product Product}
+     * 
+     * @param {@link Product Product} object to be updated and saved
+     * 
+     * @return updated {@link Product Product} if successful, null if
+     * {@link Product Product} could not be found
+     * 
+     * @throws IOException if underlying storage cannot be accessed
+     */
+    public Product updateProduct(Product product) throws IOException {
+        synchronized(inventory) {
+            if (inventory.containsKey(product.getId()) == false)
+                return null;  // Product does not exist so we can't update it
+
+            inventory.put(product.getId(),product);
+            save(); // may throw an IOException
+            return product;
+        }
+    }
 }
