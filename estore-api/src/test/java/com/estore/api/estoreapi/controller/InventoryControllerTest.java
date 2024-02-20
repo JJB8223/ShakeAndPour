@@ -73,7 +73,7 @@ public class InventoryControllerTest {
         Product[] products = new Product[2];
         products[0] = new Product(99, "Soda", 2.99f, 20);
         products[1] = new Product(98, "Milk", 3.99f, 50);
-        // When getProducts is called return the heroes created above
+        // When getProducts is called return the products!!!!!!!!!!!!!!!!!!!!!!!!!!!!! created above
         when(mockInventoryDAO.getProducts()).thenReturn(products);
 
         // invoke

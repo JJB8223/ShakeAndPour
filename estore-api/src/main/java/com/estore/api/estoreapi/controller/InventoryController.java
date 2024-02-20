@@ -67,7 +67,7 @@ public class InventoryController{
      */
     @GetMapping("")
     public ResponseEntity<Product[]> getProducts() throws IOException {
-        LOG.info("GET /products");
+        LOG.info("GET /inventory");
         try {
             Product[] products = inventoryDao.getProducts();
             return new ResponseEntity<>(products, HttpStatus.OK);
