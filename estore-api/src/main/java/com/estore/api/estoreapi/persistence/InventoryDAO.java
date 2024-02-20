@@ -22,4 +22,15 @@ public interface InventoryDAO {
      * @throws IOException if an issue with underlying storage
      */
     Product createProduct(Product Product) throws IOException;
+
+    /**
+     * Finds all {@linkplain Product Products} whose name contains the given text
+     * 
+     * @param containsText The text to match against
+     * 
+     * @return An array of {@link Product Products} whose nemes contains the given text, may be empty
+     * 
+     * @throws IOException if an issue with underlying storage
+     */
+    Product[] findProducts(String containsText) throws IOException;
 }
