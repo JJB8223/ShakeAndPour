@@ -6,12 +6,14 @@ import com.estore.api.estoreapi.persistence.InventoryDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Io;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -52,6 +54,39 @@ public class InventoryControllerTest {
     }
 
     @Test
+    public void testProductSearch() throws IOException {
+        // Setup
+        String searchString = "la";
+        Product[] products = new Product[2];
+        products[0] = new Product(99,"Mineral Water",3.40f,25);
+        products[1] = new Product(98,"Rose Water",3.40f,25);
+        // When findProducsts is called with the search string, return the two
+        /// products above
+        when(mockInventoryDAO.findProducts(searchString)).thenReturn(products);
+        
+        // Invoke
+        ResponseEntity<Product[]> response = inventoryController.searchProducts(searchString);
+        
+        // Analyze
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertEquals(products, response.getBody());
+    }
+
+    @Test
+    public void testProductSearchFail() throws IOException{
+        // Setup
+        String searchString = "an";
+        // When createProduct is called on the Mock Hero DAO, throw an IOException
+        doThrow(new IOException()).when(mockInventoryDAO).findProducts(searchString);
+
+        // Invoke
+        ResponseEntity<Product[]> response = inventoryController.searchProducts(searchString);
+
+        // Analyze
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,response.getStatusCode());
+    }
+
+    @Test
     public void testCreateHeroFail() throws IOException{
         // Setup
         Product p = new Product(99, "Soda", 2.99f, 20);
@@ -66,4 +101,32 @@ public class InventoryControllerTest {
         assertEquals(HttpStatus.CONFLICT,response.getStatusCode());
     }
 
+    @Test
+    public void testGetProducts() throws IOException{
+        // Setup
+        Product[] products = new Product[2];
+        products[0] = new Product(99, "Soda", 2.99f, 20);
+        products[1] = new Product(98, "Milk", 3.99f, 50);
+        // When getProducts is called return the products!!!!!!!!!!!!!!!!!!!!!!!!!!!!! created above
+        when(mockInventoryDAO.getProducts()).thenReturn(products);
+
+        // invoke
+        ResponseEntity<Product[]> response = inventoryController.getProducts();
+
+        // analyze
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+        assertEquals(products,response.getBody());
+    }
+    @Test
+    public void testGetProductsHandleException() throws IOException { // getProducts may throw IOException
+        // Setup
+        // When getProducts is called on the Mock InventoryDAO, throw an IOException
+        doThrow(new IOException()).when(mockInventoryDAO).getProducts();
+
+        // Invoke
+        ResponseEntity<Product[]> response = inventoryController.getProducts();
+
+        // Analyze
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,response.getStatusCode());
+    }
 }

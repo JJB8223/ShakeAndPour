@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * Implements the functionality for JSON file-based persistence for Inventory
  *
  * @author Matthew Morrison
+ * @author Akhil Devarapalli ad7171
  */
 @Component
 public class InventoryFileDAO  implements InventoryDAO{
@@ -104,6 +105,40 @@ public class InventoryFileDAO  implements InventoryDAO{
 
     }
 
+
+
+    /**
+        * Generates an array of {@linkplain Product products} from the tree map for any
+        * {@linkplain Product products} that contains the text specified by containsText
+        * <br>
+        * If containsText is null, the array contains all of the {@linkplain Product products}
+        * in the tree map
+        * 
+        * @return  The array of {@link Product products}, may be empty
+     */
+    private Product[] getProductsArray(String containsText) { // if containsText == null, no filter
+        ArrayList<Product> ProductArrayList = new ArrayList<>();
+
+        for (Product product : inventory.values()) {
+            if (containsText == null || product.getName().contains(containsText)) {
+                ProductArrayList.add(product);
+            }
+        }
+
+        Product[] ProductArray = new Product[ProductArrayList.size()];
+        ProductArrayList.toArray(ProductArray);
+        return ProductArray;
+    }
+
+
+    @Override
+    public Product[] findProducts(String containsText) {
+        synchronized(inventory) {
+            return getProductsArray(containsText);
+        }
+    }
+
+
     /**
      * Saves the {@linkplain Product products} from the map into the file as an array of JSON objects
      *
@@ -119,6 +154,16 @@ public class InventoryFileDAO  implements InventoryDAO{
         // with the file or reading from the file
         objectMapper.writeValue(new File(filename),inventory);
         return true;
+    }
+
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
+    public Product[] getProducts() {
+        synchronized(inventory) {
+            return getInventory();
+        }
     }
 
     @Override
