@@ -84,5 +84,23 @@ public class InventoryController{
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    /**
+     * Responds to the GET request for all {@linkplain Product products}
+     * 
+     * @return ResponseEntity with array of {@link Product Product} objects (may be empty) and
+     * HTTP status of OK<br>
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     * @throws IOException 
+     */
+    @GetMapping("")
+    public ResponseEntity<Product[]> getProducts() throws IOException {
+        LOG.info("GET /inventory");
+        try {
+            Product[] products = inventoryDao.getProducts();
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch(IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
