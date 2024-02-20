@@ -44,4 +44,17 @@ public interface InventoryDAO {
      * @throws IOException if an issue with underlying storage
      */
     Product[] findProducts(String containsText) throws IOException;
+
+    /**
+     * Deletes a {@linkplain Product Product} with the given id
+     * 
+     * @param id The id of the {@link Product Product}
+     * 
+     * @return true if the {@link Product Product} was deleted
+     * <br>
+     * false if Product with the given id does not exist
+     * 
+     * @throws IOException if underlying storage cannot be accessed
+     */
+    boolean deleteProduct(int id) throws IOException;
 }

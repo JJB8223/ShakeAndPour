@@ -129,4 +129,46 @@ public class InventoryControllerTest {
         // Analyze
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,response.getStatusCode());
     }
+
+    @Test
+    public void testDeleteProduct() throws IOException { // deleteProduct may throw IOException
+        // Setup
+        int productId = 99;
+        // when deleteProduct is called return true, simulating successful deletion
+        when(mockInventoryDAO.deleteProduct(productId)).thenReturn(true);
+
+        // Invoke
+        ResponseEntity<Product> response = inventoryController.deleteProduct(productId);
+
+        // Analyze
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+    }
+
+    @Test
+    public void testDeleteProductNotFound() throws IOException { // deleteProduct may throw IOException
+        // Setup
+        int productId = 99;
+        // when deleteProduct is called return false, simulating failed deletion
+        when(mockInventoryDAO.deleteProduct(productId)).thenReturn(false);
+
+        // Invoke
+        ResponseEntity<Product> response = inventoryController.deleteProduct(productId);
+
+        // Analyze
+        assertEquals(HttpStatus.NOT_FOUND,response.getStatusCode());
+    }
+
+    @Test
+    public void testDeleteProductHandleException() throws IOException { // deleteProduct may throw IOException
+        // Setup
+        int productId = 99;
+        // When deleteProduct is called on the Mock Product DAO, throw an IOException
+        doThrow(new IOException()).when(mockInventoryDAO).deleteProduct(productId);
+
+        // Invoke
+        ResponseEntity<Product> response = inventoryController.deleteProduct(productId);
+
+        // Analyze
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,response.getStatusCode());
+    }
 }
