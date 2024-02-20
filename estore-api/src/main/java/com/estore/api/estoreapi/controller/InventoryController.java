@@ -25,7 +25,7 @@ public class InventoryController{
 
     /**
      * Creates a REST API controller to reponds to requests
-     * @param InventoryDao The {@link InventoryDAO Product Data Access Object} to perform CRUD operations
+     * @param inventoryDao The {@link InventoryDAO Product Data Access Object} to perform CRUD operations
      * <br>
      * This dependency is injected by the Spring Framework
      */
@@ -50,7 +50,7 @@ public class InventoryController{
      */
     @GetMapping("/")
     public ResponseEntity<Product[]> searchProducts(@RequestParam String name) throws IOException {
-        LOG.info("GET /products/?name="+name);
+        LOG.info("GET /inventory/?name="+name);
         try {
             Product[] products = inventoryDao.findProducts(name);
             return new ResponseEntity<>(products, HttpStatus.OK);
