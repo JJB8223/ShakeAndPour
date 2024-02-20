@@ -159,6 +159,19 @@ public class InventoryFileDAO  implements InventoryDAO{
     ** {@inheritDoc}
      */
     @Override
+    public Product getProduct(int id) {
+        synchronized(inventory) {
+            if (inventory.containsKey(id))
+                return inventory.get(id);
+            else
+                return null;
+        }
+    }
+
+    /**
+    ** {@inheritDoc}
+     */
+    @Override
     public Product[] getProducts() {
         synchronized(inventory) {
             return getInventory();
