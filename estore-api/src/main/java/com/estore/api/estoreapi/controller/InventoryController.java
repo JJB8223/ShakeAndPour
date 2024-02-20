@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class InventoryController{
 
     /**
      * Creates a REST API controller to reponds to requests
-     * @param InventoryDao The {@link InventoryDAO Product Data Access Object} to perform CRUD operations
+     * @param inventoryDao The {@link InventoryDAO Product Data Access Object} to perform CRUD operations
      * <br>
      * This dependency is injected by the Spring Framework
      */
@@ -32,6 +33,32 @@ public class InventoryController{
         this.inventoryDao = inventoryDao;
     }
 
+
+    /**
+     * Responds to the GET request for all {@linkplain Product products} whose name contains
+     * the text in name
+     * 
+     * @param name The name parameter which contains the text used to find the {@link Product products}
+     * 
+     * @return ResponseEntity with array of {@link Product Product} objects (may be empty) and
+     * HTTP status of OK<br>
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     * <p>
+     * Example: Find all products that contain the text "ma"
+     * GET http://localhost:8080/products/?name=ma
+     * @throws IOException 
+     */
+    @GetMapping("/")
+    public ResponseEntity<Product[]> searchProducts(@RequestParam String name) throws IOException {
+        LOG.info("GET /inventory/?name="+name);
+        try {
+            Product[] products = inventoryDao.findProducts(name);
+            return new ResponseEntity<>(products, HttpStatus.OK);
+        } catch(IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     /**
      * Creates a {@linkplain Product Product} with the provided Product object
