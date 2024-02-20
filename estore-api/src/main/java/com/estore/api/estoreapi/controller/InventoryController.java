@@ -72,7 +72,7 @@ public class InventoryController{
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      * @throws IOException if error occurs with the server
      */
-    @PostMapping("")
+    @PostMapping("/product")
     public ResponseEntity<Product> createProduct(@RequestBody Product Product) throws IOException {
         LOG.info("POST /inventory/product " + Product);
         try {
@@ -116,9 +116,9 @@ public class InventoryController{
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
-    @GetMapping("/")
+    @GetMapping("/product/{id}")
     public ResponseEntity<Product> getProduct(@RequestBody int id) {
-        LOG.info("GET /product/" + id);
+        LOG.info("GET /inventory/product/" + id);
         try {
             Product product = inventoryDao.getProduct(id);
             if (product != null)
