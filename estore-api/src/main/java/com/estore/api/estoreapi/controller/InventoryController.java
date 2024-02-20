@@ -143,7 +143,7 @@ public class InventoryController{
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
     @GetMapping("/product/{id}")
-    public ResponseEntity<Product> getProduct(@RequestBody int id) {
+    public ResponseEntity<Product> getProduct(@PathVariable int id) {
         LOG.info("GET /inventory/product/" + id);
         try {
             Product product = inventoryDao.getProduct(id);
@@ -167,7 +167,7 @@ public class InventoryController{
      * ResponseEntity with HTTP status of NOT_FOUND if not found<br>
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/product/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable int id) {
         LOG.info("DELETE /inventory/product/" + id);
         try {
