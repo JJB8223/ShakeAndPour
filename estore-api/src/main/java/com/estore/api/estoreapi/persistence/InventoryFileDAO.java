@@ -16,6 +16,7 @@ import java.util.logging.Logger;
  * Implements the functionality for JSON file-based persistence for Inventory
  *
  * @author Matthew Morrison
+ * @author Akhil Devarapalli ad7171
  */
 @Component
 public class InventoryFileDAO  implements InventoryDAO{
@@ -34,7 +35,7 @@ public class InventoryFileDAO  implements InventoryDAO{
 
 
     public InventoryFileDAO(@Value("${inventory.file}") String filename, ObjectMapper objectMapper) throws IOException{
-        this.filename = filename;
+        this.filename = filename; // For whatever reason this is not working properly on my windows machine, trying to manually set the file path first then do it properly through REST 
         this.objectMapper = objectMapper;
         // TODO load function
         load();
@@ -202,6 +203,27 @@ public class InventoryFileDAO  implements InventoryDAO{
             inventory.put(newP.getId(), newP);
             save();
             return newP;
+        }
+    }
+
+    /**
+     * Updates and saves a {@linkplain Product Product}
+     * 
+     * @param {@link Product Product} object to be updated and saved
+     * 
+     * @return updated {@link Product Product} if successful, null if
+     * {@link Product Product} could not be found
+     * 
+     * @throws IOException if underlying storage cannot be accessed
+     */
+    public Product updateProduct(Product product) throws IOException {
+        synchronized(inventory) {
+            if (inventory.containsKey(product.getId()) == false)
+                return null;  // Product does not exist so we can't update it
+
+            inventory.put(product.getId(),product);
+            save(); // may throw an IOException
+            return product;
         }
     }
 }

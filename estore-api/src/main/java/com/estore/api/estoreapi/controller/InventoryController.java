@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,6 +87,31 @@ public class InventoryController{
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * Updates the {@linkplain Product Product} with the provided {@linkplain Product Product} object, if it exists
+     * 
+     * @param Product The {@link Product Product} to update
+     * 
+     * @return ResponseEntity with updated {@link Product Product} object and HTTP status of OK if updated<br>
+     * ResponseEntity with HTTP status of NOT_FOUND if not found<br>
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @PutMapping("")
+    public ResponseEntity<Product> updateProduct(@RequestBody Product Product) {
+        LOG.info("PUT /products " + Product);
+        try {
+            Product status = inventoryDao.updateProduct(Product);
+            if (status == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(status, HttpStatus.OK);
+            }
+        } catch (IOException e) { 
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     /**
      * Responds to the GET request for all {@linkplain Product products}
      * 
@@ -117,7 +143,7 @@ public class InventoryController{
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
     @GetMapping("/product/{id}")
-    public ResponseEntity<Product> getProduct(@RequestBody int id) {
+    public ResponseEntity<Product> getProduct(@PathVariable int id) {
         LOG.info("GET /inventory/product/" + id);
         try {
             Product product = inventoryDao.getProduct(id);
@@ -141,7 +167,7 @@ public class InventoryController{
      * ResponseEntity with HTTP status of NOT_FOUND if not found<br>
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/product/{id}")
     public ResponseEntity<Product> deleteProduct(@PathVariable int id) {
         LOG.info("DELETE /inventory/product/" + id);
         try {

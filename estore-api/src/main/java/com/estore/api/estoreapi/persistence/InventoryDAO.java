@@ -9,6 +9,7 @@ import java.io.IOException;
  *
  * @author Matthew Morrison msm8275
  * @author David Dobbins dpd8504
+ * @author Akhil Devarapalli ad7171
  */
 public interface InventoryDAO {
     /**
@@ -46,6 +47,18 @@ public interface InventoryDAO {
     Product[] findProducts(String containsText) throws IOException;
 
     /**
+     * Updates and saves a {@linkplain Product Product}
+     * 
+     * @param {@link Product Product} object to be updated and saved
+     * 
+     * @return updated {@link Product Product} if successful, null if
+     * {@link Product Product} could not be found
+     * 
+     * @throws IOException if underlying storage cannot be accessed
+     */
+    Product updateProduct(Product product) throws IOException;
+    
+    /** 
      * Retrieves the specific wanted {@linkplain Product product}
      * 
      * @param id The id of the product that is being got

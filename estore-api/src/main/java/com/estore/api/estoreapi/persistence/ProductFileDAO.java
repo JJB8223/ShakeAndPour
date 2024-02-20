@@ -43,7 +43,7 @@ public class ProductFileDAO implements ProductDAO {
      * @throws IOException when file cannot be accessed or read from
      */
     public ProductFileDAO(@Value("${products.file}") String filename,ObjectMapper objectMapper) throws IOException {
-        this.filename = filename;
+        this.filename = filename; // For whatever reason this is not working properly on my windows machine, trying to manually set the file path first then do it properly through REST
         this.objectMapper = objectMapper;
         load();  // load the products from the file
     }
