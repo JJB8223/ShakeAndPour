@@ -5,7 +5,9 @@ import com.estore.api.estoreapi.model.Product;
 import com.estore.api.estoreapi.persistence.InventoryDAO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,7 +73,7 @@ public class InventoryController{
      * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
      * @throws IOException if error occurs with the server
      */
-    @PostMapping("")
+    @PostMapping("/product")
     public ResponseEntity<Product> createProduct(@RequestBody Product Product) throws IOException {
         LOG.info("POST /inventory/product " + Product);
         try {
@@ -130,4 +132,54 @@ public class InventoryController{
         }
     }
 
+    /**
+     * Responds to the GET request for a {@linkplain Product product} for the given id
+     *
+     * @param id The id used to locate the {@link Product product}
+     *
+     * @return ResponseEntity with created {@link Product Product} object and HTTP status of CREATED<br>
+     * ResponseEntity with HTTP status of NOT_FOUND if not found<br>
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @GetMapping("/product/{id}")
+    public ResponseEntity<Product> getProduct(@RequestBody int id) {
+        LOG.info("GET /inventory/product/" + id);
+        try {
+            Product product = inventoryDao.getProduct(id);
+            if (product != null)
+                return new ResponseEntity<Product>(product,HttpStatus.OK);
+            else
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        catch(IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Deletes a {@linkplain Product Product} with the given id
+     * 
+     * @param id The id of the {@link Product Product} to deleted
+     * 
+     * @return ResponseEntity HTTP status of OK if deleted<br>
+     * ResponseEntity with HTTP status of NOT_FOUND if not found<br>
+     * ResponseEntity with HTTP status of INTERNAL_SERVER_ERROR otherwise
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Product> deleteProduct(@PathVariable int id) {
+        LOG.info("DELETE /inventory/product/" + id);
+        try {
+            boolean status = inventoryDao.deleteProduct(id);
+            if (!status) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
