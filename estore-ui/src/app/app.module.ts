@@ -3,21 +3,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HeroesComponent } from './heroes/heroes.component';
+import { ProductsComponent } from './products/products.component';
 import { FormsModule } from '@angular/forms';
-import { HeroDetailComponent } from './hero-detail/hero-detail.component';
+import { ProductDetailComponent } from './product-detail/product-detail.component';
 import { MessagesComponent } from './messages/messages.component';
 import { DashboardComponent } from './dashboard/dashboard.component'; // <-- NgModel lives here
-import { HeroSearchComponent } from './hero-search/hero-search.component';
+import { ProductSearchComponent } from './product-search/product-search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeroesComponent,
-    HeroDetailComponent,
+    ProductsComponent,
+    ProductDetailComponent,
     MessagesComponent,
     DashboardComponent,
-    HeroSearchComponent
+    ProductSearchComponent
   ],
   imports: [
     BrowserModule,

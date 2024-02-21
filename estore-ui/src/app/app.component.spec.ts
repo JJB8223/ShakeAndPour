@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'angular-tour-of-heroes'`, () => {
+  it(`should have as title 'estore-ui'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-tour-of-heroes');
+    expect(app.title).toEqual('estore-ui');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, angular-tour-of-heroes');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, estore-ui');
   });
 });
