@@ -37,6 +37,22 @@ public class ShoppingCart {
         drinks = new HashMap<>();
     }
 
+    public boolean containsProduct(Product product) {
+        for (Product drink: drinks.keySet()) {
+            if (drink == product) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getProductQuantity(Product product) {
+        if (drinks.containsKey(product)) {
+            return drinks.get(product);
+        }
+        return 0;
+    }
+
     public Map<Product, Integer> getDrinks() {
         return drinks;
     }
