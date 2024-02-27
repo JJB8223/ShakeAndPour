@@ -1,18 +1,18 @@
 package com.estore.api.estoreapi.persistence;
 import java.io.IOException;
 
-import com.estore.api.estoreapi.model.kit;
+import com.estore.api.estoreapi.model.Kit;
 
 public interface KitDAO {
-    kit createKit(kit kit) throws IOException;
+    Kit createKit(Kit kit) throws IOException;
 
-    kit[] getKits() throws IOException;
+    Kit[] getKits() throws IOException;
 
-    kit[] findKits(String containsText) throws IOException;
+    Kit[] findKits(String containsText) throws IOException;
 
-    kit updateKit(kit kit) throws IOException;
+    Kit updateKit(Kit kit) throws IOException;
 
-    kit getKit(int id) throws IOException;
+    Kit getKit(int id) throws IOException;
 
     boolean deleteKit(int id) throws IOException;
 

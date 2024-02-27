@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonProperty;;
 
 
-public class kit {
+public class Kit {
     @JsonProperty("id") private int id;
     @JsonProperty("name") private String name;
 
@@ -15,9 +15,9 @@ public class kit {
 
     @JsonProperty("product_in_kit") private ArrayList<Integer> productsInKit;
 
-    public kit(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("price") float price, 
-                    @JsonProperty("quantity") int quantity,
-                    @JsonProperty("product_in_kit") ArrayList<Integer> productsInKit) {
+    public Kit(@JsonProperty("id") int id, @JsonProperty("name") String name, @JsonProperty("price") float price,
+               @JsonProperty("quantity") int quantity,
+               @JsonProperty("product_in_kit") ArrayList<Integer> productsInKit) {
             this.id = id;
             this.name = name;
             this.price = price;
