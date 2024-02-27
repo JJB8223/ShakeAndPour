@@ -147,7 +147,7 @@ public class InventoryController{
         LOG.info("GET /inventory/product/" + id);
         try {
             Product product = inventoryDao.getProduct(id);
-            if (product != null)
+            if (product != null) 
                 return new ResponseEntity<Product>(product,HttpStatus.OK);
             else
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
