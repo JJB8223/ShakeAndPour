@@ -33,6 +33,8 @@ public class Kit {
 
     public float getPrice() {return price;}
 
+    public void setPrice(float price) {this.price = price; }
+
     public void setQuantity(int quantity){this.quantity = quantity;}
 
     public int getQuantity() {return quantity;}
