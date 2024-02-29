@@ -4,6 +4,8 @@ import com.estore.api.estoreapi.model.Product;
 
 import java.io.IOException;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Defines the interface for Inventory object persistence
  *

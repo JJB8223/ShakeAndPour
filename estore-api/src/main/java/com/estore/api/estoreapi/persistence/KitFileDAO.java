@@ -33,7 +33,6 @@ public class KitFileDAO implements KitDAO{
     public KitFileDAO(@Value("${kits.file}") String filename, ObjectMapper objectMapper) throws IOException{
         this.filename = filename; // For whatever reason this is not working properly on my windows machine, trying to manually set the file path first then do it properly through REST 
         this.objectMapper = objectMapper;
-        // TODO: load function
         load();
     }
 

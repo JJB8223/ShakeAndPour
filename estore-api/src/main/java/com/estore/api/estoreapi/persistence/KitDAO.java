@@ -1,6 +1,8 @@
 package com.estore.api.estoreapi.persistence;
 import java.io.IOException;
 
+import org.springframework.stereotype.Component;
+
 import com.estore.api.estoreapi.model.Kit;
 
 public interface KitDAO {
