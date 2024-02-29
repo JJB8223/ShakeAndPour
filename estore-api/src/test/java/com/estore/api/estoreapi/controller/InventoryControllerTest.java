@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
  * Test the Inventory Controller class and its methods
  *
  * @author Matthew Morrison msm8275
+ * @author Joshua Bay jjb8223
  */
 @Tag("Controller-tier")
 public class InventoryControllerTest {
