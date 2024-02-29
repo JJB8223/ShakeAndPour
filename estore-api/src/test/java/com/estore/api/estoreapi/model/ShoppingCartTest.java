@@ -39,6 +39,6 @@ public class ShoppingCartTest {
         cart.addProduct(milk, 3);
         cart.addProduct(cola, 5);
         cart.clearCart();
-        assertTrue(cart.getDrinks().isEmpty(), "Cart should be completelycleared");
+        assertTrue(cart.getDrinks().isEmpty(), "Cart should be completely cleared");
     }
 }

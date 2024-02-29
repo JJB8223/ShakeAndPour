@@ -26,7 +26,6 @@ public class InventoryController{
     private static final Logger LOG = Logger.getLogger(InventoryController.class.getName());
 
     private InventoryDAO inventoryDao;
-    private ShoppingCart shoppingCart = new ShoppingCart();
 
     /**
      * Creates a REST API controller to reponds to requests
@@ -76,10 +75,10 @@ public class InventoryController{
      * @throws IOException if error occurs with the server
      */
     @PostMapping("/product")
-    public ResponseEntity<Product> createProduct(@RequestBody Product Product) throws IOException {
-        LOG.info("POST /inventory/product " + Product);
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) throws IOException {
+        LOG.info("POST /inventory/product " + product);
         try {
-            Product createdProduct = inventoryDao.createProduct(Product);
+            Product createdProduct = inventoryDao.createProduct(product);
             if (createdProduct == null) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
@@ -181,49 +180,6 @@ public class InventoryController{
             }
         } catch (IOException e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/cart/add")
-    public ResponseEntity<Void> addtoCart(@PathVariable int id, @RequestParam int quantity) {
-        try {
-            Product product = inventoryDao.getProduct(id);
-            if (product != null) {
-                if (quantity <= product.getQuantity() && quantity > 0) {
-                    shoppingCart.addProduct(product, quantity);
-                    int prevQuantity = product.getQuantity();
-                    product.setQuantity(prevQuantity - quantity);
-                    inventoryDao.updateProduct(product);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                } else {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @PostMapping("/cart/remove")
-    public ResponseEntity<Void> removeFromCart(@PathVariable int id, @RequestParam int quantity) {
-        try {
-            Product product = inventoryDao.getProduct(id);
-            if (shoppingCart.containsProduct(product)) {
-                int newQuantity = product.getQuantity() + quantity;
-                if (shoppingCart.getProductQuantity(product) < quantity) {
-                    newQuantity = product.getQuantity() + shoppingCart.getProductQuantity(product);
-                }
-                product.setQuantity(newQuantity);
-                inventoryDao.updateProduct(product);
-                shoppingCart.removeProduct(product, quantity);
-                return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
