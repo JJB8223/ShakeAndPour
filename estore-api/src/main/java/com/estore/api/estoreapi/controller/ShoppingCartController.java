@@ -48,9 +48,9 @@ public class ShoppingCartController {
      * @param quantity the quantity of the product to add
      * @return ResponseEntity representing the result of the operation (OK, BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR)
      */
-    @PostMapping("/cart/add")
+    @PostMapping("/add")
     public ResponseEntity<Void> addtoCart(@PathVariable int id, @RequestParam int quantity) {
-        LOG.info("POST /cart/add/" + id + " qty: " + quantity);
+        LOG.info("POST /cart/add/id/?quantity=");
         try {
             Product product = inventoryDao.getProduct(id);
             if (product != null) {
@@ -80,9 +80,9 @@ public class ShoppingCartController {
      * @param quantity the quantity of the product to remove
      * @return ResponseEntity representing the result of the operation (OK, NOT_FOUND, INTERNAL_SERVER_ERROR)
      */
-    @DeleteMapping("/cart/remove")
+    @DeleteMapping("/remove")
     public ResponseEntity<Void> removeFromCart(@PathVariable int id, @RequestParam int quantity) {
-        LOG.info("DELETE /cart/remove/" + id + " qty: " + quantity);
+        LOG.info("DELETE /cart/remove/id/?quantity=");
         try {
             Product product = inventoryDao.getProduct(id);
             if (shoppingCart.containsProduct(product)) {
