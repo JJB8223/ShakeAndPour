@@ -113,7 +113,7 @@ public class ShoppingCartController {
     @GetMapping("")
     public ResponseEntity<Map<Product, Integer>> getCartProducts() throws IOException {
         LOG.info("GET /cart");
-        Map<Product, Integer> cartItems = shoppingCart.getDrinks();
+        Map<Product, Integer> cartItems = shoppingCart.getProducts();
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 }

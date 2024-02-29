@@ -37,8 +37,8 @@ public class ShoppingCartTest {
         cart.addProduct(milk, 2);
         cart.addProduct(cola, 3);
         cart.removeProduct(cola, 1);
-        assertEquals(2, cart.getDrinks().get(milk).intValue(), "Soda quantity should be 2");
-        assertEquals(2, cart.getDrinks().get(cola).intValue(), "Tea quantity after removal should be 2");
+        assertEquals(2, cart.getProducts().get(milk).intValue(), "Soda quantity should be 2");
+        assertEquals(2, cart.getProducts().get(cola).intValue(), "Tea quantity after removal should be 2");
     }
 
     /**
@@ -61,6 +61,6 @@ public class ShoppingCartTest {
         cart.addProduct(milk, 3);
         cart.addProduct(cola, 5);
         cart.clearCart();
-        assertTrue(cart.getDrinks().isEmpty(), "Cart should be completely cleared");
+        assertTrue(cart.getProducts().isEmpty(), "Cart should be completely cleared");
     }
 }

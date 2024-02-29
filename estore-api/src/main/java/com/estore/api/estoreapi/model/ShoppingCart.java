@@ -11,14 +11,14 @@ import java.util.Map;
  * @author David Dobbins dpd8504
  */
 public class ShoppingCart {
-    private Map<Product, Integer> drinks;
+    private Map<Product, Integer> products;
     
     /**
      * Constructs a new ShoppingCart instance. Initializes the internal
      * storage for products added to the cart.
      */
     public ShoppingCart() {
-        drinks = new HashMap<>();
+        products = new HashMap<>();
     }
 
     /**
@@ -29,7 +29,7 @@ public class ShoppingCart {
      * @param quantity The quantity of the product to add.
      */
     public void addProduct(Product product, int quantity) {
-        drinks.put(product, drinks.getOrDefault(product, 0) + quantity);
+        products.put(product, products.getOrDefault(product, 0) + quantity);
     }
 
     /**
@@ -41,12 +41,12 @@ public class ShoppingCart {
      * @param quantity The quantity of the product to remove.
      */
     public void removeProduct(Product product, int quantity) {
-        int currentQuantity = drinks.getOrDefault(product, 0);
+        int currentQuantity = products.getOrDefault(product, 0);
         int newQuantity = currentQuantity - quantity;
         if (newQuantity > 0) {
-            drinks.put(product, newQuantity);
+            products.put(product, newQuantity);
         } else {
-            drinks.remove(product);
+            products.remove(product);
         }
     }
 
@@ -57,9 +57,9 @@ public class ShoppingCart {
      */
     public float getTotalCost() {
         float totalCost = 0;
-        for (Product drink: drinks.keySet()) {
+        for (Product drink: products.keySet()) {
             float price = drink.getPrice();
-            int quantity = drinks.get(drink);
+            int quantity = products.get(drink);
             totalCost += (price * quantity);
         }
         return totalCost;
@@ -69,7 +69,7 @@ public class ShoppingCart {
      * Clears all products from the shopping cart.
      */
     public void clearCart() {
-        drinks = new HashMap<>();
+        products = new HashMap<>();
     }
 
     /**
@@ -79,8 +79,8 @@ public class ShoppingCart {
      * @return true if the cart contains the product; false otherwise.
      */
     public boolean containsProduct(Product product) {
-        for (Product drink: drinks.keySet()) {
-            if (drink == product) {
+        for (Product item: products.keySet()) {
+            if (item == product) {
                 return true;
             }
         }
@@ -94,8 +94,8 @@ public class ShoppingCart {
      * @return The quantity of the specified product in the cart; returns 0 if the product is not in the cart.
      */
     public int getProductQuantity(Product product) {
-        if (drinks.containsKey(product)) {
-            return drinks.get(product);
+        if (products.containsKey(product)) {
+            return products.get(product);
         }
         return 0;
     }
@@ -105,8 +105,8 @@ public class ShoppingCart {
      * 
      * @return A map containing all products in the cart along with their quantities.
      */
-    public Map<Product, Integer> getDrinks() {
-        return drinks;
+    public Map<Product, Integer> getProducts() {
+        return products;
     }
 
 

@@ -184,7 +184,7 @@ public class ShoppingCartControllerTest {
         Product milk = new Product(1, "Milk", 2.99f, 50);
         Product cola = new Product(2, "Cola", 1.99f, 50);
         Map<Product, Integer> expectedCartItems = Map.of(milk, 2, cola, 3);
-        when(mockShoppingCart.getDrinks()).thenReturn(expectedCartItems);
+        when(mockShoppingCart.getProducts()).thenReturn(expectedCartItems);
         ResponseEntity<Map<Product, Integer>> response = shoppingCartController.getCartProducts();
         assertEquals(HttpStatus.OK, response.getStatusCode(), "Response status should be OK");
         assertEquals(2, response.getBody().get(milk).intValue(), "Milk quantity should be 2 in the cart");
@@ -192,9 +192,16 @@ public class ShoppingCartControllerTest {
         assertEquals(expectedCartItems, response.getBody(), "Returned cart items should match expected items");
     }
 
+    /**
+    * Tests retrieving all products from the shopping cart when the cart is empty. 
+    * Verifies that an empty map is returned and that the operation 
+    * succeeds with an HTTP status of OK (200).
+    *
+    * @throws IOException if an I/O error occurs which is simulated for testing error handling.
+    */
     @Test
     public void testGetCartProductsWhenEmpty() throws IOException {
-        when(mockShoppingCart.getDrinks()).thenReturn(Map.of()); // Return an empty map
+        when(mockShoppingCart.getProducts()).thenReturn(Map.of());
 
         ResponseEntity<Map<Product, Integer>> response = shoppingCartController.getCartProducts();
 
