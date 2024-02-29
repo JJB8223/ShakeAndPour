@@ -1,5 +1,6 @@
 package com.estore.api.estoreapi.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Provides JUnit test cases for the ShoppingCartController class to verify the correct handling
@@ -168,5 +170,35 @@ public class ShoppingCartControllerTest {
         ResponseEntity<Void> response = shoppingCartController.removeFromCart(productId, quantity);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    }
+
+    /**
+    * Tests retrieving all products from the shopping cart. 
+    * Verifies that the correct products and quantities are returned and that the operation 
+    * succeeds with an HTTP status of OK (200).
+    *
+    * @throws IOException if an I/O error occurs which is simulated for testing error handling.
+    */
+    @Test
+    public void testGetCartProducts() throws IOException {
+        Product milk = new Product(1, "Milk", 2.99f, 50);
+        Product cola = new Product(2, "Cola", 1.99f, 50);
+        Map<Product, Integer> expectedCartItems = Map.of(milk, 2, cola, 3);
+        when(mockShoppingCart.getDrinks()).thenReturn(expectedCartItems);
+        ResponseEntity<Map<Product, Integer>> response = shoppingCartController.getCartProducts();
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "Response status should be OK");
+        assertEquals(2, response.getBody().get(milk).intValue(), "Milk quantity should be 2 in the cart");
+        assertEquals(3, response.getBody().get(cola).intValue(), "Cola quantity should be 3 in the cart");
+        assertEquals(expectedCartItems, response.getBody(), "Returned cart items should match expected items");
+    }
+
+    @Test
+    public void testGetCartProductsWhenEmpty() throws IOException {
+        when(mockShoppingCart.getDrinks()).thenReturn(Map.of()); // Return an empty map
+
+        ResponseEntity<Map<Product, Integer>> response = shoppingCartController.getCartProducts();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "Response status should be OK for an empty cart");
+        assertTrue(response.getBody().isEmpty(), "Cart should be empty");
     }
 }
