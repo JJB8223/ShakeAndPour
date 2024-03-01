@@ -54,30 +54,30 @@ public class KitFileDAOTest {
 
     @Test
     public void testGetKitExists() {
-        // setup
+        // Setup
         Kit expectedKit = testKits[1];
         int testId = 2;
-        // run
+        // invoke
         Kit actualKit = kitFileDAO.getKit(testId);
-        // check
+        // analyze
         assertEquals(expectedKit, actualKit);
     }
 
     @Test
     public void testGetKitNotExists() {
-        // setup
+        // Setup
         int testId = 4; 
-        // run
+        // invoke
         Kit actualKit = kitFileDAO.getKit(testId);
-        // check
+        // analyze
         assertEquals(actualKit, null);
     }
 
     @Test
     public void testGetKits() {
-        // run
+        // Invoke
         Kit[] resultingKits = kitFileDAO.getKits();
-        // check
+        // Analyze
         for (int i = 0; i < resultingKits.length; i++) {
             assertEquals(resultingKits[i], testKits[i]);
         }
@@ -85,11 +85,11 @@ public class KitFileDAOTest {
 
     @Test
     public void testFindKitsEmpty() {
-        // setup
+        // Setup
         Kit[] expectedKits = testKits; // we expect to get all the kits upon entering an empty string
-        // run
+        // Invoke
         Kit[] resultingKits = kitFileDAO.findKits("");
-        // check
+        // Analyze
         for (int i = 0; i < resultingKits.length; i++) {
             assertEquals(expectedKits[i], resultingKits[i]);
         }
@@ -97,33 +97,33 @@ public class KitFileDAOTest {
 
     @Test
     public void testFindKitsNoMatches() {
-        // run
+        // invoke
         Kit[] resultingKits = kitFileDAO.findKits("Zebra"); 
-        // check
+        // analyze
         assertEquals(resultingKits.length, 0); // none of the kits contain this string
     }
 
     @Test
     public void testFindKitsMatches() {
-        // setup
+        // Setup
         Kit expectedKit = testKits[2];
         int expectedMatches = 1; // only 1 kit has Charlie in the name
-        // run
+        // invoke
         Kit[] resultingKits = kitFileDAO.findKits("Charlie");
-        // check
+        // analyze
         assertEquals(resultingKits.length, expectedMatches);
         assertEquals(resultingKits[0], expectedKit);
     }
 
     @Test
     public void testDeleteKitExists() throws IOException {
-        // setup 
+        // Setup 
         int deletedId = 1;
         int expectedResultingLength = 2;
-        // run
+        // invoke
         boolean result = kitFileDAO.deleteKit(deletedId);
         Kit[] resultingKits = kitFileDAO.getKits();
-        // check
+        // analyze
         assertTrue(result);
         assertEquals(resultingKits.length, expectedResultingLength);
         for (int i = 0; i < resultingKits.length; i++) {
@@ -133,19 +133,19 @@ public class KitFileDAOTest {
 
     @Test
     public void testDeleteKitNotExists() throws IOException {
-        // setup
+        // Setup
         int deletedId = 4;
         int expectedResultingLength = 3;
-        // run
+        // invoke
         boolean result = kitFileDAO.deleteKit(deletedId);
-        // check
+        // analyze
         assertFalse(result);
         assertEquals(kitFileDAO.getKits().length, expectedResultingLength);
     }
 
     @Test
     public void testCreateKit() throws IOException {
-        // setup
+        // Setup
         int createdId = 4;
         String createdName = "Test Kit Delta"; 
         float createdPrice = 9.5f;
@@ -153,10 +153,10 @@ public class KitFileDAOTest {
         ArrayList<Integer> idList = new ArrayList<>();
         Kit createdKit = new Kit(createdId, createdName, createdPrice, createdQuantity, idList);
         int expectedResultingLength = 4;
-        // run
+        // invoke
         kitFileDAO.createKit(createdKit);
         Kit[] resultingKits = kitFileDAO.getKits();
-        // check
+        // analyze
         assertEquals(resultingKits.length, expectedResultingLength);
         // checking shallow equality doesn't work because the KitFileDAO class serializes and deserializes its data
         assertEquals(createdKit.getId(), resultingKits[3].getId());
@@ -168,17 +168,17 @@ public class KitFileDAOTest {
 
     @Test
     public void testUpdateKitExists() throws IOException {
-        // setup
+        // Setup
         int updatedId = 3;
         String updatedName = "Test Kit Three";
         float updatedPrice = 1.1f;
         int updatedQuantity = 100;
         ArrayList<Integer> idList = new ArrayList<>();
         Kit updatedKit = new Kit(updatedId, updatedName, updatedPrice, updatedQuantity, idList);
-        // run
+        // invoke
         Kit response = kitFileDAO.updateKit(updatedKit);
         Kit[] resultingKits = kitFileDAO.getKits();
-        // check
+        // analyze
         assertEquals(updatedKit, response);
         // checking shallow equality doesn't work because the KitFileDAO class serializes and deserializes its data
         assertEquals(updatedKit.getId(), resultingKits[2].getId());
@@ -190,16 +190,16 @@ public class KitFileDAOTest {
 
     @Test
     public void testUpdateKitNotExists() throws IOException {
-        // setup
+        // Setup
         int updatedId = 5;
         String updatedName = "Test Kit Echo";
         float updatedPrice = 1.1f;
         int updatedQuantity = 100;
         ArrayList<Integer> idList = new ArrayList<>();
         Kit updatedKit = new Kit(updatedId, updatedName, updatedPrice, updatedQuantity, idList);
-        // run
+        // invoke
         Kit response = kitFileDAO.updateKit(updatedKit);
-        // check
+        // analyze
         assertEquals(response, null);
     }
 
