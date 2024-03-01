@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("kits")
 public class KitController {
-    private static final Logger LOG = Logger.getLogger(ProductController.class.getName());
+    private static final Logger LOG = Logger.getLogger(KitController.class.getName());
     private KitDAO kitDao;
 
     /**
