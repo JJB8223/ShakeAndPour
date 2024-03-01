@@ -16,6 +16,12 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Test the Inventory File DAO class
+ *
+ * @author Akhil Devarapalli ad7171
+ * @author Duncan French dlf3550
+ */
 @Tag("Controller-tier")
 public class KitControllerTest {
 
