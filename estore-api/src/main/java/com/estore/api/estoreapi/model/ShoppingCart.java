@@ -79,12 +79,10 @@ public class ShoppingCart {
      * @return true if the cart contains the product; false otherwise.
      */
     public boolean containsProduct(Product product) {
-        for (Product item: products.keySet()) {
-            if (item == product) {
-                return true;
-            }
+        if (products.get(product) == 0 || products.get(product) == null) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**

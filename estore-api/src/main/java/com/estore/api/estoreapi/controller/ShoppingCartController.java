@@ -27,7 +27,7 @@ public class ShoppingCartController {
     private static final Logger LOG = Logger.getLogger(ShoppingCartController.class.getName());
 
     private final InventoryDAO inventoryDao;
-    private final ShoppingCart shoppingCart;
+    private ShoppingCart shoppingCart;
     
     /**
      * Constructs a ShoppingCartController with the specified inventory DAO and shopping cart.
@@ -35,9 +35,9 @@ public class ShoppingCartController {
      * @param inventoryDao the DAO responsible for inventory operations
      * @param shoppingCart the shopping cart for the current user session
      */
-    public ShoppingCartController(InventoryDAO inventoryDao, ShoppingCart shoppingCart) {
+    public ShoppingCartController(InventoryDAO inventoryDao) {
         this.inventoryDao = inventoryDao;
-        this.shoppingCart = shoppingCart;
+        this.shoppingCart = new ShoppingCart();
     }
 
     /**
@@ -85,6 +85,9 @@ public class ShoppingCartController {
         LOG.info("DELETE /cart/remove/id/?quantity=");
         try {
             Product product = inventoryDao.getProduct(id);
+            if (product == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
             if (shoppingCart.containsProduct(product)) {
                 int newQuantity = product.getQuantity() + quantity;
                 if (shoppingCart.getProductQuantity(product) < quantity) {
