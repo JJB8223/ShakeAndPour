@@ -92,10 +92,7 @@ public class ShoppingCart {
      * @return The quantity of the specified product in the cart; returns 0 if the product is not in the cart.
      */
     public int getProductQuantity(Product product) {
-        if (products.containsKey(product)) {
-            return products.get(product);
-        }
-        return 0;
+        return products.getOrDefault(product, 0);
     }
 
     /**

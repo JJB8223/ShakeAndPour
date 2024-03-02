@@ -89,19 +89,16 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
-public void testRemoveFromCartProductNotFound() throws IOException {
-    int productId = 1; // Arbitrary product ID for testing
-    int quantity = 5; // Arbitrary quantity for testing
+    public void testRemoveFromCartProductNotFound() throws IOException {
+        int productId = 1;
+        int quantity = 5;
 
-    // Mock the behavior of the InventoryDAO to return null for a non-existent product
-    when(mockInventoryDAO.getProduct(productId)).thenReturn(null);
+        when(mockInventoryDAO.getProduct(productId)).thenReturn(null);
 
-    // Attempt to remove a non-existent product from the shopping cart
-    ResponseEntity<Void> response = shoppingCartController.removeFromCart(productId, quantity);
+        ResponseEntity<Void> response = shoppingCartController.removeFromCart(productId, quantity);
 
-    // Assert that the response status is HttpStatus.NOT_FOUND
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-}
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 
     @Test
     public void testRemoveFromCartHandleException() throws IOException {
