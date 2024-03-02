@@ -61,7 +61,9 @@ public class ShoppingCartController {
                     inventoryDao.updateProduct(product);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    shoppingCart.addProduct(product, product.getQuantity());
+                    product.setQuantity(0);
+                    return new ResponseEntity<>(HttpStatus.OK);
                 }
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

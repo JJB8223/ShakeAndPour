@@ -61,7 +61,7 @@ public class ShoppingCartControllerTest {
 
         ResponseEntity<Void> response = shoppingCartController.addtoCart(productId, quantity);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
