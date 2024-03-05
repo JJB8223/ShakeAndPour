@@ -5,7 +5,6 @@ import com.estore.api.estoreapi.persistence.KitDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Io;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -17,6 +16,12 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+/**
+ * Test the Inventory File DAO class
+ *
+ * @author Akhil Devarapalli ad7171
+ * @author Duncan French dlf3550
+ */
 @Tag("Controller-tier")
 public class KitControllerTest {
 
@@ -108,6 +113,15 @@ public class KitControllerTest {
 
         // analyze
         assertEquals(HttpStatus.CONFLICT,response.getStatusCode());
+    }
+
+    @Test
+    public void testCreateKitHandleException() throws IOException {
+        doThrow(new IOException()).when(mockKitDAO).createKit(null);
+
+        ResponseEntity<Kit> response = KitController.createKit(null);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
     @Test
@@ -219,5 +233,37 @@ public class KitControllerTest {
 
     }
 
+    @Test
+    public void testUpdateKit() throws IOException {
+        // Setup
+        Kit updatedKit = new Kit(99, "Fizzy Soda", 3.99f, 20, new ArrayList<Integer>());
+        when(mockKitDAO.updateKit(updatedKit)).thenReturn(updatedKit);
+        // invoke
+        ResponseEntity<Kit> response = KitController.updateKit(updatedKit);
+        // analyze
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), updatedKit);
+    }
 
+    @Test 
+    public void testUpdateKitNotExists() throws IOException {
+        // Setup
+        Kit updatedKit = new Kit(99, "Fizzy Soda", 3.99f, 20, new ArrayList<Integer>());
+        when(mockKitDAO.updateKit(updatedKit)).thenReturn(null); 
+        // invoke
+        ResponseEntity<Kit> response = KitController.updateKit(updatedKit);
+        // analyze
+        assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void testUpdateKitHandleException() throws IOException {
+        // Setup
+        Kit updatedKit = new Kit(99, "Fizzy Soda", 3.99f, 20, new ArrayList<Integer>());
+        doThrow(new IOException()).when(mockKitDAO).updateKit(updatedKit);
+        // invoke
+        ResponseEntity<Kit> response = KitController.updateKit(updatedKit);
+        // analyze
+        assertEquals(response.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
