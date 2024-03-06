@@ -55,6 +55,20 @@ public class InventoryControllerTest {
     }
 
     @Test
+    public void testCreateProductException() throws IOException{
+        Product p = new Product(99, "Soda", 2.99f, 20);
+        doThrow(new IOException()).when(mockInventoryDAO).createProduct(p);
+
+        // Invoke
+        ResponseEntity<Product> response = inventoryController.createProduct(p);
+
+        // Analyze
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,response.getStatusCode());
+
+
+    }
+
+    @Test
     public void testProductSearch() throws IOException {
         // Setup
         String searchString = "la";
@@ -118,6 +132,8 @@ public class InventoryControllerTest {
         assertEquals(HttpStatus.OK,response.getStatusCode());
         assertEquals(products,response.getBody());
     }
+
+
     @Test
     public void testGetProductsHandleException() throws IOException { // getProducts may throw IOException
         // Setup
@@ -215,5 +231,70 @@ public class InventoryControllerTest {
 
         // Analyze
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,response.getStatusCode());
+    }
+
+
+    @Test
+    public void testUpdateProductSuccess() throws IOException {
+        // add initial product
+        Product p = new Product(99, "Soda", 2.99f, 20);
+
+        when(mockInventoryDAO.createProduct(p)).thenReturn(p);
+
+        // invoke
+        ResponseEntity<Product> response = inventoryController.createProduct(p);
+
+        assertEquals(HttpStatus.CREATED,response.getStatusCode());
+
+        // now update product
+        p = new Product(99, "Ramune Soda", 2.99f, 40);
+        when(mockInventoryDAO.updateProduct(p)).thenReturn(p);
+        ResponseEntity<Product> status = inventoryController.updateProduct(p);
+
+        assertEquals(HttpStatus.OK,status.getStatusCode());
+
+    }
+
+    @Test
+    public void testUpdateProductNotFound() throws IOException {
+        // add initial product
+        Product p = new Product(99, "Soda", 2.99f, 20);
+
+        when(mockInventoryDAO.createProduct(p)).thenReturn(p);
+
+        // invoke
+        ResponseEntity<Product> response = inventoryController.createProduct(p);
+
+        assertEquals(HttpStatus.CREATED,response.getStatusCode());
+
+        // try to update product not in inventory
+        p = new Product(100, "Ramune Soda", 2.99f, 40);
+        when(mockInventoryDAO.updateProduct(p)).thenReturn(null);
+        ResponseEntity<Product> status = inventoryController.updateProduct(p);
+
+        assertEquals(HttpStatus.NOT_FOUND,status.getStatusCode());
+
+    }
+
+    @Test
+    public void testUpdateProductException() throws IOException {
+        // add initial product
+        Product p = new Product(99, "Soda", 2.99f, 20);
+
+        when(mockInventoryDAO.createProduct(p)).thenReturn(p);
+
+        // invoke
+        ResponseEntity<Product> response = inventoryController.createProduct(p);
+
+        assertEquals(HttpStatus.CREATED,response.getStatusCode());
+
+        // try to update product not in inventory
+        p = new Product(100, "Ramune Soda", 2.99f, 40);
+        doThrow(new IOException()).when(mockInventoryDAO).updateProduct(p);
+        ResponseEntity<Product> status = inventoryController.updateProduct(p);
+
+        // Analyze
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR,status.getStatusCode());
+
     }
 }

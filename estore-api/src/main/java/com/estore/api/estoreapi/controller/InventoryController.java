@@ -2,6 +2,7 @@ package com.estore.api.estoreapi.controller;
 
 
 import com.estore.api.estoreapi.model.Product;
+import com.estore.api.estoreapi.model.ShoppingCart;
 import com.estore.api.estoreapi.persistence.InventoryDAO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,10 +75,10 @@ public class InventoryController{
      * @throws IOException if error occurs with the server
      */
     @PostMapping("/product")
-    public ResponseEntity<Product> createProduct(@RequestBody Product Product) throws IOException {
-        LOG.info("POST /inventory/product " + Product);
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) throws IOException {
+        LOG.info("POST /inventory/product " + product);
         try {
-            Product createdProduct = inventoryDao.createProduct(Product);
+            Product createdProduct = inventoryDao.createProduct(product);
             if (createdProduct == null) {
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
@@ -147,7 +148,7 @@ public class InventoryController{
         LOG.info("GET /inventory/product/" + id);
         try {
             Product product = inventoryDao.getProduct(id);
-            if (product != null)
+            if (product != null) 
                 return new ResponseEntity<Product>(product,HttpStatus.OK);
             else
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
