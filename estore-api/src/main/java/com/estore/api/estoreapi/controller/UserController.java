@@ -25,13 +25,15 @@ import com.estore.api.estoreapi.model.User.UserRole;
  * @author Joshua Bay jjb8223
  */
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("users")
 public class UserController {
 
     private static final Logger LOG = Logger.getLogger(UserController.class.getName());
 
     private static Map<Integer, User> users = new HashMap<>();
     private static int nextId = 0;
+
+
 
     /**
      * Registers a new user.
@@ -41,9 +43,10 @@ public class UserController {
      */
     @PostMapping("/register")
     public ResponseEntity<Void> registerUser(@RequestBody User user) {
-        LOG.info("POST /api/users/register");
+        LOG.info("POST users/register");
         user.setId(nextId++);
         users.put(user.getId(), user);
+        LoginController.addCredentials(user.getUsername(), user.getPassword());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -55,7 +58,7 @@ public class UserController {
      */
     @GetMapping("/get/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) { 
-        LOG.info("GET /api/users/get/" + id);
+        LOG.info("GET /users/get/" + id);
         User result = users.get(id);
         if(result == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -73,7 +76,7 @@ public class UserController {
      */
     @PutMapping("/update/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable int id, @RequestBody User user) {
-        LOG.info("PUT /api/users/update/" + id);
+        LOG.info("PUT /users/update/" + id);
         if(users.containsKey(id)){
             user.setId(id);
             users.put(id,user);
@@ -91,9 +94,11 @@ public class UserController {
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-        LOG.info("DELETE api/users/delete/" + id);
+        LOG.info("DELETE /users/delete/" + id);
         if(users.containsKey(id)){
             users.remove(id);
+            User user = users.get(id);
+            LoginController.delCredentials(user.getUsername(), user.getPassword());
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -107,7 +112,7 @@ public class UserController {
      */
     @PostMapping("/init-users")
     public ResponseEntity<Void> initUser(){
-        LOG.info("POST /api/users/init-users");
+        LOG.info("POST /users/init-users");
         User Akhil = new User(nextId, "customer", "password", "Akhil", UserRole.CUSTOMER);
         users.put(nextId, Akhil);
         nextId++;
