@@ -1,0 +1,13 @@
+<form (submit)= "login()"> <!-- So when you press the submit button it is going to call the login function from the login() in login components-->
+    <div>
+        <label for="username">Username:</label> <!-- This is a textfield waiting for input -->
+        <input type ="text" id="username" name="username" [(ngModel)]="username" required> <!-- This is the thing that is indicating that it is a username box with a label on it-->
+    </div>
+
+  <div>
+    <label for="password">Password:</label> <!--Textfield for a password input-->
+    <input type="password" id="password" name="password" [(ngModel)]="password" required> <!--Same principal as the username box but password-->
+  </div>
+
+  <button type="submit">Login</button> <!--The button says Login, but it calls the submit thing from up top???????-->
+</form>
