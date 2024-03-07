@@ -1,5 +1,8 @@
 <ul class="kits">
-    <li *ngFor="let kit of kits">
+    <label for="search-box">Kit Search</label>
+    <input #searchBox id="search-box" (input)="search(searchBox.value)" />
+
+    <li *ngFor="let kit of kits$ | async">
         <span>Kit Name: </span> {{kit.name}} | 
         <span>Price: </span> {{kit.price}} | 
         <span>Products in Kit: </span> {{kit.products_in_kit}}

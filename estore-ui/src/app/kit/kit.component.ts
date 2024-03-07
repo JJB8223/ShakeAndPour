@@ -1,27 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Kit } from '../kit';
 import { KitsService } from '../kits.service';
 import { ProductService } from '../product.service';
 import { Product } from '../product';
-import { OnInit } from '@angular/core';
-import { Observable, map } from 'rxjs';
-import { catchError, forkJoin, switchMap} from 'rxjs';
+import { Observable, map, Subject } from 'rxjs';
+import { catchError, forkJoin, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-kit',
   templateUrl: './kit.component.html',
   styleUrl: './kit.component.css'
 })
-export class KitComponent {
+export class KitComponent implements OnInit {
 
   constructor(private kitService: KitsService, private productService: ProductService) {}
 
   kits: Kit[] = []
 
+  kits$!: Observable<Kit[]>;
+  private searchKeywords = new Subject<string>();
+
   ngOnInit() {
-    this.getKits()
-    // console.log(this.kits)
-    // this.addProdName()
+    this.getKits();
+    this.kits$ = this.searchKeywords.pipe(
+      // wait 300ms after the user types to prevent unnecessary requests and lag
+      debounceTime(300),
+
+      // ignore if the searchbar isn't changed
+      distinctUntilChanged(),
+
+      // switch to new search observable each time the term changes
+      switchMap((term: string) => this.kitService.searchKits(term)),
+    );
   }
 
   getSpecificProduct(id: number): Observable<string> {
@@ -41,7 +52,11 @@ export class KitComponent {
     }
   }
 
-  
+  // add a search term to the searchValues stream
+  search(term: string): void {
+    this.searchKeywords.next(term);
+  }
+
 /*
   getKits(): void{
     this.kitService.getKits()
