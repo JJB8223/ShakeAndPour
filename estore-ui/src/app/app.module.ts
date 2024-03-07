@@ -9,6 +9,7 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { MessagesComponent } from './messages/messages.component';
 import { DashboardComponent } from './dashboard/dashboard.component'; // <-- NgModel lives here
 import { ProductSearchComponent } from './product-search/product-search.component';
+import { KitComponent } from './kit/kit.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ProductSearchComponent } from './product-search/product-search.componen
     ProductDetailComponent,
     MessagesComponent,
     DashboardComponent,
-    ProductSearchComponent
+    ProductSearchComponent,
+    KitComponent
   ],
   imports: [
     BrowserModule,
