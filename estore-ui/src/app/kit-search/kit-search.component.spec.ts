@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KitComponent } from './kit.component';
+import { KitSearchComponent } from './kit-search.component';
 
-describe('KitComponent', () => {
-  let component: KitComponent;
-  let fixture: ComponentFixture<KitComponent>;
+describe('KitSearchComponent', () => {
+  let component: KitSearchComponent;
+  let fixture: ComponentFixture<KitSearchComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [KitComponent]
+      declarations: [KitSearchComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(KitComponent);
+    fixture = TestBed.createComponent(KitSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

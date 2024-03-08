@@ -2,17 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Kit } from '../kit';
 import { KitsService } from '../kits.service';
 import { ProductService } from '../product.service';
-import { Product } from '../product';
 import { Observable, map, Subject } from 'rxjs';
 import { catchError, forkJoin, switchMap } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-kit',
-  templateUrl: './kit.component.html',
-  styleUrl: './kit.component.css'
+  selector: 'app-kit-search',
+  templateUrl: './kit-search.component.html',
+  styleUrl: './kit-search.component.css'
 })
-export class KitComponent implements OnInit {
+export class KitSearchComponent implements OnInit {
 
   constructor(private kitService: KitsService, private productService: ProductService) {}
 
@@ -39,17 +38,6 @@ export class KitComponent implements OnInit {
     return this.productService.getProduct(id).pipe(
         map(product => product.name)
     );
-  }
-
-  addProdName(): void {
-    console.log("Adding product names")
-    console.log(this.kits)
-    for (let i = 0; i < this.kits.length; i++) {
-      for (let j = 0; j < this.kits[i].products_in_kit.length; j++) {
-        let productName = this.getSpecificProduct(this.kits[i].products_in_kit[j]);
-        this.kits[i].products_in_kit[j] = productName;
-      }
-    }
   }
 
   // add a search term to the searchValues stream
