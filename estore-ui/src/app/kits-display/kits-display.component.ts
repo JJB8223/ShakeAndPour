@@ -39,7 +39,7 @@ export class KitsDisplayComponent {
             return forkJoin(observables).pipe(
               map(productNames => {
                 kit.products_in_kit = productNames;
-                return kit;
+                return kit;      // Do something with each kit and its corresponding quantity
               })
             );
           });
@@ -51,6 +51,10 @@ export class KitsDisplayComponent {
           this.kits = kits;
         }
       );
+  }
+
+  addToShoppingCart(id: number): void {
+    console.log(id)
   }
 
 

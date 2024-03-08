@@ -6,11 +6,14 @@ import org.springframework.web.bind.annotation.*;
 import com.estore.api.estoreapi.model.Kit;
 import com.estore.api.estoreapi.model.ShoppingCart;
 import com.estore.api.estoreapi.persistence.KitDAO;
+import com.estore.api.estoreapi.model.ShoppingCartKit;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  * Controller for handling shopping cart operations within the e-store API.
@@ -48,9 +51,9 @@ public class ShoppingCartController {
      * @param quantity the quantity of the kit to add
      * @return ResponseEntity representing the result of the operation (OK, BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR)
      */
-    @PostMapping("/add")
-    public ResponseEntity<Void> addtoCart(@PathVariable int id, @RequestParam int quantity) {
-        LOG.info("POST /cart/add/id/?quantity=");
+    @PostMapping("/add/{id}/{quantity}")
+    public ResponseEntity<Void> addtoCart(@PathVariable int id, @PathVariable int quantity) {
+        LOG.info("POST /cart/add/id/?quantity="+quantity);
         try {
             Kit kit = kitDao.getKit(id);
             if (kit != null) {
@@ -82,8 +85,8 @@ public class ShoppingCartController {
      * @param quantity the quantity of the kit to remove
      * @return ResponseEntity representing the result of the operation (OK, NOT_FOUND, INTERNAL_SERVER_ERROR)
      */
-    @DeleteMapping("/remove")
-    public ResponseEntity<Void> removeFromCart(@PathVariable int id, @RequestParam int quantity) {
+    @DeleteMapping("/remove/{id}/{quantity}")
+    public ResponseEntity<Void> removeFromCart(@PathVariable int id, @PathVariable int quantity) {
         LOG.info("DELETE /cart/remove/id/?quantity=");
         try {
             Kit kit = kitDao.getKit(id);
@@ -116,9 +119,31 @@ public class ShoppingCartController {
     * @throws IOException if an I/O error occurs during kit retrieval.
     */
     @GetMapping("")
-    public ResponseEntity<Map<Kit, Integer>> getCartKits() throws IOException {
+    public ResponseEntity<ArrayList<ShoppingCartKit>> getCartKits() throws IOException {
         LOG.info("GET /cart");
         Map<Kit, Integer> cartItems = shoppingCart.getKits();
-        return new ResponseEntity<>(cartItems, HttpStatus.OK);
+        
+        
+        // get the kit from kitDAO and add to a list to be returned
+        ArrayList<ShoppingCartKit> shoppingCartItems = new ArrayList<>();
+
+        for (Map.Entry<Kit, Integer> entry : cartItems.entrySet()) {
+            Kit kit = entry.getKey();
+            int quantity = entry.getValue();
+
+            // Step 2: Extract the kit ID
+            int kitId = kit.getId();
+
+            // getting the name
+            String name = kit.getName();
+
+            // Step 3: Create a new data structure pairing the ID with the quantity
+            // and add it to the list
+            shoppingCartItems.add(new ShoppingCartKit(kitId, quantity, name));
+        }
+
+
+        LOG.info(cartItems.toString());
+        return new ResponseEntity<>(shoppingCartItems, HttpStatus.OK);
     }
 }

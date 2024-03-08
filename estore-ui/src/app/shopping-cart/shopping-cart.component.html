@@ -1,1 +1,8 @@
-<p>shopping-cart works!</p>
+<h1>Shopping Cart</h1>
+<ul class="shopping-cart">
+    <h1>Shopping Cart</h1>
+    <li *ngFor="let kitMap of kitMaps">
+        <span>Kit Name: </span> {{kitMap.name}} | 
+        <span>Quantity: </span> {{kitMap.quantity}}
+    </li>
+</ul>
