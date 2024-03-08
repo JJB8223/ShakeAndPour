@@ -57,37 +57,6 @@ export class KitComponent implements OnInit {
     this.searchKeywords.next(term);
   }
 
-/*
-  getKits(): void{
-    this.kitService.getKits()
-      .pipe(
-        map(kits => {
-          kits.forEach(kit => {
-            // modify it here
-            for (let i = 0; i < kit.products_in_kit.length; i++){
-              let retrievedProductName: Observable<String>;
-              // this.productService.getProduct(kit.products_in_kit[i])
-              //  .subscribe(product => retrievedProduct = product)
-              
-              // retrievedProductName = this.getSpecificProduct(kit.products_in_kit[i]);
-              // console.log("Happening right here")
-              // kit.products_in_kit[i] = retrievedProductName;
-            
-              this.getSpecificProduct(kit.products_in_kit[i]).subscribe(
-                productName => {
-                    console.log(productName)
-                    kit.products_in_kit[i] = "Some bullshit";
-                }
-            );
-            }
-          })
-          return kits
-        })
-      )
-      .subscribe(kits => this.kits = kits);
-  }
-  */
-
   getKits(): void {
     this.kitService.getKits()
       .pipe(
