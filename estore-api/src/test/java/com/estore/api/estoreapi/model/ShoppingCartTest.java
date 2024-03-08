@@ -3,6 +3,8 @@ package com.estore.api.estoreapi.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +16,8 @@ import org.junit.jupiter.api.Test;
  */
 public class ShoppingCartTest {
     private ShoppingCart cart;
-    private Product milk;
-    private Product cola;
+    private Kit kit1;
+    private Kit kit2;
 
     /**
      * Sets up the test environment before each test method.
@@ -24,8 +26,20 @@ public class ShoppingCartTest {
     @BeforeEach 
     public void constructorSetUp() {
         cart = new ShoppingCart();
-        milk = new Product(1, "Milk", 2.99f, 50);
-        cola = new Product(2, "Cola", 1.99f, 50);
+        ArrayList<Integer> products = new ArrayList<>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        ArrayList<Integer> products2 = new ArrayList<>();
+        products2.add(4);
+        products2.add(5);
+        Product milk = new Product(1, "Milk", 2.99f, 50);
+        Product rose = new Product(3, "Rose Water", 4.00f, 50);
+        Product vodka = new Product(4, "Vodka", 5.00f, 40);
+        Product orange = new Product(5, "Orange", 2.10f, 60);
+        Product cola = new Product(2, "Cola", 1.99f, 50);
+        kit1 = new Kit(1, "First", 15.00f, 50, products);
+        kit2 = new Kit(2, "Second", 20.00f, 25, products);
     }
 
     /**

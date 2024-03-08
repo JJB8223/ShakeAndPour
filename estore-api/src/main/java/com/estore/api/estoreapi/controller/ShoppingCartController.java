@@ -3,9 +3,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.estore.api.estoreapi.model.Product;
+import com.estore.api.estoreapi.model.Kit;
 import com.estore.api.estoreapi.model.ShoppingCart;
-import com.estore.api.estoreapi.persistence.InventoryDAO;
+import com.estore.api.estoreapi.persistence.KitDAO;
 
 import java.io.IOException;
 import java.util.Map;
@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 
 /**
  * Controller for handling shopping cart operations within the e-store API.
- * This class provides endpoints for adding products to and removing products from a shopping cart.
- * It interacts with the InventoryDAO to check product availability and update stock levels.
+ * This class provides endpoints for adding kits to and removing kits from a shopping cart.
+ * It interacts with the InventoryDAO to check kit availability and update stock levels.
  * 
  * @author David Dobbins dpd8504
  */
@@ -26,43 +26,43 @@ public class ShoppingCartController {
 
     private static final Logger LOG = Logger.getLogger(ShoppingCartController.class.getName());
 
-    private final InventoryDAO inventoryDao;
+    private final KitDAO kitDao;
     private ShoppingCart shoppingCart;
     
     /**
-     * Constructs a ShoppingCartController with the specified inventory DAO and shopping cart.
+     * Constructs a ShoppingCartController with the specified kit DAO and shopping cart.
      * 
-     * @param inventoryDao the DAO responsible for inventory operations
+     * @param kitDao the DAO responsible for kit operations
      * @param shoppingCart the shopping cart for the current user session
      */
-    public ShoppingCartController(InventoryDAO inventoryDao) {
-        this.inventoryDao = inventoryDao;
+    public ShoppingCartController(KitDAO kitDao) {
+        this.kitDao = kitDao;
         this.shoppingCart = new ShoppingCart();
     }
 
     /**
-     * Adds a product to the shopping cart. Validates that the product exists and that there is
-     * sufficient stock before adding it to the cart. Updates the inventory to reflect the new stock level.
+     * Adds a kit to the shopping cart. Validates that the kit exists and that there is
+     * sufficient stock before adding it to the cart. Updates the kit to reflect the new stock level.
      * 
-     * @param id the ID of the product to add
-     * @param quantity the quantity of the product to add
+     * @param id the ID of the kit to add
+     * @param quantity the quantity of the kit to add
      * @return ResponseEntity representing the result of the operation (OK, BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR)
      */
     @PostMapping("/add")
     public ResponseEntity<Void> addtoCart(@PathVariable int id, @RequestParam int quantity) {
         LOG.info("POST /cart/add/id/?quantity=");
         try {
-            Product product = inventoryDao.getProduct(id);
-            if (product != null) {
-                if (quantity <= product.getQuantity() && quantity > 0) {
-                    shoppingCart.addProduct(product, quantity);
-                    int prevQuantity = product.getQuantity();
-                    product.setQuantity(prevQuantity - quantity);
-                    inventoryDao.updateProduct(product);
+            Kit kit = kitDao.getKit(id);
+            if (kit != null) {
+                if (quantity <= kit.getQuantity() && quantity > 0) {
+                    shoppingCart.addKit(kit, quantity);
+                    int prevQuantity = kit.getQuantity();
+                    kit.setQuantity(prevQuantity - quantity);
+                    kitDao.updateKit(kit);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
-                    shoppingCart.addProduct(product, product.getQuantity());
-                    product.setQuantity(0);
+                    shoppingCart.addKit(kit, kit.getQuantity());
+                    kit.setQuantity(0);
                     return new ResponseEntity<>(HttpStatus.OK);
                 }
             } else {
@@ -75,29 +75,29 @@ public class ShoppingCartController {
     }
 
     /**
-     * Removes a product from the shopping cart. Validates that the product exists in the cart before
-     * removing the specified quantity. Updates the inventory to reflect the returned stock level.
+     * Removes a kit from the shopping cart. Validates that the kit exists in the cart before
+     * removing the specified quantity. Updates the kit to reflect the returned stock level.
      * 
-     * @param id the ID of the product to remove
-     * @param quantity the quantity of the product to remove
+     * @param id the ID of the kit to remove
+     * @param quantity the quantity of the kit to remove
      * @return ResponseEntity representing the result of the operation (OK, NOT_FOUND, INTERNAL_SERVER_ERROR)
      */
     @DeleteMapping("/remove")
     public ResponseEntity<Void> removeFromCart(@PathVariable int id, @RequestParam int quantity) {
         LOG.info("DELETE /cart/remove/id/?quantity=");
         try {
-            Product product = inventoryDao.getProduct(id);
-            if (product == null) {
+            Kit kit = kitDao.getKit(id);
+            if (kit == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-            if (shoppingCart.containsProduct(product)) {
-                int newQuantity = product.getQuantity() + quantity;
-                if (shoppingCart.getProductQuantity(product) < quantity) {
-                    newQuantity = product.getQuantity() + shoppingCart.getProductQuantity(product);
+            if (shoppingCart.containsKit(kit)) {
+                int newQuantity = kit.getQuantity() + quantity;
+                if (shoppingCart.getKitQuantity(kit) < quantity) {
+                    newQuantity = kit.getQuantity() + shoppingCart.getKitQuantity(kit);
                 }
-                product.setQuantity(newQuantity);
-                inventoryDao.updateProduct(product);
-                shoppingCart.removeProduct(product, quantity);
+                kit.setQuantity(newQuantity);
+                kitDao.updateKit(kit);
+                shoppingCart.removeKit(kit, quantity);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -109,16 +109,16 @@ public class ShoppingCartController {
     }
 
     /**
-    * Retrieves and returns all the products currently in the shopping cart.
+    * Retrieves and returns all the kits currently in the shopping cart.
     * This endpoint allows the client to view all items in the cart, along with their quantities.
     * 
-    * @return A ResponseEntity containing a map of products to their quantities in the cart and the HTTP status code.
-    * @throws IOException if an I/O error occurs during product retrieval.
+    * @return A ResponseEntity containing a map of kits to their quantities in the cart and the HTTP status code.
+    * @throws IOException if an I/O error occurs during kit retrieval.
     */
     @GetMapping("")
-    public ResponseEntity<Map<Product, Integer>> getCartProducts() throws IOException {
+    public ResponseEntity<Map<Kit, Integer>> getCartKits() throws IOException {
         LOG.info("GET /cart");
-        Map<Product, Integer> cartItems = shoppingCart.getProducts();
+        Map<Kit, Integer> cartItems = shoppingCart.getKits();
         return new ResponseEntity<>(cartItems, HttpStatus.OK);
     }
 }
