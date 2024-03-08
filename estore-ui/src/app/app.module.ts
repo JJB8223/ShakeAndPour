@@ -10,6 +10,8 @@ import { MessagesComponent } from './messages/messages.component';
 import { DashboardComponent } from './dashboard/dashboard.component'; // <-- NgModel lives here
 import { ProductSearchComponent } from './product-search/product-search.component';
 import { LoginComponent } from './login/login.component';
+import { AdminComponent } from './admin/admin.component';
+import { PublicComponent } from './public/public.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { LoginComponent } from './login/login.component';
     MessagesComponent,
     DashboardComponent,
     ProductSearchComponent,
-    LoginComponent
+    LoginComponent,
+    AdminComponent,
+    PublicComponent
   ],
   imports: [
     BrowserModule,
