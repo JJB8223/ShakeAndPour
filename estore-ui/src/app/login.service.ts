@@ -22,27 +22,8 @@ export class LoginService {
     private http: HttpClient,
     private messageService: MessageService) {}
 
-    /** POST: Check whose logging in, either admin or customer */
-    authenticateUser(username: string, password: string) {
-      const url = `${this.loginUrl}/authenticate`;
-      return this.http.post<User>(url, username, password, this.httpOptions)
-      .pipe(map(user => {
-      this.log(`User authenticated: ${user.username}`);
-      return user;
-      }),
-      catchError(this.handleError<User>('authenticateUser')
-    }
-
-
-
-    private handleError<T>(operation = 'operation', result?: T) {
-      return (error:any): Observable<T> => {
-
-        console.error(error);
-        this.log(`${operation} failed: ${error.message}`);
-
-        return of(result as T);
-
-      }
+    login(username: string, password: string){
+    let user = (u) =>u.username===username && u.password===password;
+      if(this.username)
     }
 }
