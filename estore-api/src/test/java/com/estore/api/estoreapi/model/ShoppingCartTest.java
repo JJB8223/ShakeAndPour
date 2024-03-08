@@ -48,11 +48,11 @@ public class ShoppingCartTest {
      */
     @Test
     public void testAddAndRemoveProduct() {
-        cart.addProduct(milk, 2);
-        cart.addProduct(cola, 3);
-        cart.removeProduct(cola, 1);
-        assertEquals(2, cart.getProducts().get(milk).intValue(), "Soda quantity should be 2");
-        assertEquals(2, cart.getProducts().get(cola).intValue(), "Tea quantity after removal should be 2");
+        cart.addKit(kit1, 2);
+        cart.addKit(kit2, 3);
+        cart.removeKit(kit2, 1);
+        assertEquals(2, cart.getKits().get(kit2).intValue(), "Kit2 quantity should be 2");
+        assertEquals(2, cart.getKits().get(kit2).intValue(), "Kit1 quantity after removal should be 2");
     }
 
     /**
@@ -61,9 +61,9 @@ public class ShoppingCartTest {
      */
     @Test
     public void testGetTotalCost() {
-        cart.addProduct(milk, 2);
-        cart.addProduct(cola, 3);
-        assertEquals(11.95f, cart.getTotalCost(), 0.001, "Total cost should reflect sum of drink costs");
+        cart.addKit(kit1, 2);
+        cart.addKit(kit2, 3);
+        assertEquals(90.00f, cart.getTotalCost(), 0.001, "Total cost should reflect sum of drink costs");
     }
 
     /**
@@ -72,9 +72,9 @@ public class ShoppingCartTest {
      */
     @Test
     public void testClearCart() {
-        cart.addProduct(milk, 3);
-        cart.addProduct(cola, 5);
+        cart.addKit(kit1, 3);
+        cart.addKit(kit2, 5);
         cart.clearCart();
-        assertTrue(cart.getProducts().isEmpty(), "Cart should be completely cleared");
+        assertTrue(cart.getKits().isEmpty(), "Cart should be completely cleared");
     }
 }

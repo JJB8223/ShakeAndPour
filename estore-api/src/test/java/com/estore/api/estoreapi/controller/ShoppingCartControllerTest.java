@@ -6,8 +6,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.estore.api.estoreapi.model.Product;
-import com.estore.api.estoreapi.persistence.InventoryDAO;
+import com.estore.api.estoreapi.model.Kit;
+import com.estore.api.estoreapi.persistence.KitDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -15,122 +15,143 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Tag("Controller-tier")
 public class ShoppingCartControllerTest {
 
     private ShoppingCartController shoppingCartController;
-    private InventoryDAO mockInventoryDAO;
+    private KitDAO mockKitDAO;
 
     @BeforeEach
     public void setup() {
-        mockInventoryDAO = mock(InventoryDAO.class);
-        shoppingCartController = new ShoppingCartController(mockInventoryDAO);
+        mockKitDAO = mock(KitDAO.class);
+        shoppingCartController = new ShoppingCartController(mockKitDAO);
     }
 
     @Test
     public void testAddToCart() throws IOException {
-        int productId = 1;
+        int kitId = 1;
         int quantity = 5;
-        Product product = new Product(productId, "Soda", 2.99f, 20);
-        when(mockInventoryDAO.getProduct(productId)).thenReturn(product);
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        
+        Kit kit1 = new Kit(kitId, "Soda", 2.99f, 20, products);
+        when(mockKitDAO.getKit(kitId)).thenReturn(kit1);
 
-        ResponseEntity<Void> response = shoppingCartController.addtoCart(productId, quantity);
+        ResponseEntity<Void> response = shoppingCartController.addtoCart(kitId, quantity);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    public void testAddToCartProductNotFound() throws IOException {
-        int productId = 1;
+    public void testAddToCartKitNotFound() throws IOException {
+        int kitId = 1;
         int quantity = 5;
-        when(mockInventoryDAO.getProduct(productId)).thenReturn(null);
+        when(mockKitDAO.getKit(kitId)).thenReturn(null);
 
-        ResponseEntity<Void> response = shoppingCartController.addtoCart(productId, quantity);
+        ResponseEntity<Void> response = shoppingCartController.addtoCart(kitId, quantity);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     public void testAddToCartInsufficientQuantity() throws IOException {
-        int productId = 1;
+        int kitId = 1;
         int quantity = 25;
-        Product product = new Product(productId, "Soda", 2.99f, 20);
-        when(mockInventoryDAO.getProduct(productId)).thenReturn(product);
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        Kit kit = new Kit(kitId, "Soda", 2.99f, 20, products);
+        when(mockKitDAO.getKit(kitId)).thenReturn(kit);
 
-        ResponseEntity<Void> response = shoppingCartController.addtoCart(productId, quantity);
+        ResponseEntity<Void> response = shoppingCartController.addtoCart(kitId, quantity);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     public void testAddToCartHandleException() throws IOException {
-        int productId = 1;
+        int kitId = 1;
         int quantity = 5;
-        doThrow(new IOException()).when(mockInventoryDAO).getProduct(productId);
+        doThrow(new IOException()).when(mockKitDAO).getKit(kitId);
 
-        ResponseEntity<Void> response = shoppingCartController.addtoCart(productId, quantity);
+        ResponseEntity<Void> response = shoppingCartController.addtoCart(kitId, quantity);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
     @Test
     public void testRemoveFromCart() throws IOException {
-        int productId = 1;
+        int kitId = 1;
         int quantity = 5;
-        Product product = new Product(productId, "Soda", 2.99f, 20);
-        when(mockInventoryDAO.getProduct(productId)).thenReturn(product);
-        shoppingCartController.addtoCart(productId, quantity); // Add product to cart before attempting to remove
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        Kit kit = new Kit(kitId, "Soda", 2.99f, 20, products);
+        when(mockKitDAO.getKit(kitId)).thenReturn(kit);
+        shoppingCartController.addtoCart(kitId, quantity); // Add kit to cart before attempting to remove
 
-        ResponseEntity<Void> response = shoppingCartController.removeFromCart(productId, quantity);
+        ResponseEntity<Void> response = shoppingCartController.removeFromCart(kitId, quantity);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    public void testRemoveFromCartProductNotFound() throws IOException {
-        int productId = 1;
+    public void testRemoveFromCartKitNotFound() throws IOException {
+        int kitId = 1;
         int quantity = 5;
 
-        when(mockInventoryDAO.getProduct(productId)).thenReturn(null);
+        when(mockKitDAO.getKit(kitId)).thenReturn(null);
 
-        ResponseEntity<Void> response = shoppingCartController.removeFromCart(productId, quantity);
+        ResponseEntity<Void> response = shoppingCartController.removeFromCart(kitId, quantity);
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     public void testRemoveFromCartHandleException() throws IOException {
-        int productId = 1;
+        int kitId = 1;
         int quantity = 5;
-        doThrow(new IOException()).when(mockInventoryDAO).getProduct(productId);
+        doThrow(new IOException()).when(mockKitDAO).getKit(kitId);
 
-        ResponseEntity<Void> response = shoppingCartController.removeFromCart(productId, quantity);
+        ResponseEntity<Void> response = shoppingCartController.removeFromCart(kitId, quantity);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
     @Test
-    public void testGetCartProducts() throws IOException {
-        int productId1 = 1, productId2 = 2;
-        Product milk = new Product(productId1, "Milk", 2.99f, 50);
-        Product cola = new Product(productId2, "Cola", 1.99f, 50);
-        when(mockInventoryDAO.getProduct(productId1)).thenReturn(milk);
-        when(mockInventoryDAO.getProduct(productId2)).thenReturn(cola);
-        shoppingCartController.addtoCart(productId1, 2); // Add products to the cart
-        shoppingCartController.addtoCart(productId2, 3);
+    public void testGetCartKits() throws IOException {
+        int kitId1 = 1, kitId2 = 2;
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        ArrayList<Integer> products2 = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        products2.add(4);
+        products2.add(5);
+        Kit kit1 = new Kit(kitId1, "Milk", 2.99f, 50, products);
+        Kit kit2 = new Kit(kitId2, "Cola", 1.99f, 50, products2);
+        when(mockKitDAO.getKit(kitId1)).thenReturn(kit1);
+        when(mockKitDAO.getKit(kitId2)).thenReturn(kit2);
+        shoppingCartController.addtoCart(kitId1, 2); // Add kits to the cart
+        shoppingCartController.addtoCart(kitId2, 3);
 
-        ResponseEntity<Map<Product, Integer>> response = shoppingCartController.getCartProducts();
+        ResponseEntity<Map<Kit, Integer>> response = shoppingCartController.getCartKits();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, response.getBody().get(milk).intValue());
-        assertEquals(3, response.getBody().get(cola).intValue());
+        assertEquals(2, response.getBody().get(kit1).intValue());
+        assertEquals(3, response.getBody().get(kit2).intValue());
     }
 
     @Test
-    public void testGetCartProductsWhenEmpty() throws IOException {
-        ResponseEntity<Map<Product, Integer>> response = shoppingCartController.getCartProducts();
+    public void testGetCartKitsWhenEmpty() throws IOException {
+        ResponseEntity<Map<Kit, Integer>> response = shoppingCartController.getCartKits();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().isEmpty());
