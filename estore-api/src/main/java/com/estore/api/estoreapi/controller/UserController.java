@@ -44,6 +44,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<Void> registerUser(@RequestBody User user) {
         LOG.info("POST users/register");
+        // TODO FIX
         user.setId(nextId++);
         users.put(user.getId(), user);
         LoginController.addCredentials(user.getUsername(), user.getPassword());

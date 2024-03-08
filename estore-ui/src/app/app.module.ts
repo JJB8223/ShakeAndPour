@@ -23,7 +23,7 @@ import { PublicComponent } from './public/public.component';
     ProductSearchComponent,
     LoginComponent,
     AdminComponent,
-    PublicComponent
+    PublicComponent,
   ],
   imports: [
     BrowserModule,

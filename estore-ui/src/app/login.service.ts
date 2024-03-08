@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import {Login} from './login';
+import {LoginComponent} from './login/login.component';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -31,7 +31,7 @@ export class LoginService {
 
       /** Log a ProductService message with the MessageService */
     private log(message: string) {
-      this.messageService.add(`ProductService: ${message}`);
+      this.messageService.add(`LoginService: ${message}`);
     }
 
     private handleError<T>(operation = 'operation', result?: T) {
