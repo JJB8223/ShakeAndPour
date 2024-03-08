@@ -1,0 +1,74 @@
+package com.estore.api.estoreapi.persistence;
+
+import com.estore.api.estoreapi.model.User;
+
+import java.io.IOException;
+
+/**
+ * Defines the interface for the User object persistence
+ *
+ * @author Matthew Morrison msm8275
+ */
+public interface UserDAO {
+
+    /**
+     * Create and save a new  {@linkplain User User}
+     * @param user {@linkplain User User} object to be created and saved.
+     * The id of the User object is assigned uniquely when a new User is created
+     *
+     * @return new {@linkplain User User} if successful, False otherwise
+     * @throws IOException if there is an issue with underlying storage
+     */
+    User createUser (User user) throws IOException;
+
+    /**
+     * Delete a {@linkplain User User} with their id
+     *
+     * @param id The id of the {@link User User}
+     *
+     * @return true if the {@link User User} was deleted,
+     * False, if User with the given id does not exist
+     *
+     * @throws IOException if underlying storage cannot be accessed
+     */
+    boolean deleteProduct(int id) throws IOException;
+
+    /**
+     * Updates and saves a new username for a {@linkplain User User}
+     *
+     * @param user {@linkplain User User} user to update their username
+     * @param newUsername the new username to update to
+     *
+     * @return updated {@linkplain User User} if successful, null if
+     * {@linkplain User User} could not be found
+     *
+     * @throws IOException if underlying storage cannot be accessed
+     */
+    User updateUsername(User user, String newUsername) throws IOException;
+
+    /**
+     * Updates and saves a new password for a {@linkplain User User}
+     *
+     * @param user {@linkplain User User} user to update their username
+     * @param newPassword the new password to update to
+     *
+     * @return updated {@linkplain User User} if successful, null if
+     * {@linkplain User User} could not be found
+     *
+     * @throws IOException if underlying storage cannot be accessed
+     */
+    User updatePassword(User user, String newPassword) throws IOException;
+
+    /**
+     * Updates and saves a new name for a {@linkplain User User}
+     *
+     * @param user {@linkplain User User} user to update their username
+     * @param newName the new name to update to
+     *
+     * @return updated {@linkplain User User} if successful, null if
+     * {@linkplain User User} could not be found
+     *
+     * @throws IOException if underlying storage cannot be accessed
+     */
+    User updateName(User user, String newName) throws IOException;
+}
