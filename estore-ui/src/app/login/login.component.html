@@ -1,8 +1,7 @@
-<div id="container" [formGroup]="form">
-  <h1>Login</h1>
-
-  <input type="text" formControlName="username" placeholder="Username"/>
-  <input type="text" formControlName="password" placeholder="Password"/>
-
-  <button (click)="login()">Login</button>
-</div>
+<h1>Login</h1>
+<form>
+  <label for="username">Username: </label>
+  <input type="text" id = "username" name="username"><br>
+  <label for="password">Password: </label>
+  <input type="text" id = "password" name="password"><br>
+</form>

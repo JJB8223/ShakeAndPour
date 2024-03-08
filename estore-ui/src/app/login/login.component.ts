@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder} from '@angular/forms';
+import {LoginService} from '../login.service'
 
 @Component({
   selector: 'app-login',
@@ -9,29 +9,36 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  form: FormGroup = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required]
+  form = this.formBuilder.group({
+    username: [""],
+    password: [""]
   });
 
-  constructor(private http: HttpClient, private router: Router) {} //Router so I can send them to different pages, Httpclient so a http can ask login controller questions
+  constructor(
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private loginService: LoginService,
+    ) {} //Router so I can send them to different pages, Httpclient so a http can ask login controller questions
 
   login(): void {
-    let user = this.authService.login(
-      this.form.value.username,
-      this.form.value.password
+
+    const username: string = this.form.value.username || '';
+    const password: string = this.form.value.password || '';
+
+    this.loginService.login(
+      username, password
+    ).subscribe(
+      user => {
+        if (user && user.username === 'admin') {
+          this.router.navigateByUrl('/admin');
+        }
+        else if (user) {
+          this.router.navigateByUrl('/user');
+        }
+        else {
+          alert('Invalid username or password');
+        }
+      }
     );
-
-    if(!user){
-      alert('Invalid username or password');
-    }
-    else if (user.username === "admin"){
-    this.router.navigateByUrl('/admin');
-    }
-    else{
-    this.router.navigateByUrl('/user');
-    }
-
-
   }
 }
