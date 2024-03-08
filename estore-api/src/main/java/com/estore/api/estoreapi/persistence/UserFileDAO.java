@@ -1,11 +1,13 @@
 package com.estore.api.estoreapi.persistence;
 
+import com.estore.api.estoreapi.model.Product;
 import com.estore.api.estoreapi.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -39,6 +41,17 @@ public class UserFileDAO implements UserDAO{
     }
 
     /**
+     * Generates the next id for a new {@linkplain User User}
+     *
+     * @return The next id
+     */
+    private synchronized static int nextId() {
+        int id = nextId;
+        ++nextId;
+        return id;
+    }
+
+    /**
      * Load the information on the user file
      * @return true when completed
      * @throws IOException if an error occurs reading the object mapper
@@ -60,6 +73,35 @@ public class UserFileDAO implements UserDAO{
     }
 
     /**
+     * Generates an array of {@linkplain User users} from the tree map for any
+     * {@linkplain User users}
+     *
+     * @return  The array of {@link Product products}, may be empty
+     */
+    private User[] getUsers() {
+        ArrayList<User> userArrayList = new ArrayList<>(users.values());
+
+        User[] userList = new User[userArrayList.size()];
+        userArrayList.toArray(userList);
+        return userList;
+    }
+
+    /**
+     * Saves the {@linkplain Product products} from the map into the file as an array of JSON objects
+     *
+     * @return true if the {@link Product products} were written successfully
+     *
+     * @throws IOException when file cannot be accessed or written to
+     */
+    private boolean save() throws IOException {
+        User[] users = getUsers();
+
+        objectMapper.writeValue(new File(filename), users);
+        return true;
+    }
+
+
+    /**
      * Create and save a new  {@linkplain User User}
      * @param user {@linkplain User User} object to be created and saved.
      * The id of the User object is assigned uniquely when a new User is created
@@ -69,7 +111,13 @@ public class UserFileDAO implements UserDAO{
      */
     @Override
     public User createUser(User user) throws IOException {
-        return null;
+        synchronized(users) {
+            User newU = new User(nextId(), user.getUsername(), user.getPassword(),
+                    user.getName(), user.getRole());
+            users.put(newU.getId(), newU);
+            save();
+            return newU;
+        }
     }
 
     /**
@@ -84,7 +132,15 @@ public class UserFileDAO implements UserDAO{
      */
     @Override
     public boolean deleteProduct(int id) throws IOException {
-        return false;
+        synchronized (users){
+            if(users.containsKey(id)){
+                users.remove(id);
+                return save();
+            }
+            else{
+                return false;
+            }
+        }
     }
 
     /**
@@ -100,7 +156,16 @@ public class UserFileDAO implements UserDAO{
      */
     @Override
     public User updateUsername(User user, String newUsername) throws IOException {
-        return null;
+        synchronized (users){
+            if(!users.containsKey(user.getId())){
+                return null; // User doesn't exist
+            }
+
+            user.setUsername(newUsername);
+            users.put(user.getId(), user);
+            save();
+            return user;
+        }
     }
 
     /**
@@ -116,7 +181,16 @@ public class UserFileDAO implements UserDAO{
      */
     @Override
     public User updatePassword(User user, String newPassword) throws IOException {
-        return null;
+        synchronized (users){
+            if(!users.containsKey(user.getId())){
+                return null; // User doesn't exist
+            }
+
+            user.setPassword(newPassword);
+            users.put(user.getId(), user);
+            save();
+            return user;
+        }
     }
 
     /**
@@ -132,6 +206,15 @@ public class UserFileDAO implements UserDAO{
      */
     @Override
     public User updateName(User user, String newName) throws IOException {
-        return null;
+        synchronized (users){
+            if(!users.containsKey(user.getId())){
+                return null; // User doesn't exist
+            }
+
+            user.setName(newName);
+            users.put(user.getId(), user);
+            save();
+            return user;
+        }
     }
 }
