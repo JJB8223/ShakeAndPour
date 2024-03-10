@@ -92,4 +92,12 @@ public interface UserDAO {
      * @throws IOException if underlying storage cannot be accessed
      */
     User updateName(User user, String newName) throws IOException;
+
+    /**
+     * Attempt to log in a user to the estore with their credentials
+     * @param username the entered username
+     * @param password the entered password
+     * @return true if the credentials exists and are correct, else false
+     */
+    boolean authorize(String username, String password);
 }

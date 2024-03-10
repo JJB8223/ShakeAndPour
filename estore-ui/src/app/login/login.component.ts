@@ -9,6 +9,7 @@ import {LoginService} from '../login.service'
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  users$!: Observable<User{}>;
   form = this.formBuilder.group({
     username: [""],
     password: [""]

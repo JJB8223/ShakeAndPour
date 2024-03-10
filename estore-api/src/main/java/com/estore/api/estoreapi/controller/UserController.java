@@ -28,7 +28,6 @@ public class UserController {
     private static final Logger LOG = Logger.getLogger(UserController.class.getName());
 
     private static Map<Integer, User> users = new HashMap<>();
-    private static Map<String, String> loginCreds = new HashMap<>();
     private static int nextId = 0;
 
     private UserDAO userDAO;
@@ -197,13 +196,18 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         LOG.info("DELETE /users/delete/" + id);
-        if(users.containsKey(id)){
-            users.remove(id);
-            User user = users.get(id);
-            LoginController.delCredentials(user.getUsername(), user.getPassword());
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            boolean status = userDAO.deleteUser(id);
+            if (!status) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        catch (IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }    
 
@@ -223,5 +227,24 @@ public class UserController {
         nextId++;
         
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
+    @GetMapping("/login")
+    public ResponseEntity<String> login(@RequestParam String username,
+                                      @RequestParam String password){
+        LOG.info("GET /users/login/?username=" + username + "?password=" + password);
+        if(username.equals("admin") && userDAO.authorize(username, password)){
+            return new ResponseEntity<>("admin login successful",
+                    HttpStatus.OK);
+        }
+        else if (userDAO.authorize(username, password)) {
+            return new ResponseEntity<>("user login successful" ,
+                    HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>("Invalid username or password",
+                    HttpStatus.UNAUTHORIZED);
+        }
     }
 }

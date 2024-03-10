@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Implements the functionality for JSON file-based persistence for Users
@@ -19,6 +17,7 @@ import java.util.TreeMap;
 public class UserFileDAO implements UserDAO{
 
     Map<Integer, User> users; // local cache of all current Users
+    HashMap<String, String> loginCreds;
 
     private ObjectMapper objectMapper; // Connection between User objects
                                         // and JSON text format written
@@ -34,7 +33,7 @@ public class UserFileDAO implements UserDAO{
      * @param objectMapper the object mapper between User objects and JSON text
      * @throws IOException if an error occurs when instantiating the file
      */
-    public UserFileDAO(@Value("${user.file") String filename, ObjectMapper objectMapper) throws IOException{
+    public UserFileDAO(@Value("${users.file") String filename, ObjectMapper objectMapper) throws IOException{
         this.filename = filename;
         this.objectMapper = objectMapper;
         load();
@@ -67,6 +66,10 @@ public class UserFileDAO implements UserDAO{
             if (user.getId() > nextId) {
                 nextId = user.getId();
             }
+            String username = user.getUsername();
+            String password = user.getPassword();
+            loginCreds.put(username, password);
+
         }
         nextId++;
         return true;
@@ -115,6 +118,7 @@ public class UserFileDAO implements UserDAO{
             User newU = new User(nextId(), user.getUsername(), user.getPassword(),
                     user.getName(), user.getRole());
             users.put(newU.getId(), newU);
+            loginCreds.put(user.getUsername(), user.getPassword());
             save();
             return newU;
         }
@@ -134,7 +138,10 @@ public class UserFileDAO implements UserDAO{
     public boolean deleteUser(int id) throws IOException {
         synchronized (users){
             if(users.containsKey(id)){
+                User u = getUser(id);
                 users.remove(id);
+
+                loginCreds.remove(u.getUsername());
                 return save();
             }
             else{
@@ -176,9 +183,10 @@ public class UserFileDAO implements UserDAO{
             if(!users.containsKey(user.getId())){
                 return null; // User doesn't exist
             }
-
+            loginCreds.remove(user.getUsername());
             user.setUsername(newUsername);
             users.put(user.getId(), user);
+            loginCreds.put(user.getUsername(), user.getPassword());
             save();
             return user;
         }
@@ -204,6 +212,7 @@ public class UserFileDAO implements UserDAO{
 
             user.setPassword(newPassword);
             users.put(user.getId(), user);
+            loginCreds.replace(user.getUsername(), newPassword);
             save();
             return user;
         }
@@ -233,4 +242,16 @@ public class UserFileDAO implements UserDAO{
             return user;
         }
     }
+
+    /**
+     * Attempt to log in a user to the estore with their credentials
+     * @param username the entered username
+     * @param password the entered password
+     * @return true if the credentials exists and are correct, else false
+     */
+    public boolean authorize(String username, String password) {
+        return loginCreds.containsKey(username) &&
+                Objects.equals(loginCreds.get(username), password);
+    }
+
 }
