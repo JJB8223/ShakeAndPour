@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Implements the functionality for JSON file-based persistence for Users
@@ -15,6 +16,8 @@ import java.util.*;
  * @author Matthew Morrison msm8275
  */
 public class UserFileDAO implements UserDAO{
+
+    private static final Logger LOG = Logger.getLogger(UserFileDAO.class.getName());
 
     Map<Integer, User> users; // local cache of all current Users
     HashMap<String, String> loginCreds;
@@ -33,7 +36,7 @@ public class UserFileDAO implements UserDAO{
      * @param objectMapper the object mapper between User objects and JSON text
      * @throws IOException if an error occurs when instantiating the file
      */
-    public UserFileDAO(@Value("${users.file") String filename, ObjectMapper objectMapper) throws IOException{
+    public UserFileDAO(@Value("${users.file}") String filename, ObjectMapper objectMapper) throws IOException{
         this.filename = filename;
         this.objectMapper = objectMapper;
         load();

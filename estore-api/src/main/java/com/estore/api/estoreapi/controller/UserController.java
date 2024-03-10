@@ -1,8 +1,6 @@
 package com.estore.api.estoreapi.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -12,11 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.estore.api.estoreapi.model.User;
-import com.estore.api.estoreapi.model.User.UserRole;
 
 /**
  * Controller for handling anything that would need to be done with users within the e-store API.
- * This class provides endpoints for registering, getting, updating. deleting and intializing Users.
+ * This class provides endpoints for registering, getting, updating. deleting and initializing Users.
+ * Also helps user's to log in using their credentials
+ *
  *
  * @author Joshua Bay jjb8223
  * @author Matthew Morrison msm8275
@@ -26,9 +25,6 @@ import com.estore.api.estoreapi.model.User.UserRole;
 public class UserController {
 
     private static final Logger LOG = Logger.getLogger(UserController.class.getName());
-
-    private static Map<Integer, User> users = new HashMap<>();
-    private static int nextId = 0;
 
     private UserDAO userDAO;
 
@@ -209,24 +205,6 @@ public class UserController {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }    
-
-    /**
-     * Initializes some users for testing purposes.
-     * 
-     * @return ResponseEntity indicating the status of the initialization operation.
-     */
-    @PostMapping("/init-users")
-    public ResponseEntity<Void> initUser(){
-        LOG.info("POST /users/init-users");
-        User Akhil = new User(nextId, "customer", "password", "Akhil", UserRole.CUSTOMER);
-        users.put(nextId, Akhil);
-        nextId++;
-        User MattyMo = new User(2, "admin", "password", "MattyMo", UserRole.ADMIN);
-        users.put(nextId, MattyMo);
-        nextId++;
-        
-        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
