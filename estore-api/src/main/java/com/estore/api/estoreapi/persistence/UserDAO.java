@@ -1,5 +1,6 @@
 package com.estore.api.estoreapi.persistence;
 
+import com.estore.api.estoreapi.model.Product;
 import com.estore.api.estoreapi.model.User;
 
 import java.io.IOException;
@@ -32,6 +33,14 @@ public interface UserDAO {
      * @throws IOException if underlying storage cannot be accessed
      */
     boolean deleteUser(int id) throws IOException;
+
+    /**
+     * Generates an array of {@linkplain User users} from the tree map for any
+     * {@linkplain User users}
+     *
+     * @return  The array of {@link Product products}, may be empty
+     */
+    User[] getUsers();
 
     /**
      * Retrieve a specific {@linkplain User User}

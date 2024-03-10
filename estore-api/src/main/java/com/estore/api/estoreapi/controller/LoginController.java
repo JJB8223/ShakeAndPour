@@ -1,9 +1,12 @@
 package com.estore.api.estoreapi.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.estore.api.estoreapi.model.User;
+import com.estore.api.estoreapi.persistence.UserDAO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +28,29 @@ public class LoginController {
     private static final Logger LOG = Logger.getLogger(UserController.class.getName());
 
     private static Map<String, String> credentials = new HashMap<>();
+
+    private UserDAO userDAO;
+
+
+    public void getCredentials() {
+        User[] users = userDAO.getUsers();
+        for(User u : users){
+            String username = u.getUsername();
+            String password = u.getPassword();
+            credentials.put(username, password);
+        }
+    }
+
+    /**
+     * Creates a REST API controller to reponds to requests
+     * @param userDao The {@link UserDAO Product Data Access Object} to perform CRUD operations
+     * <br>
+     * This dependency is injected by the Spring Framework
+     */
+    public LoginController(UserDAO userDao){
+        this.userDAO = userDao;
+        getCredentials();
+    }
 
     /**
      * Adds a user to the credentials list
@@ -56,7 +82,7 @@ public class LoginController {
     public ResponseEntity<String> authenticate(@RequestParam String username, @RequestParam String password) { 
         LOG.info("POST /login/authenticate");
         if(credentials.containsKey(username) && credentials.get(username).equals(password)){
-            return new ResponseEntity<>("Login Sucessful", HttpStatus.OK);
+            return new ResponseEntity<>("Login Successful", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
         }

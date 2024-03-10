@@ -78,7 +78,7 @@ public class UserFileDAO implements UserDAO{
      *
      * @return  The array of {@link Product products}, may be empty
      */
-    private User[] getUsers() {
+    public User[] getUsers() {
         ArrayList<User> userArrayList = new ArrayList<>(users.values());
 
         User[] userList = new User[userArrayList.size()];

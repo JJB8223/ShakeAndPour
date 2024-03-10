@@ -28,9 +28,20 @@ public class UserController {
     private static final Logger LOG = Logger.getLogger(UserController.class.getName());
 
     private static Map<Integer, User> users = new HashMap<>();
+    private static Map<String, String> loginCreds = new HashMap<>();
     private static int nextId = 0;
 
     private UserDAO userDAO;
+
+    /**
+     * Creates a REST API controller to reponds to requests
+     * @param userDao The {@link UserDAO Product Data Access Object} to perform CRUD operations
+     * <br>
+     * This dependency is injected by the Spring Framework
+     */
+    public UserController(UserDAO userDao){
+        this.userDAO = userDao;
+    }
 
 
 
@@ -80,7 +91,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    //TODO fix so it has method for updating username, password, or name
 
     /**
      * Update an existing {@linkplain User User} username
