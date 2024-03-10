@@ -1,19 +1,15 @@
 package com.estore.api.estoreapi.controller;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.estore.api.estoreapi.persistence.UserDAO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.estore.api.estoreapi.model.User;
 import com.estore.api.estoreapi.model.User.UserRole;
@@ -21,8 +17,9 @@ import com.estore.api.estoreapi.model.User.UserRole;
 /**
  * Controller for handling anything that would need to be done with users within the e-store API.
  * This class provides endpoints for registering, getting, updating. deleting and intializing Users.
- * 
+ *
  * @author Joshua Bay jjb8223
+ * @author Matthew Morrison msm8275
  */
 @RestController
 @RequestMapping("users")
@@ -33,6 +30,8 @@ public class UserController {
     private static Map<Integer, User> users = new HashMap<>();
     private static int nextId = 0;
 
+    private UserDAO userDAO;
+
 
 
     /**
@@ -42,13 +41,19 @@ public class UserController {
      * @return ResponseEntity indicating the status of the registration operation.
      */
     @PostMapping("/register")
-    public ResponseEntity<Void> registerUser(@RequestBody User user) {
-        LOG.info("POST users/register");
-        // TODO FIX
-        user.setId(nextId++);
-        users.put(user.getId(), user);
-        LoginController.addCredentials(user.getUsername(), user.getPassword());
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
+        LOG.info("POST users/register " + user);
+        try {
+            User createdU = userDAO.createUser(user);
+            if(createdU == null){
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
+            }
+            return new ResponseEntity<>(createdU, HttpStatus.CREATED);
+        }
+        catch(IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -60,30 +65,116 @@ public class UserController {
     @GetMapping("/get/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) { 
         LOG.info("GET /users/get/" + id);
-        User result = users.get(id);
-        if(result == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-        return new ResponseEntity<>(result,HttpStatus.OK);
+
+        try {
+            User u = userDAO.getUser(id);
+            if (u != null){
+                return new ResponseEntity<>(u, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch(IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    //TODO fix so it has method for updating username, password, or name
+
+    /**
+     * Update an existing {@linkplain User User} username
+     * @param id the id of the existing {@linkplain User User}
+     * @param newU the new username
+     * @return ResponseEntity indicating the status of the operation.
+     * @throws IOException if an internal error occurs
+     */
+    @PutMapping("/update/{id}/u")
+    public ResponseEntity<Void> updateUsername(@PathVariable int id, @RequestParam String newU)
+        throws IOException {
+        LOG.info("PUT /users/update/" + id + "/u/?username=" + newU);
+        try{
+            User currU = userDAO.getUser(id);
+            if (currU == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            User status = userDAO.updateUsername(currU, newU);
+
+            if (status == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        catch (IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     /**
-     * Updates an existing user.
-     * 
-     * @param id The ID of the user to update.
-     * @param user The updated user object.
-     * @return ResponseEntity indicating the status of the update operation.
+     * Update an existing {@linkplain User User} password
+     * @param id the id of the existing {@linkplain User User}
+     * @param newP the new password
+     * @return ResponseEntity indicating the status of the operation.
+     * @throws IOException if an internal error occurs
      */
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateUser(@PathVariable int id, @RequestBody User user) {
-        LOG.info("PUT /users/update/" + id);
-        if(users.containsKey(id)){
-            user.setId(id);
-            users.put(id,user);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @PutMapping("/update/{id}/p")
+    public ResponseEntity<Void> updatePassword(@PathVariable int id, @RequestParam String newP)
+            throws IOException {
+        LOG.info("PUT /users/update/" + id + "/p/?password=" + newP);
+        try{
+            User currU = userDAO.getUser(id);
+            if (currU == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            User status = userDAO.updatePassword(currU, newP);
+
+            if (status == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        catch (IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    /**
+     * Update an existing {@linkplain User User} name
+     * @param id the id of the existing {@linkplain User User}
+     * @param newN the new name
+     * @return ResponseEntity indicating the status of the operation.
+     * @throws IOException if an internal error occurs
+     */
+    @PutMapping("/update/{id}/n")
+    public ResponseEntity<Void> updateName(@PathVariable int id, @RequestParam String newN)
+            throws IOException {
+        LOG.info("PUT /users/update/" + id + "/n/?name=" + newN);
+        try{
+            User currU = userDAO.getUser(id);
+            if (currU == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            User status = userDAO.updateName(currU, newN);
+
+            if (status == null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            else{
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        catch (IOException e) {
+            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

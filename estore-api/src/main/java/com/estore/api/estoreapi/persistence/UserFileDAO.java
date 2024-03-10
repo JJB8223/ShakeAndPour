@@ -131,7 +131,7 @@ public class UserFileDAO implements UserDAO{
      * @throws IOException if underlying storage cannot be accessed
      */
     @Override
-    public boolean deleteProduct(int id) throws IOException {
+    public boolean deleteUser(int id) throws IOException {
         synchronized (users){
             if(users.containsKey(id)){
                 users.remove(id);
@@ -140,6 +140,22 @@ public class UserFileDAO implements UserDAO{
             else{
                 return false;
             }
+        }
+    }
+
+    /**
+     * Retrieve a specific {@linkplain User User}
+     *
+     * @param id the id of the user to find
+     *
+     * @return the specific {@linkplain User User} that corresponds
+     * with the id
+     *
+     * @throws IOException if there is an issue with underlying storage
+     */
+    public User getUser(int id) throws IOException{
+        synchronized (users){
+            return users.getOrDefault(id, null);
         }
     }
 

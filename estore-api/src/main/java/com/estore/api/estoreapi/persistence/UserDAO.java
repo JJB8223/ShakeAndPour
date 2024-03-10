@@ -31,7 +31,19 @@ public interface UserDAO {
      *
      * @throws IOException if underlying storage cannot be accessed
      */
-    boolean deleteProduct(int id) throws IOException;
+    boolean deleteUser(int id) throws IOException;
+
+    /**
+     * Retrieve a specific {@linkplain User User}
+     *
+     * @param id the id of the user to find
+     *
+     * @return the specific {@linkplain User User} that corresponds
+     * with the id
+     *
+     * @throws IOException if there is an issue with underlying storage
+     */
+    User getUser(int id) throws IOException;
 
     /**
      * Updates and saves a new username for a {@linkplain User User}
