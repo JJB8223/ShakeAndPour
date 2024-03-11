@@ -4,6 +4,7 @@ import com.estore.api.estoreapi.model.Product;
 import com.estore.api.estoreapi.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +16,13 @@ import java.util.logging.Logger;
  *
  * @author Matthew Morrison msm8275
  */
+@Component
 public class UserFileDAO implements UserDAO{
 
     private static final Logger LOG = Logger.getLogger(UserFileDAO.class.getName());
 
     Map<Integer, User> users; // local cache of all current Users
-    HashMap<String, String> loginCreds;
+    Map<String, String> loginCreds = new HashMap<>();
 
     private ObjectMapper objectMapper; // Connection between User objects
                                         // and JSON text format written
