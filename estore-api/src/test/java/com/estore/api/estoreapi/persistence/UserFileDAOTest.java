@@ -1,6 +1,5 @@
 package com.estore.api.estoreapi.persistence;
 
-import com.estore.api.estoreapi.model.Product;
 import com.estore.api.estoreapi.model.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -133,4 +132,80 @@ public class UserFileDAOTest {
 
 
     }
+
+    @Test
+    public void testUpdatePassword() throws IOException{
+        User u = new User(102, "user" , "pass", "User", User.UserRole.CUSTOMER);
+
+        userFileDAO.createUser(u);
+
+        String newPassword = "newpass";
+
+        User result = assertDoesNotThrow(() -> userFileDAO.updatePassword(u, newPassword),
+                "Unexpected exception thrown");
+
+        User notFound = new User(0, "NotFound", "000", "u", User.UserRole.CUSTOMER);
+
+        assertNull(userFileDAO.updatePassword(notFound, newPassword));
+
+        assertNotNull(result);
+
+        assertEquals(102, u.getId());
+        assertEquals(newPassword, u.getPassword());
+        assertEquals("user", u.getUsername());
+        assertEquals("User", u.getName());
+        assertEquals(User.UserRole.CUSTOMER, u.getRole());
+
+
+        testLoginCreds = userFileDAO.getLogin();
+        assertEquals(testLoginCreds.size(), 3);
+        assertTrue(testLoginCreds.containsKey(u.getUsername()));
+        assertEquals(testLoginCreds.get(u.getUsername()), u.getPassword());
+
+
+    }
+
+    @Test
+    public void testUpdateName() throws IOException{
+        User u = new User(102, "user" , "pass", "User", User.UserRole.CUSTOMER);
+
+        userFileDAO.createUser(u);
+
+        String newName = "newname";
+
+        User result = assertDoesNotThrow(() -> userFileDAO.updateName(u, newName),
+                "Unexpected exception thrown");
+
+        User notFound = new User(0, "NotFound", "000", "u", User.UserRole.CUSTOMER);
+
+        assertNull(userFileDAO.updateName(notFound, newName));
+
+        assertNotNull(result);
+
+        assertEquals(102, u.getId());
+        assertEquals(newName, u.getName());
+        assertEquals("user", u.getUsername());
+        assertEquals("pass", u.getPassword());
+        assertEquals(User.UserRole.CUSTOMER, u.getRole());
+
+
+        testLoginCreds = userFileDAO.getLogin();
+        assertEquals(testLoginCreds.size(), 3);
+        assertTrue(testLoginCreds.containsKey(u.getUsername()));
+        assertEquals(testLoginCreds.get(u.getUsername()), u.getPassword());
+    }
+
+    @Test
+    public void testAuthorize() throws IOException {
+        User u = new User(102, "user" , "pass", "User", User.UserRole.CUSTOMER);
+
+        userFileDAO.createUser(u);
+
+        assertTrue(userFileDAO.authorize(u.getUsername(), u.getPassword()));
+        // incorrect username
+        assertFalse(userFileDAO.authorize("wrong", u.getPassword()));
+        // incorrect password
+        assertFalse(userFileDAO.authorize(u.getUsername(), "wrong"));
+    }
+
 }

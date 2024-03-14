@@ -16,7 +16,6 @@ import com.estore.api.estoreapi.model.User;
  * This class provides endpoints for registering, getting, updating. deleting and initializing Users.
  * Also helps user's to log in using their credentials
  *
- *
  * @author Joshua Bay jjb8223
  * @author Matthew Morrison msm8275
  */
@@ -95,7 +94,7 @@ public class UserController {
      * @throws IOException if an internal error occurs
      */
     @PutMapping("/update/{id}/u")
-    public ResponseEntity<Void> updateUsername(@PathVariable int id, @RequestParam String newU)
+    public ResponseEntity<User> updateUsername(@PathVariable int id, @RequestParam String newU)
         throws IOException {
         LOG.info("PUT /users/update/" + id + "/u/?username=" + newU);
         try{
@@ -110,7 +109,7 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             else{
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(status, HttpStatus.OK);
             }
         }
         catch (IOException e) {
@@ -127,7 +126,7 @@ public class UserController {
      * @throws IOException if an internal error occurs
      */
     @PutMapping("/update/{id}/p")
-    public ResponseEntity<Void> updatePassword(@PathVariable int id, @RequestParam String newP)
+    public ResponseEntity<User> updatePassword(@PathVariable int id, @RequestParam String newP)
             throws IOException {
         LOG.info("PUT /users/update/" + id + "/p/?password=" + newP);
         try{
@@ -142,7 +141,7 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             else{
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(status, HttpStatus.OK);
             }
         }
         catch (IOException e) {
@@ -159,7 +158,7 @@ public class UserController {
      * @throws IOException if an internal error occurs
      */
     @PutMapping("/update/{id}/n")
-    public ResponseEntity<Void> updateName(@PathVariable int id, @RequestParam String newN)
+    public ResponseEntity<User> updateName(@PathVariable int id, @RequestParam String newN)
             throws IOException {
         LOG.info("PUT /users/update/" + id + "/n/?name=" + newN);
         try{
@@ -174,7 +173,7 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
             else{
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<>(status, HttpStatus.OK);
             }
         }
         catch (IOException e) {
