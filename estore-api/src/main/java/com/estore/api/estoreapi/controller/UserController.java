@@ -210,7 +210,7 @@ public class UserController {
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username,
                                       @RequestParam String password){
-        LOG.info("GET /users/login/?username=" + username + "?password=" + password);
+        LOG.info("GET /users/login?username=" + username + "&password=" + password);
         if(username.equals("admin") && userDAO.authorize(username, password)){
             return new ResponseEntity<>("admin login successful",
                     HttpStatus.OK);
