@@ -89,21 +89,21 @@ public class UserController {
     /**
      * Update an existing {@linkplain User User} username
      * @param id the id of the existing {@linkplain User User}
-     * @param newU the new username
+     * @param username the new username
      * @return ResponseEntity indicating the status of the operation.
      * @throws IOException if an internal error occurs
      */
     @PutMapping("/update/{id}/u")
-    public ResponseEntity<User> updateUsername(@PathVariable int id, @RequestParam String newU)
+    public ResponseEntity<User> updateUsername(@PathVariable int id, @RequestParam String username)
         throws IOException {
-        LOG.info("PUT /users/update/" + id + "/u/?username=" + newU);
+        LOG.info("PUT /users/update/" + id + "/u?username=" + username);
         try{
             User currU = userDAO.getUser(id);
             if (currU == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            User status = userDAO.updateUsername(currU, newU);
+            User status = userDAO.updateUsername(currU, username);
 
             if (status == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -121,21 +121,21 @@ public class UserController {
     /**
      * Update an existing {@linkplain User User} password
      * @param id the id of the existing {@linkplain User User}
-     * @param newP the new password
+     * @param password the new password
      * @return ResponseEntity indicating the status of the operation.
      * @throws IOException if an internal error occurs
      */
     @PutMapping("/update/{id}/p")
-    public ResponseEntity<User> updatePassword(@PathVariable int id, @RequestParam String newP)
+    public ResponseEntity<User> updatePassword(@PathVariable int id, @RequestParam String password)
             throws IOException {
-        LOG.info("PUT /users/update/" + id + "/p/?password=" + newP);
+        LOG.info("PUT /users/update/" + id + "/p?password=" + password);
         try{
             User currU = userDAO.getUser(id);
             if (currU == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            User status = userDAO.updatePassword(currU, newP);
+            User status = userDAO.updatePassword(currU, password);
 
             if (status == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -153,21 +153,21 @@ public class UserController {
     /**
      * Update an existing {@linkplain User User} name
      * @param id the id of the existing {@linkplain User User}
-     * @param newN the new name
+     * @param name the new name
      * @return ResponseEntity indicating the status of the operation.
      * @throws IOException if an internal error occurs
      */
     @PutMapping("/update/{id}/n")
-    public ResponseEntity<User> updateName(@PathVariable int id, @RequestParam String newN)
+    public ResponseEntity<User> updateName(@PathVariable int id, @RequestParam String name)
             throws IOException {
-        LOG.info("PUT /users/update/" + id + "/n/?name=" + newN);
+        LOG.info("PUT /users/update/" + id + "/n?name=" + name);
         try{
             User currU = userDAO.getUser(id);
             if (currU == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
-            User status = userDAO.updateName(currU, newN);
+            User status = userDAO.updateName(currU, name);
 
             if (status == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
