@@ -22,7 +22,7 @@ public class UserFileDAO implements UserDAO{
     private static final Logger LOG = Logger.getLogger(UserFileDAO.class.getName());
 
     Map<Integer, User> users; // local cache of all current Users
-    Map<String, String> loginCreds = new HashMap<>();
+    Map<String, String> loginCreds;
 
     private ObjectMapper objectMapper; // Connection between User objects
                                         // and JSON text format written
@@ -62,6 +62,7 @@ public class UserFileDAO implements UserDAO{
      */
     private boolean load() throws IOException {
         users = new TreeMap<>();
+        loginCreds = new HashMap<>();
         nextId = 0;
 
         User[] UserArray = objectMapper.readValue(new File(filename), User[].class);
@@ -94,6 +95,10 @@ public class UserFileDAO implements UserDAO{
         return userList;
     }
 
+    public Map<String, String> getLogin() {
+        return loginCreds;
+    }
+
     /**
      * Saves the {@linkplain Product products} from the map into the file as an array of JSON objects
      *
@@ -105,6 +110,11 @@ public class UserFileDAO implements UserDAO{
         User[] users = getUsers();
 
         objectMapper.writeValue(new File(filename), users);
+        for (User user: users) {
+            String username = user.getUsername();
+            String password = user.getPassword();
+            loginCreds.put(username, password);
+        }
         return true;
     }
 
@@ -163,9 +173,8 @@ public class UserFileDAO implements UserDAO{
      * @return the specific {@linkplain User User} that corresponds
      * with the id
      *
-     * @throws IOException if there is an issue with underlying storage
      */
-    public User getUser(int id) throws IOException{
+    public User getUser(int id) {
         synchronized (users){
             return users.getOrDefault(id, null);
         }
@@ -191,7 +200,6 @@ public class UserFileDAO implements UserDAO{
             loginCreds.remove(user.getUsername());
             user.setUsername(newUsername);
             users.put(user.getId(), user);
-            loginCreds.put(user.getUsername(), user.getPassword());
             save();
             return user;
         }

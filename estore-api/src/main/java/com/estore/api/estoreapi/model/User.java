@@ -116,4 +116,8 @@ public class User {
      */
     public void setRole(UserRole role) {this.role = role;}
 
+    @Override
+    public String toString() {return Integer.toString(id) + username +
+    password + name + role.toString();}
+
 }
