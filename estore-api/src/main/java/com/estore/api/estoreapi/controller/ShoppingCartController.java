@@ -57,17 +57,11 @@ public class ShoppingCartController {
         try {
             Kit kit = kitDao.getKit(id);
             if (kit != null) {
-                if (quantity <= kit.getQuantity() && quantity > 0) {
-                    shoppingCart.addKit(kit, quantity);
-                    int prevQuantity = kit.getQuantity();
-                    kit.setQuantity(prevQuantity - quantity);
-                    kitDao.updateKit(kit);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                } else {
-                    shoppingCart.addKit(kit, kit.getQuantity());
-                    kit.setQuantity(0);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                }
+                shoppingCart.addKit(kit, quantity);
+                int prevQuantity = kit.getQuantity();
+                kit.setQuantity(prevQuantity + quantity);
+                kitDao.updateKit(kit);
+                return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }

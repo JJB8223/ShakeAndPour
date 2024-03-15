@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, numberAttribute } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { Kit } from './kit';
@@ -19,10 +19,15 @@ export class ShoppingCartService {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
   
+  addToShoppingCart(id: number): void {
+    const url = `http://localhost:8080/cart/add/${id}/1`;
+    console.log(url); // Check the constructed URL
 
-  // method to add things to the shopping cart
-  addToShoppingCart(id: Number): void {
-    // leaving this shit alone for now
+    this.http.post(url, null).subscribe(
+      (response) => {
+        console.log('Item added to the shopping cart successfully:', response);
+      },
+    );
   }
 
   getShoppingCart(): Observable<KitMap[]> {
@@ -31,6 +36,15 @@ export class ShoppingCartService {
       tap(_=> this.log('fetched shopping cart')),
       catchError(this.handleError<KitMap[]>('getShoppingCart'))
     )
+  }
+
+  removeItem(id: number): void {
+    const url = `http://localhost:8080/cart/remove/${id}/1`
+    this.http.delete(url).subscribe(
+      (response) => {
+        console.log('Item removed from the shopping cart', response);
+      }
+    );
   }
 
 

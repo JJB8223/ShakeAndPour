@@ -3,6 +3,7 @@
     <h1>Shopping Cart</h1>
     <li *ngFor="let kitMap of kitMaps">
         <span>Kit Name: </span> {{kitMap.name}} | 
-        <span>Quantity: </span> {{kitMap.quantity}}
+        <span>Quantity: </span> {{kitMap.quantity}} |
+        <button (click)="removeItem(kitMap.id)"> Remove Item </button>
     </li>
 </ul>

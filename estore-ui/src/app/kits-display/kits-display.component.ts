@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { KitsService } from '../kits.service';
 import { ProductService } from '../product.service';
 import { catchError, forkJoin, switchMap } from 'rxjs';
+import { ShoppingCartService } from '../shopping-cart.service';
 import { Observable, map, Subject } from 'rxjs';
 import { Kit } from '../kit';
 
@@ -11,7 +12,8 @@ import { Kit } from '../kit';
   styleUrl: './kits-display.component.css'
 })
 export class KitsDisplayComponent {
-  constructor (private kitService: KitsService, private productService: ProductService) {}
+  constructor (private kitService: KitsService, private productService: ProductService,
+               private shoppingCartService: ShoppingCartService) {}
   
   kits: Kit[] = []
 
@@ -54,7 +56,8 @@ export class KitsDisplayComponent {
   }
 
   addToShoppingCart(id: number): void {
-    console.log(id)
+    console.log("This is the mumber we adding " + id)
+    this.shoppingCartService.addToShoppingCart(id);
   }
 
 

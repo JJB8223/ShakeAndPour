@@ -26,4 +26,10 @@ export class ShoppingCartComponent {
       .subscribe(kitMap => this.kitMaps = kitMap)
   }
 
+  removeItem(id: number): void {
+    console.log(id)
+    this.shoppingCartService.removeItem(id)
+    location.reload()
+  }
+
 }
