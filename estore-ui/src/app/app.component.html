@@ -2,7 +2,7 @@
 <nav>
   <a routerLink="/dashboard">Dashboard</a>
   <a routerLink="/products">Products</a>
-  <button *ngIf="!isUserOrAdminPage()" routerLink="/login">Login</button>
+  <a *ngIf="!isUserOrAdminPage()" routerLink="/login">Login</a>
 </nav>
 <router-outlet></router-outlet>
 <app-messages></app-messages>
