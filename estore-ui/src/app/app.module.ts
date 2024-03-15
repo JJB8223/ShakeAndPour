@@ -12,6 +12,7 @@ import { ProductSearchComponent } from './product-search/product-search.componen
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { PublicComponent } from './public/public.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { PublicComponent } from './public/public.component';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

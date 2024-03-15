@@ -207,7 +207,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username,
                                       @RequestParam String password){
         LOG.info("GET /users/login?username=" + username + "&password=" + password);

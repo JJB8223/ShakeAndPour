@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import {LoginComponent} from './login/login.component';
 import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import {User} from './user';
 
@@ -12,7 +12,7 @@ import {User} from './user';
   providedIn: 'root'
 })
 export class LoginService {
-  private loginUrl = 'http://localhost:8080/login'; // URL to login api
+  private loginUrl = 'http://localhost:8080/users/login'; // URL to login api
   private httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
@@ -21,11 +21,13 @@ export class LoginService {
     private http: HttpClient,
     private messageService: MessageService) {}
 
-    login(username: string, password: string): Observable<User | null>{
-      const url = `${this.loginUrl}/authenticate`
-      const body = {username, password}
-      return this.http.post<User>(url, body, this.httpOptions)
-      .pipe(catchError(this.handleError<User>('login'))
+    login(username: string, password: string): Observable<string>{
+      const params = new HttpParams()
+        .set('username', username)
+        .set('password', password);
+    return this.http.post(this.loginUrl, {}, { params, responseType: 'text' })
+      .pipe(
+        catchError(this.handleError<string>('login'))
       );
     }
 
