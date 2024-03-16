@@ -16,6 +16,9 @@ export class LoginService {
   private httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
+  isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
+  isCust: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -27,8 +30,26 @@ export class LoginService {
         .set('password', password);
     return this.http.post(this.loginUrl, {}, { params, responseType: 'text' })
       .pipe(
+        map((response: string) => {
+        if (response == 'admin login successful') {
+          this.isLoggedIn = true;
+          this.isAdmin = true;
+        }
+        else if (response == 'user login successful') {
+          this.isLoggedIn = true;
+          this.isCust = true;
+        }
+
+        return response;
+      }),
         catchError(this.handleError<string>('login'))
       );
+    }
+
+    logout(): void {
+       this.isLoggedIn = false;
+       this.isAdmin = false;
+       this.isCust = false;
     }
 
       /** Log a ProductService message with the MessageService */

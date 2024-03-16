@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import {LoginService} from './login.service';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,24 @@ import { Router, NavigationEnd } from '@angular/router';
 export class AppComponent {
   title = 'Shake And Pour';
 
-  constructor(private router: Router) {}
+  constructor(
+  private router: Router,
+  private loginService: LoginService
+  ) {}
 
     // Method to check if the current route is /admin or /user
-    isUserOrAdminPage(): boolean {
-      return this.router.url === '/admin' || this.router.url === '/user';
+    isAdmin(): boolean {
+      return this.loginService.isAdmin;
+    }
+
+    // Method to check if a user is logged admin
+    isLoggedIn(): boolean {
+      return this.loginService.isLoggedIn;
+    }
+
+    logout(): void {
+      this.loginService.logout();
+      // Redirect to dashboard after logout
+      this.router.navigateByUrl('/dashboard');
     }
 }
