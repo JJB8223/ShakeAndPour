@@ -131,9 +131,11 @@ public class ShoppingCartController {
             // getting the name
             String name = kit.getName();
 
+            float price = kit.getPrice();
+
             // Step 3: Create a new data structure pairing the ID with the quantity
             // and add it to the list
-            shoppingCartItems.add(new ShoppingCartKit(kitId, quantity, name));
+            shoppingCartItems.add(new ShoppingCartKit(kitId, quantity, name, price));
         }
 
 

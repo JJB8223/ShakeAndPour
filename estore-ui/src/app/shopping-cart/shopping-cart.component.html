@@ -4,6 +4,7 @@
     <li *ngFor="let kitMap of kitMaps">
         <span>Kit Name: </span> {{kitMap.name}} | 
         <span>Quantity: </span> {{kitMap.quantity}} |
+        <span>Total Price: </span> {{kitMap.quantity * kitMap.price}}
         <button (click)="removeItem(kitMap.id)"> Remove Item </button>
     </li>
 </ul>
