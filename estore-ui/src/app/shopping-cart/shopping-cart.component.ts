@@ -29,6 +29,13 @@ export class ShoppingCartComponent {
       .subscribe(kitMap => this.kitMaps = kitMap)
   }
 
+  addItem(id: number, quantity: number): void {
+    console.log(id)
+    this.shoppingCartService.addToShoppingCart(id, quantity);
+    this.getShoppingCart();
+    this.getTotalCost();
+  }
+
   removeItem(id: number, quantity: number): void {
     console.log(id)
     this.shoppingCartService.removeItem(id, quantity)

@@ -55,9 +55,9 @@ export class KitsDisplayComponent {
       );
   }
 
-  addToShoppingCart(id: number): void {
+  addToShoppingCart(id: number, quantity: number): void {
     console.log("This is the mumber we adding " + id)
-    this.shoppingCartService.addToShoppingCart(id);
+    this.shoppingCartService.addToShoppingCart(id, quantity);
   }
 
 

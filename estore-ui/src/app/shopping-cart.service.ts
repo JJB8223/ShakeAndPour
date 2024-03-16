@@ -19,10 +19,9 @@ export class ShoppingCartService {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
   
-  addToShoppingCart(id: number): void {
-    const url = `http://localhost:8080/cart/add/${id}/1`;
+  addToShoppingCart(id: number, quantity: number): void {
+    const url = `http://localhost:8080/cart/add/${id}/${quantity}`;
     console.log(url); // Check the constructed URL
-
     this.http.post(url, null).subscribe(
       (response) => {
         console.log('Item added to the shopping cart successfully:', response);
