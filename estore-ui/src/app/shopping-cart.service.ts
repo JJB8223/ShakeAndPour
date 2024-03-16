@@ -47,6 +47,14 @@ export class ShoppingCartService {
     );
   }
 
+  getTotalCost(): Observable<any> {
+    const url = `${this.ShoppingCartURL}/total`;
+    return this.http.get<number>(url, this.httpOptions)
+      .pipe(
+        tap(_ => this.log('fetched total cost of the shopping cart')),
+        catchError(this.handleError<number>('getTotalCost', 0))
+      );
+  }
 
   /** A logging helper method */
   private log(message: string) {
