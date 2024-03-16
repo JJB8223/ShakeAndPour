@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.estore.api.estoreapi.model.Kit;
+import com.estore.api.estoreapi.model.ShoppingCartKit;
 import com.estore.api.estoreapi.persistence.KitDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -142,19 +143,49 @@ public class ShoppingCartControllerTest {
         shoppingCartController.addtoCart(kitId1, 2); // Add kits to the cart
         shoppingCartController.addtoCart(kitId2, 3);
 
-        ResponseEntity<Map<Kit, Integer>> response = shoppingCartController.getCartKits();
+        ResponseEntity<ArrayList<ShoppingCartKit>> response = shoppingCartController.getCartKits();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, response.getBody().get(kit1).intValue());
-        assertEquals(3, response.getBody().get(kit2).intValue());
+        assertEquals(2, response.getBody().get(0).getQuantity());
+        assertEquals(3, response.getBody().get(1).getQuantity());
     }
 
     @Test
     public void testGetCartKitsWhenEmpty() throws IOException {
-        ResponseEntity<Map<Kit, Integer>> response = shoppingCartController.getCartKits();
+        ResponseEntity<ArrayList<ShoppingCartKit>> response = shoppingCartController.getCartKits();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody().isEmpty());
+    }
+
+    @Test
+    public void testGetTotalCost_EmptyCart() throws IOException {
+        ResponseEntity<Float> response = shoppingCartController.getTotalCost();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(0.0f, response.getBody());
+    }
+
+    @Test
+    public void testGetTotalCost() throws IOException {
+        int kitId1 = 1, kitId2 = 2;
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        ArrayList<Integer> products2 = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        products2.add(4);
+        products2.add(5);
+        Kit kit1 = new Kit(kitId1, "Milk", 2.99f, 50, products);
+        Kit kit2 = new Kit(kitId2, "Cola", 1.99f, 50, products2);
+        when(mockKitDAO.getKit(kitId1)).thenReturn(kit1);
+        when(mockKitDAO.getKit(kitId2)).thenReturn(kit2);
+        shoppingCartController.addtoCart(kitId1, 2); // Add kits to the cart
+        shoppingCartController.addtoCart(kitId2, 3);
+
+        ResponseEntity<Float> response = shoppingCartController.getTotalCost();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(11.95f, response.getBody());
     }
 }
 

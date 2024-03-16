@@ -62,7 +62,7 @@ public class ShoppingCart {
             int quantity = kits.get(drink);
             totalCost += (price * quantity);
         }
-        return totalCost;
+        return Float.parseFloat(String.format("%.2f", totalCost));
     }
 
     /**

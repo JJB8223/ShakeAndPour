@@ -38,8 +38,8 @@ export class ShoppingCartService {
     )
   }
 
-  removeItem(id: number): void {
-    const url = `http://localhost:8080/cart/remove/${id}/1`
+  removeItem(id: number, quantity: number): void {
+    const url = `http://localhost:8080/cart/remove/${id}/${quantity}`
     this.http.delete(url).subscribe(
       (response) => {
         console.log('Item removed from the shopping cart', response);

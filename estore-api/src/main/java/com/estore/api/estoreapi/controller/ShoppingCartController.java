@@ -142,4 +142,19 @@ public class ShoppingCartController {
         LOG.info(cartItems.toString());
         return new ResponseEntity<>(shoppingCartItems, HttpStatus.OK);
     }
+
+    /**
+    * Calculates and returns the total cost of all kits currently in the shopping cart.
+    * This endpoint allows the client to view the total cost of the items in the cart.
+    * 
+    * @return A ResponseEntity containing the total cost and the HTTP status code.
+    * @throws IOException if an I/O error occurs during kit retrieval.
+    */
+    @GetMapping("/total")
+    public ResponseEntity<Float> getTotalCost() throws IOException {
+        LOG.info("GET /cart/total");
+        float totalCost = shoppingCart.getTotalCost();
+        LOG.info("Total cost of cart: " + totalCost);
+        return new ResponseEntity<>(totalCost, HttpStatus.OK);
+    }
 }

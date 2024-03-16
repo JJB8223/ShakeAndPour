@@ -15,8 +15,11 @@ export class ShoppingCartComponent {
                private kitService: KitsService ) { }
   kitMaps: KitMap[] = []
 
+  totalCost: number = 0;
+
   ngOnInit() {
     this.getShoppingCart()
+    this.getTotalCost()
   }
 
 
@@ -26,10 +29,21 @@ export class ShoppingCartComponent {
       .subscribe(kitMap => this.kitMaps = kitMap)
   }
 
-  removeItem(id: number): void {
+  removeItem(id: number, quantity: number): void {
     console.log(id)
-    this.shoppingCartService.removeItem(id)
+    this.shoppingCartService.removeItem(id, quantity)
     location.reload()
+    this.getTotalCost();
   }
 
+  getTotalCost(): void {
+    this.shoppingCartService.getTotalCost().subscribe({
+      next: (cost) => {
+        this.totalCost = cost; // Update totalCost with the value received from the service
+      },
+      error: (error) => {
+        console.error('Error fetching total cost', error);
+      }
+    })
+  }
 }
