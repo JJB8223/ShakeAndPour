@@ -61,9 +61,21 @@ This section describes the application domain.
 
 ![Domain Model](sprint-2-domain-analysis.png)
 
-> _**[Sprint 2 & 4]** Provide a high-level overview of the domain for this application. You
-> can discuss the more important domain entities and their relationship
-> to each other._
+Owner: This entity represents the individual or group responsible for managing the e-store. They have administrative access, enabling them to add, remove, and edit inventory items, including both products and kits.
+
+E-store: Acts as the digital storefront through which transactions between customers and the business are facilitated. It is the platform where products and kits are displayed for sale.
+
+Inventory: Serves as the collection of all items available for sale within the e-store, including both individual products and kits. The inventory is directly managed by the Owner.
+
+Product: Individual items for sale, each with its own price. Products can be sold as part of a kit.
+
+Kit: A significant addition to the model, a Kit is a bundled group of products sold together at a specific price. Each Kit includes a list of products, making it a convenient option for customers looking for package deals or themed collections.
+
+Customer: Customers are the end-users of the platform, capable of browsing the inventory, adding products and kits to their shopping cart, and making purchases. They interact with the e-store by logging in, searching for items, and checking out.
+
+Shopping Cart: The Shopping Cart is an essential component of the online shopping experience, allowing customers to accumulate a list of items they intend to purchase. Updated to include kits, it tracks both individual products and kits, along with the total price.
+
+Payment Method: This entity facilitates the transaction process, offering customers various options to complete their purchases, including Credit Card, Paypal, and Apple Pay.
 
 
 ## Architecture and Design
