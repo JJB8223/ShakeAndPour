@@ -13,6 +13,7 @@ import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import { PublicComponent } from './public/public.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {ReactiveFormsModule} from '@angular/forms';
     LoginComponent,
     AdminComponent,
     PublicComponent,
+    UserComponent,
   ],
   imports: [
     BrowserModule,
