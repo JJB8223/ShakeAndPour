@@ -1,7 +1,5 @@
 package com.estore.api.estoreapi.model;
 
-
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.logging.Logger;
@@ -44,25 +42,82 @@ public class User {
         this.role = role;
     }
 
+    /**
+     * ENUM values to distinguish the role a user plays
+     * A user can either be the admin or a standard customer
+     */
     public enum UserRole {
         CUSTOMER,
-        ADMIN
+        ADMIN;
+
+        /**
+         * Get the role in lowercase, used for JSON objects
+         * @return the role string in lowercase
+         */
+        public String getRole() {
+            return this.name().toLowerCase();
+        }
     }
 
+    /**
+     * Get the id of the user
+     * @return the user's id
+     */
     public int getId(){return id;}
 
-    public void setId(int id){this.id = id;}
-
+    /**
+     * Get the user's username
+     * @return the user's username
+     */
     public String getUsername() {return username;}
 
+    /**
+     * Update the user's username to a new string
+     * @param username the updated username
+     */
     public void setUsername(String username) {this.username = username;}
 
+    /**
+     * Get the user's password
+     * @return the user's password
+     */
     public String getPassword() {return password;}
 
+    /**
+     * Update the user's password to a new string
+     * @param password the updated password
+     */
     public void setPassword(String password) {this.password = password;}
 
-    public UserRole getRole() {return role;}
+    /**
+     * get the user's name
+     * @return the user's name
+     */
+    public String getName(){return name;}
 
+    /**
+     * Update the user's name to a new string
+     * @param name the updated name
+     */
+    public void setName(String name){this.name = name;}
+
+
+    /**
+     * Get the user's role
+     * @return the user's role
+     */
+    public UserRole getRole() {
+        return role;
+    }
+
+    /**
+     * Update the user's role
+     * @param role the new role
+     */
     public void setRole(UserRole role) {this.role = role;}
+
+    @Override
+    public String toString() {return Integer.toString(id) + username +
+    password + name + role.toString();}
 
 }
