@@ -14,6 +14,7 @@ import { AdminComponent } from './admin/admin.component';
 import { PublicComponent } from './public/public.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { UserComponent } from './user/user.component';
+import { KitService } from './kits.service';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { UserComponent } from './user/user.component';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [KitService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
