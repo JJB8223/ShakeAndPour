@@ -28,8 +28,6 @@ export class KitsDisplayComponent {
     );
   }
 
-
-
   getKits(): void {
     this.kitService.getKits()
       .pipe(
