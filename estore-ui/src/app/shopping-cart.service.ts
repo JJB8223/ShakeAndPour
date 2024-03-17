@@ -19,14 +19,19 @@ export class ShoppingCartService {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
   
-  addToShoppingCart(id: number, quantity: number): void {
+  addToShoppingCart(id: number, quantity: number): Observable<any> {
     const url = `http://localhost:8080/cart/add/${id}/${quantity}`;
     console.log(url); // Check the constructed URL
-    this.http.post(url, null).subscribe(
-      (response) => {
-        console.log('Item added to the shopping cart successfully:', response);
-      },
+    return this.http.post<any>(url, null).pipe(
+        tap((response) => console.log('Item added to the shopping cart successfully:', response))
     );
+  }
+
+  removeItem(id: number, quantity: number): Observable<any> {
+      const url = `http://localhost:8080/cart/remove/${id}/${quantity}`;
+      return this.http.delete<any>(url).pipe(
+          tap((response) => console.log('Item removed from the shopping cart', response))
+      );
   }
 
   getShoppingCart(): Observable<KitMap[]> {
@@ -35,16 +40,7 @@ export class ShoppingCartService {
       tap(_=> this.log('fetched shopping cart')),
       catchError(this.handleError<KitMap[]>('getShoppingCart'))
     )
-  }
-
-  removeItem(id: number, quantity: number): void {
-    const url = `http://localhost:8080/cart/remove/${id}/${quantity}`
-    this.http.delete(url).subscribe(
-      (response) => {
-        console.log('Item removed from the shopping cart', response);
-      }
-    );
-  }
+  } 
 
   getTotalCost(): Observable<any> {
     const url = `${this.ShoppingCartURL}/total`;

@@ -30,17 +30,23 @@ export class ShoppingCartComponent {
   }
 
   addItem(id: number, quantity: number): void {
-    console.log(id)
-    this.shoppingCartService.addToShoppingCart(id, quantity);
-    this.getShoppingCart();
-    this.getTotalCost();
+    console.log(id);
+    this.shoppingCartService.addToShoppingCart(id, quantity).pipe(
+      switchMap(() => this.shoppingCartService.getShoppingCart())
+    ).subscribe(kitMap => {
+      this.kitMaps = kitMap;
+      this.getTotalCost();
+    });
   }
-
+  
   removeItem(id: number, quantity: number): void {
-    console.log(id)
-    this.shoppingCartService.removeItem(id, quantity)
-    location.reload()
-    this.getTotalCost();
+    console.log(id);
+    this.shoppingCartService.removeItem(id, quantity).pipe(
+      switchMap(() => this.shoppingCartService.getShoppingCart())
+    ).subscribe(kitMap => {
+      this.kitMaps = kitMap;
+      this.getTotalCost();
+    });
   }
 
   getTotalCost(): void {

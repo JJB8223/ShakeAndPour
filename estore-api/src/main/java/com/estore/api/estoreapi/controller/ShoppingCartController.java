@@ -57,14 +57,23 @@ public class ShoppingCartController {
         try {
             Kit kit = kitDao.getKit(id);
             if (kit != null) {
-                shoppingCart.addKit(kit, quantity);
-                int prevQuantity = kit.getQuantity();
-                kit.setQuantity(prevQuantity + quantity);
-                kitDao.updateKit(kit);
-                return new ResponseEntity<>(HttpStatus.OK);
+                if (kit.getQuantity() > 0) {
+                    int prevQuantity = kit.getQuantity();
+                    if ((prevQuantity - quantity) < 0) {
+                        shoppingCart.addKit(kit, prevQuantity);
+                        kit.setQuantity(0);
+                    } else {
+                        shoppingCart.addKit(kit, quantity);
+                        kit.setQuantity(prevQuantity - quantity);
+                    }
+                    kitDao.updateKit(kit);
+                    return new ResponseEntity<>(HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+            } 
         } catch (IOException e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

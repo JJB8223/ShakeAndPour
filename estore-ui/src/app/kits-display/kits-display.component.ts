@@ -56,8 +56,15 @@ export class KitsDisplayComponent {
   }
 
   addToShoppingCart(id: number, quantity: number): void {
-    console.log("This is the mumber we adding " + id)
-    this.shoppingCartService.addToShoppingCart(id, quantity);
+    console.log("This is the number we are adding: " + id);
+    this.shoppingCartService.addToShoppingCart(id, quantity).subscribe({
+      next: (response) => {
+        console.log('Response from adding to cart:', response);
+      },
+      error: (err) => {
+        console.error('Error adding item to cart:', err);
+      }
+    });
   }
 
 
