@@ -140,9 +140,9 @@ interacts with the ProductDAO class, which is the service for the project.
 ![Replace with your ViewModel Tier class diagram 1, etc.](model-placeholder.png)
 
 ### Model Tier
-The Model Tier is which is represented by our Product Class. This product is used in the ProductFileDAO class, which finally interacts with the project’s storage.
+The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, and User classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files. 
 
-> _**[Sprint 2, 3 & 4]** Provide a summary of this tier of your architecture. This
+> _**[Sprint 3 & 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
 > Tier above._
 
