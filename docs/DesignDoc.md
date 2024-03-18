@@ -172,11 +172,16 @@ We considered the MVVM architecture and object-oriented design principles while 
 > and the results of the testing._
 
 ### Acceptance Testing
-> _**[Sprint 2 & 4]** Report on the number of user stories that have passed all their
+> _**[Sprint 4]** Report on the number of user stories that have passed all their
 > acceptance criteria tests, the number that have some acceptance
 > criteria tests failing, and the number of user stories that
 > have not had any testing yet. Highlight the issues found during
 > acceptance testing and if there are any concerns._
+
+Note: All stories for sprints 1 & 2 are passing their acceptance criteria
+User Stories passing all acceptance criteria: 14
+User Stories passing some acceptance criteria: 0
+User Stories not under testing yet: 14
 
 ### Unit Testing and Code Coverage
 > _**[Sprint 4]** Discuss your unit testing strategy. Report on the code coverage
