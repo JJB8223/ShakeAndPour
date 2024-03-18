@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ProductSearchComponent } from '../product-search/product-search.component';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
 import { MessageService } from '../message.service';
@@ -33,9 +32,19 @@ export class AdminComponent{
     this.productService.deleteProduct(parseInt(id)) // the entry field enforces only integers but still passes strings
       .subscribe(
         response => {
-          this.getProducts(); // updating the products once we've received a response for the deletion operation
+          this.getProducts(); // updating the products once we've received a response
         }
       )
+  }
+
+  addProduct(name: string, productPrice: string, productQuantity: string): void {
+    // I couldn't find a clean way to only allow floats in the price field so this can cause an error
+    this.productService.addProduct({ name, price: parseFloat(productPrice), quantity: parseInt(productQuantity) } as Product).
+      subscribe(
+        response => {
+          this.getProducts(); // updating the products once we've recevied a response
+        }
+      );
   }
 
 }

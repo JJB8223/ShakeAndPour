@@ -31,7 +31,17 @@
 
 </div>
 
-<div *ngIf="isAddingProduct"><p>Adding</p></div>
+<div *ngIf="isAddingProduct">
+  <form>
+    <label for="name-field">Product Name</label>
+    <input type="text" #addedName id="name-field"/><br>
+    <label for="price-field">Product Price</label>
+    <input type="text" #addedPrice id="price-field"/><br>
+    <label for="quantity-field">Product Quantity:</label>
+    <input type="number" #addedQuantity id="quantity-field"/><br>
+    <button (click) = "addProduct(addedName.value, addedPrice.value, addedQuantity.value)">Add Product</button>
+  </form>
+</div>
 
 <div *ngIf="isEditingProduct"><p>Editing</p></div>
 
