@@ -46,6 +46,7 @@ export class AdminComponent{
     this.productService.deleteProduct(parseInt(id)) // the entry field enforces only integers but still passes strings
       .subscribe(
         response => {
+          // TODO: Needs alert if entered ID is not found in the inventory
           this.getProducts(); // updating the products once we've received a response
         }
       );
@@ -66,6 +67,7 @@ export class AdminComponent{
     this.productService.updateProduct({id: parseInt(productID), name, price: parseFloat(productPrice), quantity: parseInt(productQuantity)} as Product)
       .subscribe(
         response => {
+          // TODO: Needs alert if entered ID is not found in the inventory
           this.getProducts(); // updating the products once we've received a response
         }
       );
@@ -75,6 +77,7 @@ export class AdminComponent{
     this.kitService.deleteKit(parseInt(id)) // the entry field enforces only integers but still passes strings
       .subscribe(
         response => {
+          // TODO: Needs alert if entered ID is not found in the inventory
           this.getKits(); // updating the kits once we've received a response
         }
       );
@@ -95,6 +98,7 @@ export class AdminComponent{
     this.kitService.updateKit({id: parseInt(kitId), name, price: parseFloat(kitPrice), quantity: parseInt(kitQuantity), products_in_kit: idArray} as Kit)
       .subscribe(
         response => {
+          // TODO: Needs alert if entered ID is not found in the inventory
           this.getKits(); // updating the kits once we've received a response
         }
       )
