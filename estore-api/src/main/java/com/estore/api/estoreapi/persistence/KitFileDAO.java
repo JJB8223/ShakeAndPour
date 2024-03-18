@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.estore.api.estoreapi.model.Kit;
-
-
+import com.estore.api.estoreapi.model.Product;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,15 +55,25 @@ public class KitFileDAO implements KitDAO{
         return true;
     }
 
+    /**
+     * Generates the next id for a new {@linkplain Kit Kit}
+     *
+     * @return The next id
+     */
     private synchronized static int nextId() {
         int id = nextId;
         ++nextId;
         return id;
     }
 
+    /**
+     * Generates an array of {@linkplain Kit kits} from the tree map
+     *
+     * @return  The array of {@link Kit kits}, may be empty
+     */
     private Kit[] getInventory(){return getInventory(null);}
 
-        /**
+    /**
      * Generates an array of {@linkplain Kit kits} from the tree map for any
      * {@linkplain Kit kits} that contains the text specified by containsText
      * <br>
@@ -87,6 +96,15 @@ public class KitFileDAO implements KitDAO{
         return inventoryList;
     }
 
+    /**
+        * Generates an array of {@linkplain Kit kits} from the tree map for any
+        * {@linkplain Kit kits} that contains the text specified by containsText
+        * <br>
+        * If containsText is null, the array contains all of the {@linkplain Kit kits}
+        * in the tree map
+        * 
+        * @return  The array of {@link Kit kits}, may be empty
+     */
     private Kit[] getKitsArray(String containsText) { // if containsText == null, no filter
         ArrayList<Kit> KitArrayList = new ArrayList<>();
 
