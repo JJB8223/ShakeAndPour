@@ -15,10 +15,17 @@ export class AppComponent {
   private loginService: LoginService
   ) {}
 
-    // Method to check if the current route is /admin or /user
+    // Method to check if the current user is an admin
     isAdmin(): boolean {
       return this.loginService.isAdmin;
     }
+
+    // Method to check if current user is just a customer
+    isUser(): boolean {
+      return this.loginService.isCust;
+    }
+
+
 
     // Method to check if a user is logged admin
     isLoggedIn(): boolean {
@@ -28,6 +35,6 @@ export class AppComponent {
     logout(): void {
       this.loginService.logout();
       // Redirect to dashboard after logout
-      this.router.navigateByUrl('/dashboard');
+      this.router.navigateByUrl('/login');
     }
 }

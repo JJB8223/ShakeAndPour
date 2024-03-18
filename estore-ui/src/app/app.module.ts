@@ -14,10 +14,8 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { KitsDisplayComponent } from './kits-display/kits-display.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
-import { PublicComponent } from './public/public.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { UserComponent } from './user/user.component';
-import { KitService } from './kits.service';
 
 @NgModule({
   declarations: [
@@ -27,13 +25,13 @@ import { KitService } from './kits.service';
     MessagesComponent,
     DashboardComponent,
     ProductSearchComponent,
-    KitSearchComponent,
-    ShoppingCartComponent,
-    KitsDisplayComponent,
     LoginComponent,
     AdminComponent,
-    PublicComponent,
     UserComponent,
+    ProductSearchComponent,
+    KitSearchComponent,
+    ShoppingCartComponent,
+    KitsDisplayComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +40,7 @@ import { KitService } from './kits.service';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [KitService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

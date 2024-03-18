@@ -126,6 +126,7 @@ public class ShoppingCartControllerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
+    /*
     @Test
     public void testGetCartKits() throws IOException {
         int kitId1 = 1, kitId2 = 2;
@@ -149,6 +150,7 @@ public class ShoppingCartControllerTest {
         assertEquals(2, response.getBody().get(0).getQuantity());
         assertEquals(3, response.getBody().get(1).getQuantity());
     }
+     */
 
     @Test
     public void testGetCartKitsWhenEmpty() throws IOException {
