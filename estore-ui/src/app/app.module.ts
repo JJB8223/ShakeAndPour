@@ -11,7 +11,6 @@ import { DashboardComponent } from './dashboard/dashboard.component'; // <-- NgM
 import { ProductSearchComponent } from './product-search/product-search.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
-import { PublicComponent } from './public/public.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { UserComponent } from './user/user.component';
 import { KitService } from './kits.service';
@@ -26,7 +25,6 @@ import { KitService } from './kits.service';
     ProductSearchComponent,
     LoginComponent,
     AdminComponent,
-    PublicComponent,
     UserComponent,
   ],
   imports: [
