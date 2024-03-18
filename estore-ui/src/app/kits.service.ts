@@ -27,7 +27,15 @@ export class KitService {
       );
   }
 
-  /**DELETE: delete the product from the server */
+  /** POST: add a new Kit to the server */
+  addKit(kit: Kit): Observable<Kit> {
+    return this.http.post<Kit>(`${this.kitsUrl}/create`, kit, this.httpOptions).pipe(
+      tap((newKit: Kit) => this.log(`added Kit w/ id=${newKit.id}`)),
+      catchError(this.handleError<Kit>('addKit'))
+    );
+  }
+
+  /**DELETE: delete the kit from the server */
   deleteKit(id: number): Observable<Kit> {
     const url = `${this.kitsUrl}/${id}`;
 

@@ -32,7 +32,17 @@
 </div>
 
 <div *ngIf="isAddingKit">
-  <p>Adding under construction</p>
+  <form>
+    <label for="name-field">Kit Name</label>
+    <input type="text" #addedName id="name-field"/><br>
+    <label for="price-field">Kit Price</label>
+    <input type="text" #addedPrice id="price-field"/><br>
+    <label for="quantity-field">Kit Quantity:</label>
+    <input type="number" #addedQuantity id="quantity-field"/><br>
+    <label for="product-ids">Product IDs (separate with commas):</label>
+    <input type="text" #addedProductIDs id="product-ids"/><br>
+    <button (click) = "addKit(addedName.value, addedPrice.value, addedQuantity.value, addedProductIDs.value)">Add Kit</button>
+  </form>
 </div>
 
 <div *ngIf="isEditingKit">
