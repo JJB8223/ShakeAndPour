@@ -106,7 +106,7 @@ public class UserController {
             User status = userDAO.updateUsername(currU, username);
 
             if (status == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             else{
                 return new ResponseEntity<>(status, HttpStatus.OK);
@@ -138,7 +138,7 @@ public class UserController {
             User status = userDAO.updatePassword(currU, password);
 
             if (status == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             else{
                 return new ResponseEntity<>(status, HttpStatus.OK);
@@ -170,7 +170,7 @@ public class UserController {
             User status = userDAO.updateName(currU, name);
 
             if (status == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             else{
                 return new ResponseEntity<>(status, HttpStatus.OK);

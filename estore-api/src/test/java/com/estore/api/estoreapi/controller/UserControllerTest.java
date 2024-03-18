@@ -176,9 +176,36 @@ public class UserControllerTest {
 
         // cannot find user
         when(mockUserDao.getUser(u.getId())).thenReturn(null);
-        when(mockUserDao.updateUsername(u, newUsername)).thenReturn(null);
         ResponseEntity<User> s = UserController.updateUsername(200, newUsername);
         assertEquals(HttpStatus.NOT_FOUND,s.getStatusCode());
+
+        assertNull(s.getBody());
+    }
+
+    @Test
+    public void testUpdateUsernameFail() throws IOException {
+        // Expected values
+        int id = 102;
+        String username = "testUser";
+        String password = "000000";
+        String name = "New User";
+        User.UserRole role = User.UserRole.CUSTOMER;
+
+        User u = new User(id, username, password, name, role);
+
+        when(mockUserDao.createUser(u)).thenReturn(u);
+        ResponseEntity<User> r = UserController.registerUser(u);
+        // analyze
+        assertEquals(HttpStatus.CREATED,r.getStatusCode());
+
+        // update username
+        String newUsername = "newUser";
+
+        // cannot find user
+        when(mockUserDao.getUser(u.getId())).thenReturn(u);
+        when(mockUserDao.updateUsername(u, newUsername)).thenReturn(null);
+        ResponseEntity<User> s = UserController.updateUsername(102, newUsername);
+        assertEquals(HttpStatus.CONFLICT,s.getStatusCode());
 
         assertNull(s.getBody());
     }
@@ -262,9 +289,36 @@ public class UserControllerTest {
 
         // cannot find user
         when(mockUserDao.getUser(u.getId())).thenReturn(null);
-        when(mockUserDao.updatePassword(u, newPass)).thenReturn(null);
         ResponseEntity<User> s = UserController.updatePassword(200, newPass);
         assertEquals(HttpStatus.NOT_FOUND,s.getStatusCode());
+
+        assertNull(s.getBody());
+    }
+
+    @Test
+    public void testUpdatePasswordFail() throws IOException {
+        // Expected values
+        int id = 102;
+        String username = "testUser";
+        String password = "000000";
+        String name = "New User";
+        User.UserRole role = User.UserRole.CUSTOMER;
+
+        User u = new User(id, username, password, name, role);
+
+        when(mockUserDao.createUser(u)).thenReturn(u);
+        ResponseEntity<User> r = UserController.registerUser(u);
+        // analyze
+        assertEquals(HttpStatus.CREATED,r.getStatusCode());
+
+        // update password
+        String newPass = "1123";
+
+        // cannot find user
+        when(mockUserDao.getUser(u.getId())).thenReturn(u);
+        when(mockUserDao.updatePassword(u, newPass)).thenReturn(null);
+        ResponseEntity<User> s = UserController.updatePassword(102, newPass);
+        assertEquals(HttpStatus.CONFLICT,s.getStatusCode());
 
         assertNull(s.getBody());
     }
@@ -348,9 +402,36 @@ public class UserControllerTest {
 
         // cannot find user
         when(mockUserDao.getUser(u.getId())).thenReturn(null);
-        when(mockUserDao.updateName(u, newName)).thenReturn(null);
         ResponseEntity<User> s = UserController.updateName(200, newName);
         assertEquals(HttpStatus.NOT_FOUND,s.getStatusCode());
+
+        assertNull(s.getBody());
+    }
+
+    @Test
+    public void testUpdateNameFail() throws IOException {
+        // Expected values
+        int id = 102;
+        String username = "testUser";
+        String password = "000000";
+        String name = "New User";
+        User.UserRole role = User.UserRole.CUSTOMER;
+
+        User u = new User(id, username, password, name, role);
+
+        when(mockUserDao.createUser(u)).thenReturn(u);
+        ResponseEntity<User> r = UserController.registerUser(u);
+        // analyze
+        assertEquals(HttpStatus.CREATED,r.getStatusCode());
+
+        // update name
+        String newName = "John Doe";
+
+        // cannot find user
+        when(mockUserDao.getUser(u.getId())).thenReturn(u);
+        when(mockUserDao.updateName(u, newName)).thenReturn(null);
+        ResponseEntity<User> s = UserController.updateName(102, newName);
+        assertEquals(HttpStatus.CONFLICT,s.getStatusCode());
 
         assertNull(s.getBody());
     }
