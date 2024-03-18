@@ -4,7 +4,6 @@
   <a *ngIf="isAdmin()" routerLink="/products">Products</a>
   <a *ngIf="isUser()" routerLink="/kits">View Kits</a>
   <a *ngIf="isUser()" routerLink="/cart">Shopping Cart</a>
-  <a *ngIf="!isLoggedIn()" routerLink="/login">Login</a>
   <a *ngIf="isAdmin()" routerLink="/admin">Admin Page</a>
   <a *ngIf="isUser()" routerLink="/user">User Page</a>
   <a *ngIf="isLoggedIn()" (click)="logout()">Logout</a>
