@@ -71,3 +71,11 @@
     </div>
   </li>
 </ul>
+<h2>Kit Inventory</h2>
+<ul>
+  <li *ngFor="let kit of kits">
+    <div>
+      name: {{kit.name | uppercase}} id: {{kit.id}} price: {{kit.price}} quantity: {{kit.quantity}} product IDs: {{kit.products_in_kit}}
+    </div>
+  </li>
+</ul>

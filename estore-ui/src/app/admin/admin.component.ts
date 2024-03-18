@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Product } from '../product';
 import { ProductService } from '../product.service';
-import { MessageService } from '../message.service';
+import { Kit } from '../kit';
+import { KitService } from '../kits.service';
 
 @Component({
   selector: 'app-admin',
@@ -11,21 +12,30 @@ import { MessageService } from '../message.service';
 })
 export class AdminComponent{
 
+  // these variables are updated to define which inventory management forms are visible
   isAddingProduct: boolean = false;
   isEditingProduct: boolean = false;
   isDeletingProduct: boolean = false;
 
   products: Product[] = [];
+  kits: Kit[] = [];
 
-  constructor(private productService: ProductService, private messageService: MessageService) { }
+  constructor(private productService: ProductService, private kitService: KitService) { }
 
   ngOnInit(): void {
-    this.getProducts(); // initializing the list of products 
+    // initializing the list of products and list of kits
+    this.getProducts(); 
+    this.getKits();
   }
 
   getProducts(): void {
     this.productService.getProducts()
-        .subscribe(products => this.products = products);
+      .subscribe(products => this.products = products);
+  }
+
+  getKits(): void{
+    this.kitService.getKits()
+      .subscribe(kits => this.kits = kits);
   }
 
   deleteProduct(id: string): void {
@@ -39,8 +49,8 @@ export class AdminComponent{
 
   addProduct(name: string, productPrice: string, productQuantity: string): void {
     // Couldn't find a clean way to only allow floats in the price field so this can cause an error
-    this.productService.addProduct({ name, price: parseFloat(productPrice), quantity: parseInt(productQuantity) } as Product).
-      subscribe(
+    this.productService.addProduct({ name, price: parseFloat(productPrice), quantity: parseInt(productQuantity) } as Product)
+      .subscribe(
         response => {
           this.getProducts(); // updating the products once we've recevied a response
         }
@@ -49,8 +59,8 @@ export class AdminComponent{
 
   updateProduct(productID: string, name: string, productPrice: string, productQuantity: string): void {
     // Couldn't find a clean way to only allow floats in the price field so this can cause an error
-    this.productService.updateProduct({id: parseInt(productID), name, price: parseFloat(productPrice), quantity: parseInt(productQuantity)} as Product).
-      subscribe(
+    this.productService.updateProduct({id: parseInt(productID), name, price: parseFloat(productPrice), quantity: parseInt(productQuantity)} as Product)
+      .subscribe(
         response => {
           this.getProducts(); // updating the products once we've received a response
         }

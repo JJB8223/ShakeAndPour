@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Kit } from './kit';
 import { MessageService } from './message.service';
 
@@ -15,9 +15,11 @@ export class KitService {
     private http: HttpClient,
     private messageService: MessageService) {}
 
+  /**GET products from the server */
   getKits(): Observable<Kit[]> {
     return this.http.get<Kit[]>(this.kitsUrl)
       .pipe(
+        tap(_ => this.log('fetched Kits')),
         catchError(this.handleError<Kit[]>('getKits', []))
       );
   }
