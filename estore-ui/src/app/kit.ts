@@ -3,6 +3,6 @@ export interface Kit {
     name: string;
     price: number;
     quantity: number;
-    products_in_kit: number[];
+    products_in_kit: any[];
   }
   
