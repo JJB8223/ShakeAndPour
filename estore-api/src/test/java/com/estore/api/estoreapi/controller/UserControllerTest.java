@@ -509,6 +509,18 @@ public class UserControllerTest {
     }
 
     @Test
+    public void testLoginAdminFail() {
+        String username = "admin";
+        String password = "000000";
+
+        when(mockUserDao.authorize(username, password)).thenReturn(false);
+        ResponseEntity<String> r = UserController.login(username, password);
+
+        assertEquals(HttpStatus.UNAUTHORIZED,r.getStatusCode());
+        assertEquals("Invalid username or password", r.getBody());
+    }
+
+    @Test
     public void testLoginUser() {
         // Expected values
         String username = "user";
