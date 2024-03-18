@@ -44,7 +44,7 @@ export class ProductService {
   }
   /** DELETE: delete the Product from the server */
   deleteProduct(id: number): Observable<Product> {
-    const url = `${this.ProductsUrl}/${id}`;
+    const url = `${this.ProductsUrl}/product/${id}`;
 
     return this.http.delete<Product>(url, this.httpOptions).pipe(
       tap(_ => this.log(`deleted Product id=${id}`)),

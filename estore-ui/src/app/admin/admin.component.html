@@ -1,15 +1,15 @@
 <h1>Welcome, Admin</h1>
 <div>
 
-  <button>
+  <button (click) = "isAddingProduct= true; isEditingProduct = false; isDeletingProduct = false">
     Add Products
   </button>
 
-  <button>
+  <button (click) = "isAddingProduct= false; isEditingProduct = true; isDeletingProduct = false">
     Edit Products
   </button>
 
-  <button>
+  <button (click) = "isAddingProduct= false; isEditingProduct = false; isDeletingProduct = true">
     Delete Products
   </button>
 
@@ -29,6 +29,16 @@
     Delete Kits
   </button>
 
+</div>
+
+<div *ngIf="isAddingProduct"><p>Adding</p></div>
+
+<div *ngIf="isEditingProduct"><p>Editing</p></div>
+
+<div *ngIf="isDeletingProduct">
+  <label for="deleted-id-field">Deleted Product ID</label>
+  <input type = "number" #deletedID id="deleted-id-field"/>
+  <button (click) = "deleteProduct(deletedID.value)">Delete</button>
 </div>
 
 <h2>Product Inventory</h2>
