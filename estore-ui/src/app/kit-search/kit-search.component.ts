@@ -4,6 +4,7 @@ import { KitsService } from '../kits.service';
 import { ProductService } from '../product.service';
 import { Observable, map, Subject } from 'rxjs';
 import { catchError, forkJoin, switchMap } from 'rxjs';
+import { ShoppingCartService } from '../shopping-cart.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +14,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class KitSearchComponent implements OnInit {
 
-  constructor(private kitService: KitsService, private productService: ProductService) {}
+  constructor(private kitService: KitsService, private productService: ProductService,
+              private shoppingCartService: ShoppingCartService) {}
 
   kits: Kit[] = []
 
@@ -21,16 +23,30 @@ export class KitSearchComponent implements OnInit {
   private searchKeywords = new Subject<string>();
 
   ngOnInit() {
-    this.getKits();
     this.kits$ = this.searchKeywords.pipe(
       // wait 300ms after the user types to prevent unnecessary requests and lag
       debounceTime(300),
 
       // ignore if the searchbar isn't changed
       distinctUntilChanged(),
-
       // switch to new search observable each time the term changes
-      switchMap((term: string) => this.kitService.searchKits(term)),
+      switchMap((term: string) => this.kitService.searchKits(term)
+      .pipe(
+        switchMap(kits => {
+          const productObservables = kits.map(kit => {
+            const observables = kit.products_in_kit.map(productId =>
+              this.getSpecificProduct(productId)
+            );
+            return forkJoin(observables).pipe(
+              map(productNames => {
+                kit.products_in_kit = productNames;
+                return kit;      // Do something with each kit and its corresponding quantity
+              })
+            );
+          });
+          return forkJoin(productObservables);
+        })
+      )),
     );
   }
 
@@ -45,29 +61,17 @@ export class KitSearchComponent implements OnInit {
     this.searchKeywords.next(term);
   }
 
-  getKits(): void {
-    this.kitService.getKits()
-      .pipe(
-        switchMap(kits => {
-          const productObservables = kits.map(kit => {
-            const observables = kit.products_in_kit.map(productId =>
-              this.getSpecificProduct(productId)
-            );
-            return forkJoin(observables).pipe(
-              map(productNames => {
-                kit.products_in_kit = productNames;
-                return kit;
-              })
-            );
-          });
-          return forkJoin(productObservables);
-        })
-      )
-      .subscribe(
-        kits => {
-          this.kits = kits;
-        }
-      );
+
+  addToShoppingCart(id: number, quantity: number): void {
+    console.log("This is the number we are adding: " + id);
+    this.shoppingCartService.addToShoppingCart(id, quantity).subscribe({
+      next: (response) => {
+        console.log('Response from adding to cart:', response);
+      },
+      error: (err) => {
+        console.error('Error adding item to cart:', err);
+      }
+    });
   }
 
 }
