@@ -3,6 +3,8 @@ package com.estore.api.estoreapi.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +16,8 @@ import org.junit.jupiter.api.Test;
  */
 public class ShoppingCartTest {
     private ShoppingCart cart;
-    private Product milk;
-    private Product cola;
+    private Kit kit1;
+    private Kit kit2;
 
     /**
      * Sets up the test environment before each test method.
@@ -24,8 +26,20 @@ public class ShoppingCartTest {
     @BeforeEach 
     public void constructorSetUp() {
         cart = new ShoppingCart();
-        milk = new Product(1, "Milk", 2.99f, 50);
-        cola = new Product(2, "Cola", 1.99f, 50);
+        ArrayList<Integer> products = new ArrayList<>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        ArrayList<Integer> products2 = new ArrayList<>();
+        products2.add(4);
+        products2.add(5);
+        Product milk = new Product(1, "Milk", 2.99f, 50);
+        Product rose = new Product(3, "Rose Water", 4.00f, 50);
+        Product vodka = new Product(4, "Vodka", 5.00f, 40);
+        Product orange = new Product(5, "Orange", 2.10f, 60);
+        Product cola = new Product(2, "Cola", 1.99f, 50);
+        kit1 = new Kit(1, "First", 15.00f, 50, products);
+        kit2 = new Kit(2, "Second", 20.00f, 25, products);
     }
 
     /**
@@ -34,11 +48,11 @@ public class ShoppingCartTest {
      */
     @Test
     public void testAddAndRemoveProduct() {
-        cart.addProduct(milk, 2);
-        cart.addProduct(cola, 3);
-        cart.removeProduct(cola, 1);
-        assertEquals(2, cart.getProducts().get(milk).intValue(), "Soda quantity should be 2");
-        assertEquals(2, cart.getProducts().get(cola).intValue(), "Tea quantity after removal should be 2");
+        cart.addKit(kit1, 2);
+        cart.addKit(kit2, 3);
+        cart.removeKit(kit2, 1);
+        assertEquals(2, cart.getKits().get(kit2).intValue(), "Kit2 quantity should be 2");
+        assertEquals(2, cart.getKits().get(kit2).intValue(), "Kit1 quantity after removal should be 2");
     }
 
     /**
@@ -47,9 +61,9 @@ public class ShoppingCartTest {
      */
     @Test
     public void testGetTotalCost() {
-        cart.addProduct(milk, 2);
-        cart.addProduct(cola, 3);
-        assertEquals(11.95f, cart.getTotalCost(), 0.001, "Total cost should reflect sum of drink costs");
+        cart.addKit(kit1, 2);
+        cart.addKit(kit2, 3);
+        assertEquals(90.00f, cart.getTotalCost(), 0.001, "Total cost should reflect sum of drink costs");
     }
 
     /**
@@ -58,9 +72,9 @@ public class ShoppingCartTest {
      */
     @Test
     public void testClearCart() {
-        cart.addProduct(milk, 3);
-        cart.addProduct(cola, 5);
+        cart.addKit(kit1, 3);
+        cart.addKit(kit2, 5);
         cart.clearCart();
-        assertTrue(cart.getProducts().isEmpty(), "Cart should be completely cleared");
+        assertTrue(cart.getKits().isEmpty(), "Cart should be completely cleared");
     }
 }

@@ -9,7 +9,9 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { MessagesComponent } from './messages/messages.component';
 import { DashboardComponent } from './dashboard/dashboard.component'; // <-- NgModel lives here
 import { ProductSearchComponent } from './product-search/product-search.component';
-import { KitComponent } from './kit/kit.component';
+import { KitSearchComponent } from './kit-search/kit-search.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { KitsDisplayComponent } from './kits-display/kits-display.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { KitComponent } from './kit/kit.component';
     MessagesComponent,
     DashboardComponent,
     ProductSearchComponent,
-    KitComponent
+    KitSearchComponent,
+    ShoppingCartComponent,
+    KitsDisplayComponent
   ],
   imports: [
     BrowserModule,
