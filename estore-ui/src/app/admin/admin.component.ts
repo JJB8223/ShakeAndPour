@@ -16,6 +16,9 @@ export class AdminComponent{
   isAddingProduct: boolean = false;
   isEditingProduct: boolean = false;
   isDeletingProduct: boolean = false;
+  isAddingKit: boolean = false;
+  isEditingKit: boolean = false;
+  isDeletingKit: boolean = false;
 
   products: Product[] = [];
   kits: Kit[] = [];
@@ -44,7 +47,7 @@ export class AdminComponent{
         response => {
           this.getProducts(); // updating the products once we've received a response
         }
-      )
+      );
   }
 
   addProduct(name: string, productPrice: string, productQuantity: string): void {
@@ -66,4 +69,14 @@ export class AdminComponent{
         }
       );
   }
+
+  deleteKit(id: string): void {
+    this.kitService.deleteKit(parseInt(id))
+      .subscribe(
+        response => {
+          this.getKits(); // updating the kits once we've received a response
+        }
+      ); // the entry field enforces only integers but still passes strings
+  }
+
 }

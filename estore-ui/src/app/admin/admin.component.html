@@ -17,18 +17,34 @@
 
 <div>
 
-  <button>
+  <button (click) = "isAddingKit = true; isEditingKit = false; isDeletingKit = false">
     Add Kits
   </button>
 
-  <button>
+  <button (click) = "isAddingKit = false; isEditingKit = true; isDeletingKit = false">
     Edit Kits
   </button>
 
-  <button>
+  <button (click) = "isAddingKit = false; isEditingKit = false; isDeletingKit = true">
     Delete Kits
   </button>
 
+</div>
+
+<div *ngIf="isAddingKit">
+  <p>Adding under construction</p>
+</div>
+
+<div *ngIf="isEditingKit">
+  <p>Editing under construction</p>
+</div>
+
+<div *ngIf="isDeletingKit">
+  <form>
+    <label for="deleted-id-field">Deleted Kit ID</label>
+    <input type = "number" #deletedID id="deleted-id-field"/><br>
+    <button (click) = "deleteKit(deletedID.value)">Delete</button>
+  </form>
 </div>
 
 <div *ngIf="isAddingProduct">
@@ -58,9 +74,11 @@
 </div>
 
 <div *ngIf="isDeletingProduct">
-  <label for="deleted-id-field">Deleted Product ID</label>
-  <input type = "number" #deletedID id="deleted-id-field"/>
-  <button (click) = "deleteProduct(deletedID.value)">Delete</button>
+  <form>
+    <label for="deleted-id-field">Deleted Product ID</label>
+    <input type = "number" #deletedID id="deleted-id-field"/><br>
+    <button (click) = "deleteProduct(deletedID.value)">Delete</button>
+  </form>
 </div>
 
 <h2>Product Inventory</h2>
@@ -71,6 +89,7 @@
     </div>
   </li>
 </ul>
+
 <h2>Kit Inventory</h2>
 <ul>
   <li *ngFor="let kit of kits">
