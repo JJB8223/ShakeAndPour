@@ -12,6 +12,10 @@ import { ProductSearchComponent } from './product-search/product-search.componen
 import { KitSearchComponent } from './kit-search/kit-search.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { KitsDisplayComponent } from './kits-display/kits-display.component';
+import { LoginComponent } from './login/login.component';
+import { AdminComponent } from './admin/admin.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import { UserComponent } from './user/user.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +25,10 @@ import { KitsDisplayComponent } from './kits-display/kits-display.component';
     MessagesComponent,
     DashboardComponent,
     ProductSearchComponent,
+    LoginComponent,
+    AdminComponent,
+    UserComponent,
+    ProductSearchComponent,
     KitSearchComponent,
     ShoppingCartComponent,
     KitsDisplayComponent
@@ -29,7 +37,8 @@ import { KitsDisplayComponent } from './kits-display/kits-display.component';
     BrowserModule,
     FormsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

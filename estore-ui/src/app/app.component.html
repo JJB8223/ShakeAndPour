@@ -1,9 +1,12 @@
 <h1>{{title}}</h1>
 <nav>
-  <a routerLink="/dashboard">Dashboard</a>
-  <a routerLink="/products">Products</a>
-  <a routerLink="/kits">View Kits</a>
-  <a routerLink="/cart">Shopping Cart</a>
+  <a *ngIf="isAdmin()" routerLink="/dashboard">Dashboard</a>
+  <a *ngIf="isAdmin()" routerLink="/products">Products</a>
+  <a *ngIf="isUser()" routerLink="/kits">View Kits</a>
+  <a *ngIf="isUser()" routerLink="/cart">Shopping Cart</a>
+  <a *ngIf="isAdmin()" routerLink="/admin">Admin Page</a>
+  <a *ngIf="isUser()" routerLink="/user">User Page</a>
+  <a *ngIf="isLoggedIn()" (click)="logout()">Logout</a>
 </nav>
 <router-outlet></router-outlet>
 <app-messages></app-messages>

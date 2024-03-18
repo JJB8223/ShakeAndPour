@@ -67,7 +67,7 @@ public class InventoryController{
     /**
      * Creates a {@linkplain Product Product} with the provided Product object
      *
-     * @param Product - The {@link Product Product} to create
+     * @param product - The {@link Product Product} to create
      *
      * @return ResponseEntity with created {@link Product Product} object and HTTP status of CREATED<br>
      * ResponseEntity with HTTP status of CONFLICT if {@link Product Product} object already exists<br>
