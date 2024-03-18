@@ -16,7 +16,6 @@ import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { UserComponent } from './user/user.component';
-import { KitService } from './kits.service';
 
 @NgModule({
   declarations: [
@@ -41,7 +40,7 @@ import { KitService } from './kits.service';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [KitService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

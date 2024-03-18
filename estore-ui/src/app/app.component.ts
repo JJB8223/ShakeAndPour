@@ -35,6 +35,6 @@ export class AppComponent {
     logout(): void {
       this.loginService.logout();
       // Redirect to dashboard after logout
-      this.router.navigateByUrl('/dashboard');
+      this.router.navigateByUrl('/login');
     }
 }
