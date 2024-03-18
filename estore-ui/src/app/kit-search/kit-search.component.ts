@@ -23,16 +23,31 @@ export class KitSearchComponent implements OnInit {
   private searchKeywords = new Subject<string>();
 
   ngOnInit() {
-    this.getKits();
+    // this.getKits();
     this.kits$ = this.searchKeywords.pipe(
       // wait 300ms after the user types to prevent unnecessary requests and lag
       debounceTime(300),
 
       // ignore if the searchbar isn't changed
       distinctUntilChanged(),
-
       // switch to new search observable each time the term changes
-      switchMap((term: string) => this.kitService.searchKits(term)),
+      switchMap((term: string) => this.kitService.searchKits(term)
+      .pipe(
+        switchMap(kits => {
+          const productObservables = kits.map(kit => {
+            const observables = kit.products_in_kit.map(productId =>
+              this.getSpecificProduct(productId)
+            );
+            return forkJoin(observables).pipe(
+              map(productNames => {
+                kit.products_in_kit = productNames;
+                return kit;      // Do something with each kit and its corresponding quantity
+              })
+            );
+          });
+          return forkJoin(productObservables);
+        })
+      )),
     );
   }
 
@@ -47,6 +62,7 @@ export class KitSearchComponent implements OnInit {
     this.searchKeywords.next(term);
   }
 
+  /*
   getKits(): void {
     this.kitService.getKits()
       .pipe(
@@ -58,7 +74,7 @@ export class KitSearchComponent implements OnInit {
             return forkJoin(observables).pipe(
               map(productNames => {
                 kit.products_in_kit = productNames;
-                return kit;
+                return kit;      // Do something with each kit and its corresponding quantity
               })
             );
           });
@@ -71,6 +87,7 @@ export class KitSearchComponent implements OnInit {
         }
       );
   }
+  */
 
   addToShoppingCart(id: number, quantity: number): void {
     console.log("This is the number we are adding: " + id);
