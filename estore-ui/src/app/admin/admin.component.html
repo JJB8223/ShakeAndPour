@@ -31,3 +31,11 @@
 
 </div>
 
+<h2>Product Inventory</h2>
+<ul>
+  <li *ngFor="let product of products">
+    <div>
+      name: {{product.name | uppercase}} id: {{product.id}} price: {{product.price}} quantity: {{product.quantity}}
+    </div>
+  </li>
+</ul>

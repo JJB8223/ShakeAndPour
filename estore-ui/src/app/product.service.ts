@@ -10,7 +10,7 @@ import { catchError, map, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProductService {
-  private ProductsUrl = 'http://localhost:8080/products';  // URL to web api
+  private ProductsUrl = 'http://localhost:8080/inventory';  // URL to web api
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
