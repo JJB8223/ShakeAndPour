@@ -20,10 +20,13 @@ geometry: margin=1in
 ## Executive Summary
 
 ### Purpose
+>  _**[Sprint 4]** Provide a very brief statement about the project and the most
+> important user group and user goals._
 
 This product is an e-store for a producer of custom drink kits, also known as a mixologist. It is intended to allow customers to search for and purchase drink kits as well as allow the store's administrator to easily manage and update the store's inventory.
 
 ### Glossary and Acronyms
+> _**[Sprint 4]** Provide a table of terms and acronyms._
 
 | Term | Definition |
 |------|------------|
@@ -41,6 +44,7 @@ This section describes the features of the application.
 > maybe Epics and critical Stories._
 
 ### Definition of MVP
+> _**[Sprint 4]** Provide a simple description of the Minimum Viable Product._
 
 The MVP consists of a basic login system to allow users and an admin to log into the e-store. The admin will be able to modify the contents of the inventory, while the user will be able to find, view, and purchase drink kits. All of these actions will be reflected by changes to the data stored on the server.
 
@@ -52,6 +56,9 @@ The MVP consists of a basic login system to allow users and an admin to log into
 
 
 ## Application Domain
+> _**[Sprint 4]** Provide a high-level overview of the domain for this application. You
+> can discuss the more important domain entities and their relationship
+> to each other._
 
 This section describes the application domain.
 
