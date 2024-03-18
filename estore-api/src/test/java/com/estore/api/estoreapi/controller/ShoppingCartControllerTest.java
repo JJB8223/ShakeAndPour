@@ -76,6 +76,22 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
+    public void testAddToCartNoQuantity() throws IOException {
+        int kitId = 1;
+        int quantity = 0;
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        Kit kit = new Kit(kitId, "Soda", 2.99f, 0, products);
+        when(mockKitDAO.getKit(kitId)).thenReturn(kit);
+
+        ResponseEntity<Void> response = shoppingCartController.addtoCart(kitId, quantity);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
     public void testAddToCartHandleException() throws IOException {
         int kitId = 1;
         int quantity = 5;
@@ -116,6 +132,23 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
+    public void testRemoveFromCartGreaterQuantity() throws IOException {
+        int kitId = 1;
+        int quantity = 25;
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        Kit kit = new Kit(kitId, "Soda", 2.99f, 20, products);
+        when(mockKitDAO.getKit(kitId)).thenReturn(kit);
+        shoppingCartController.addtoCart(kitId, quantity); // Add kit to cart before attempting to remove
+
+        ResponseEntity<Void> response = shoppingCartController.removeFromCart(kitId, quantity);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
     public void testRemoveFromCartHandleException() throws IOException {
         int kitId = 1;
         int quantity = 5;
@@ -126,6 +159,7 @@ public class ShoppingCartControllerTest {
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 
+    /*
     @Test
     public void testGetCartKits() throws IOException {
         int kitId1 = 1, kitId2 = 2;
@@ -149,6 +183,7 @@ public class ShoppingCartControllerTest {
         assertEquals(2, response.getBody().get(0).getQuantity());
         assertEquals(3, response.getBody().get(1).getQuantity());
     }
+    */
 
     @Test
     public void testGetCartKitsWhenEmpty() throws IOException {

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { KitMap } from '../kit-map';
 import { ShoppingCartService } from '../shopping-cart.service';
-import { KitService } from '../kits.service';
 import { switchMap } from 'rxjs';
 import { OnInit } from '@angular/core';
 

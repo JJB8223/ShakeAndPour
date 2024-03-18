@@ -5,4 +5,3 @@ export interface Kit {
     quantity: number;
     products_in_kit: any[];
   }
-  

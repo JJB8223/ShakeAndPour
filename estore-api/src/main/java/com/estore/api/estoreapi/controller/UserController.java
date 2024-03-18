@@ -106,7 +106,7 @@ public class UserController {
             User status = userDAO.updateUsername(currU, username);
 
             if (status == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             else{
                 return new ResponseEntity<>(status, HttpStatus.OK);
@@ -138,7 +138,7 @@ public class UserController {
             User status = userDAO.updatePassword(currU, password);
 
             if (status == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             else{
                 return new ResponseEntity<>(status, HttpStatus.OK);
@@ -170,7 +170,7 @@ public class UserController {
             User status = userDAO.updateName(currU, name);
 
             if (status == null){
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             else{
                 return new ResponseEntity<>(status, HttpStatus.OK);
@@ -207,6 +207,13 @@ public class UserController {
     }
 
 
+    /**
+     * Login a user given their credentials
+     * @param username the username of the user to login
+     * @param password the password of the user to login
+     * @return A response entity with a string signifying if login was
+     * successful or not.
+     */
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username,
                                       @RequestParam String password){
