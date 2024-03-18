@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Kit } from '../kit';
-import { KitsService } from '../kits.service';
+import { KitService } from '../kits.service';
 import { ProductService } from '../product.service';
 import { Observable, map, Subject } from 'rxjs';
 import { catchError, forkJoin, switchMap } from 'rxjs';
@@ -14,7 +14,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class KitSearchComponent implements OnInit {
 
-  constructor(private kitService: KitsService, private productService: ProductService,
+  constructor(private kitService: KitService, private productService: ProductService,
               private shoppingCartService: ShoppingCartService) {}
 
   kits: Kit[] = []

@@ -1,18 +1,122 @@
 <h1>Welcome, Admin</h1>
 <div>
 
-  <button>
+  <button (click) = "isAddingProduct= true; isEditingProduct = false; isDeletingProduct = false">
     Add Products
   </button>
 
-  <button>
+  <button (click) = "isAddingProduct= false; isEditingProduct = true; isDeletingProduct = false">
     Edit Products
   </button>
 
-  <button>
+  <button (click) = "isAddingProduct= false; isEditingProduct = false; isDeletingProduct = true">
     Delete Products
   </button>
 
+</div>
+
+<div>
+
+  <button (click) = "isAddingKit = true; isEditingKit = false; isDeletingKit = false">
+    Add Kits
+  </button>
+
+  <button (click) = "isAddingKit = false; isEditingKit = true; isDeletingKit = false">
+    Edit Kits
+  </button>
+
+  <button (click) = "isAddingKit = false; isEditingKit = false; isDeletingKit = true">
+    Delete Kits
+  </button>
 
 </div>
 
+<div *ngIf="isAddingKit">
+  <form>
+    <label for="name-field">Kit Name</label>
+    <input type="text" #addedName id="name-field"/><br>
+    <label for="price-field">Kit Price</label>
+    <input type="text" #addedPrice id="price-field"/><br>
+    <label for="quantity-field">Kit Quantity:</label>
+    <input type="number" #addedQuantity id="quantity-field"/><br>
+    <label for="product-ids">Product IDs (separate with commas):</label>
+    <input type="text" #addedProductIDs id="product-ids"/><br>
+    <button (click) = "addKit(addedName.value, addedPrice.value, addedQuantity.value, addedProductIDs.value)">Add Kit</button>
+  </form>
+</div>
+
+<div *ngIf="isEditingKit">
+  <form>
+    <label for="id-field">Kit ID</label>
+    <input type="number" #updatedID id ="id-field"/><br>
+    <label for="name-field">Kit Name</label>
+    <input type="text" #updatedName id="name-field"/><br>
+    <label for="price-field">Kit Price</label>
+    <input type="text" #updatedPrice id="price-field"/><br>
+    <label for="quantity-field">Kit Quantity:</label>
+    <input type="number" #updatedQuantity id="quantity-field"/><br>
+    <label for="product-ids">Product IDs (separate with commas):</label>
+    <input type="text" #updatedProductIDs id="product-ids"/><br>
+    <button (click) = "updateKit(updatedID.value, updatedName.value, updatedPrice.value, updatedQuantity.value, updatedProductIDs.value)">Update Kit</button>
+  </form>
+</div>
+
+<div *ngIf="isDeletingKit">
+  <form>
+    <label for="deleted-id-field">Deleted Kit ID</label>
+    <input type = "number" #deletedID id="deleted-id-field"/><br>
+    <button (click) = "deleteKit(deletedID.value)">Delete</button>
+  </form>
+</div>
+
+<div *ngIf="isAddingProduct">
+  <form>
+    <label for="name-field">Product Name</label>
+    <input type="text" #addedName id="name-field"/><br>
+    <label for="price-field">Product Price</label>
+    <input type="text" #addedPrice id="price-field"/><br>
+    <label for="quantity-field">Product Quantity:</label>
+    <input type="number" #addedQuantity id="quantity-field"/><br>
+    <button (click) = "addProduct(addedName.value, addedPrice.value, addedQuantity.value)">Add Product</button>
+  </form>
+</div>
+
+<div *ngIf="isEditingProduct">
+  <form>
+    <label for="id-field">Product ID</label>
+    <input type="number" #updatedID id ="id-field"/><br>
+    <label for="name-field">Product Name</label>
+    <input type="text" #updatedName id="name-field"/><br>
+    <label for="price-field">Product Price</label>
+    <input type="text" #updatedPrice id="price-field"/><br>
+    <label for="quantity-field">Product Quantity:</label>
+    <input type="number" #updatedQuantity id="quantity-field"/><br>
+    <button (click) = "updateProduct(updatedID.value, updatedName.value, updatedPrice.value, updatedQuantity.value)">Update Product</button>
+  </form>
+</div>
+
+<div *ngIf="isDeletingProduct">
+  <form>
+    <label for="deleted-id-field">Deleted Product ID</label>
+    <input type = "number" #deletedID id="deleted-id-field"/><br>
+    <button (click) = "deleteProduct(deletedID.value)">Delete</button>
+  </form>
+</div>
+
+<h2>Product Inventory</h2>
+<ul>
+  <li *ngFor="let product of products">
+    <div>
+      name: {{product.name | uppercase}} id: {{product.id}} price: {{product.price}} quantity: {{product.quantity}}
+    </div>
+  </li>
+</ul>
+
+<h2>Kit Inventory</h2>
+<ul>
+  <li *ngFor="let kit of kits">
+    <div>
+      name: {{kit.name | uppercase}} id: {{kit.id}} price: {{kit.price}} quantity: {{kit.quantity}} product IDs: {{kit.products_in_kit}}
+    </div>
+  </li>
+</ul>
