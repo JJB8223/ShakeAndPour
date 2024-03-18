@@ -81,16 +81,31 @@ export class AdminComponent{
   }
 
   addKit(name: string, kitPrice: string, kitQuantity: string, kitProductIDs: string): void {
-    let idArray: number[] = [];
-    for (let id of kitProductIDs.split(",")) {
-      idArray.push(parseInt(id.trim())); // removing all whitespace and adding the parsed integer to the array of product ids
-    }
+    let idArray: number[] = this.parseIDstring(kitProductIDs);
     this.kitService.addKit({name, price: parseFloat(kitPrice), quantity: parseInt(kitQuantity), products_in_kit: idArray} as Kit)
       .subscribe(
         response => {
-          this.getKits();
+          this.getKits(); // updating the kits once we've received a response
         }
       );
+  }
+
+  updateKit(kitId: string, name: string, kitPrice: string, kitQuantity: string, kitProductIDs: string): void {
+    let idArray: number[] = this.parseIDstring(kitProductIDs);
+    this.kitService.updateKit({id: parseInt(kitId), name, price: parseFloat(kitPrice), quantity: parseInt(kitQuantity), products_in_kit: idArray} as Kit)
+      .subscribe(
+        response => {
+          this.getKits(); // updating the kits once we've received a response
+        }
+      )
+  }
+
+  private parseIDstring(IDstring: string): number[] {
+    let idArray: number[] = [];
+    for (let id of IDstring.split(",")) {
+      idArray.push(parseInt(id.trim())); // removing all whitespace and adding the parsed integer to the array of product ids
+    }
+    return idArray;
   }
 
 }

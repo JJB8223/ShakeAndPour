@@ -46,7 +46,19 @@
 </div>
 
 <div *ngIf="isEditingKit">
-  <p>Editing under construction</p>
+  <form>
+    <label for="id-field">Kit ID</label>
+    <input type="number" #updatedID id ="id-field"/><br>
+    <label for="name-field">Kit Name</label>
+    <input type="text" #updatedName id="name-field"/><br>
+    <label for="price-field">Kit Price</label>
+    <input type="text" #updatedPrice id="price-field"/><br>
+    <label for="quantity-field">Kit Quantity:</label>
+    <input type="number" #updatedQuantity id="quantity-field"/><br>
+    <label for="product-ids">Product IDs (separate with commas):</label>
+    <input type="text" #updatedProductIDs id="product-ids"/><br>
+    <button (click) = "updateKit(updatedID.value, updatedName.value, updatedPrice.value, updatedQuantity.value, updatedProductIDs.value)">Update Kit</button>
+  </form>
 </div>
 
 <div *ngIf="isDeletingKit">

@@ -35,6 +35,14 @@ export class KitService {
     );
   }
 
+  /** PUT: update the Kit on the server */
+  updateKit(kit: Kit): Observable<any> {
+    return this.http.put(this.kitsUrl, kit, this.httpOptions).pipe(
+      tap(_ => this.log(`updated Kit id=${kit.id}`)),
+      catchError(this.handleError<any>('updateKit'))
+    );
+  }
+
   /**DELETE: delete the kit from the server */
   deleteKit(id: number): Observable<Kit> {
     const url = `${this.kitsUrl}/${id}`;
