@@ -9,6 +9,9 @@ import { ProductDetailComponent } from './product-detail/product-detail.componen
 import { MessagesComponent } from './messages/messages.component';
 import { DashboardComponent } from './dashboard/dashboard.component'; // <-- NgModel lives here
 import { ProductSearchComponent } from './product-search/product-search.component';
+import { KitSearchComponent } from './kit-search/kit-search.component';
+import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
+import { KitsDisplayComponent } from './kits-display/kits-display.component';
 import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import {ReactiveFormsModule} from '@angular/forms';
@@ -26,6 +29,10 @@ import { KitService } from './kits.service';
     LoginComponent,
     AdminComponent,
     UserComponent,
+    ProductSearchComponent,
+    KitSearchComponent,
+    ShoppingCartComponent,
+    KitsDisplayComponent
   ],
   imports: [
     BrowserModule,

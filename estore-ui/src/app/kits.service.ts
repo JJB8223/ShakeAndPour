@@ -1,42 +1,71 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { Kit } from './kit';
+import { Observable, catchError, tap, of} from 'rxjs';
 import { MessageService } from './message.service';
+
+import { HttpClient } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class KitService {
-  private kitsUrl = 'http://localhost:8080/kits';
+export class KitsService {
 
-  constructor(
-    private http: HttpClient,
-    private messageService: MessageService) {}
+  private KitsUrl = 'http://localhost:8080/kits';
+
+  constructor(private http: HttpClient,
+              private messageService: MessageService) { }
+
 
   getKits(): Observable<Kit[]> {
-    return this.http.get<Kit[]>(this.kitsUrl)
+    return this.http.get<Kit[]>(this.KitsUrl)
       .pipe(
+        tap(_=> this.log('Fetched Kits')),
         catchError(this.handleError<Kit[]>('getKits', []))
       );
   }
 
+  /* GET Kits whose name contains search term */
+  searchKits(term: string): Observable<Kit[]> {
+    if (!term.trim()) {
+      // if not search term, return empty Kit array.
+      return of([]);
+    }
+    return this.http.get<Kit[]>(`${this.KitsUrl}/?name=${term}`).pipe(
+      tap(x => x.length ?
+        this.log(`found Kits matching "${term}"`) :
+        this.log(`no Kits matching "${term}"`)),
+      catchError(this.handleError<Kit[]>('searchKits', []))
+    );
+  }
+
+  // helper functions for the kits service class
+
   private log(message: string) {
-    this.messageService.add(`KitService: ${message}`);
+    this.messageService.add(`ProductService: ${message}`);
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
+    /**
+  * Handle Http operation that failed.
+  * Let the app continue.
+  *
+  * @param operation - name of the operation that failed
+  * @param result - optional value to return as the observable result
+  */
+    private handleError<T>(operation = 'operation', result?: T) {
+      return (error: any): Observable<T> => {
 
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
+        // TODO: send the error to remote logging infrastructure
+        console.error(error); // log to console instead
 
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
+        // TODO: better job of transforming error for user consumption
+        this.log(`${operation} failed: ${error.message}`);
 
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
-  }
+        // Let the app keep running by returning an empty result.
+        return of(result as T);
+      };
+    }
+
+
+
 }
