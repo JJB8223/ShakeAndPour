@@ -4,6 +4,7 @@
   <a routerLink="/products">Products</a>
   <a *ngIf="!isLoggedIn()" routerLink="/login">Login</a>
   <a *ngIf="isAdmin()" routerLink="/admin">Admin Page</a>
+  <a *ngIf="isUser()" routerLink="/user">User Page</a>
   <a *ngIf="isLoggedIn()" (click)="logout()">Logout</a>
 </nav>
 <router-outlet></router-outlet>
