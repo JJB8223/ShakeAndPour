@@ -95,6 +95,10 @@ public class UserFileDAO implements UserDAO{
         return userList;
     }
 
+    /**
+     * Get the login credentials for all users
+     * @return the Map of all usernames and passwords
+     */
     public Map<String, String> getLogin() {
         return loginCreds;
     }

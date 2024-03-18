@@ -207,6 +207,13 @@ public class UserController {
     }
 
 
+    /**
+     * Login a user given their credentials
+     * @param username the username of the user to login
+     * @param password the password of the user to login
+     * @return A response entity with a string signifying if login was
+     * successful or not.
+     */
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username,
                                       @RequestParam String password){
