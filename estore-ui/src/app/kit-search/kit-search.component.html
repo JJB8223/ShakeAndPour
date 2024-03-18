@@ -7,5 +7,6 @@
         <span>Kit Name: </span> {{kit.name}} | 
         <span>Price: </span> {{kit.price}} | 
         <span>Products in Kit: </span> {{kit.products_in_kit}}
+        <button (click)="addToShoppingCart(kit.id, 1)">Add to Cart</button>
     </li>
 </ul>
