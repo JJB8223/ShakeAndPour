@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { KitMap } from '../kit-map';
 import { ShoppingCartService } from '../shopping-cart.service';
-import { KitsService } from '../kits.service';
+import { KitService } from '../kits.service';
 import { switchMap } from 'rxjs';
 import { OnInit } from '@angular/core';
 
@@ -11,8 +11,7 @@ import { OnInit } from '@angular/core';
   styleUrl: './shopping-cart.component.css'
 })
 export class ShoppingCartComponent {
-  constructor (private shoppingCartService: ShoppingCartService,
-               private kitService: KitsService ) { }
+  constructor (private shoppingCartService: ShoppingCartService,) { }
   kitMaps: KitMap[] = []
 
   totalCost: number = 0;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { KitsService } from '../kits.service';
+import { KitService } from '../kits.service';
 import { ProductService } from '../product.service';
 import { catchError, forkJoin, switchMap } from 'rxjs';
 import { ShoppingCartService } from '../shopping-cart.service';
@@ -12,7 +12,7 @@ import { Kit } from '../kit';
   styleUrl: './kits-display.component.css'
 })
 export class KitsDisplayComponent {
-  constructor (private kitService: KitsService, private productService: ProductService,
+  constructor (private kitService: KitService, private productService: ProductService,
                private shoppingCartService: ShoppingCartService) {}
   
   kits: Kit[] = []
