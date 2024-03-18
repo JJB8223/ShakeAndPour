@@ -4,6 +4,7 @@ import { KitsService } from '../kits.service';
 import { ProductService } from '../product.service';
 import { Observable, map, Subject } from 'rxjs';
 import { catchError, forkJoin, switchMap } from 'rxjs';
+import { ShoppingCartService } from '../shopping-cart.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -13,7 +14,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class KitSearchComponent implements OnInit {
 
-  constructor(private kitService: KitsService, private productService: ProductService) {}
+  constructor(private kitService: KitsService, private productService: ProductService,
+              private shoppingCartService: ShoppingCartService) {}
 
   kits: Kit[] = []
 
@@ -68,6 +70,18 @@ export class KitSearchComponent implements OnInit {
           this.kits = kits;
         }
       );
+  }
+
+  addToShoppingCart(id: number, quantity: number): void {
+    console.log("This is the number we are adding: " + id);
+    this.shoppingCartService.addToShoppingCart(id, quantity).subscribe({
+      next: (response) => {
+        console.log('Response from adding to cart:', response);
+      },
+      error: (err) => {
+        console.error('Error adding item to cart:', err);
+      }
+    });
   }
 
 }
