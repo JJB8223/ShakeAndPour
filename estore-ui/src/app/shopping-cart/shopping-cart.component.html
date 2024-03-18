@@ -1,0 +1,14 @@
+<h1>Shopping Cart</h1>
+<ul class="shopping-cart">
+    <li *ngFor="let kitMap of kitMaps">
+        <span>Kit Name: </span> {{kitMap.name}} | 
+        <span>Quantity: </span> {{kitMap.quantity}} |
+        <span>Price: </span> {{kitMap.quantity * kitMap.price}}
+        <button (click)="removeItem(kitMap.id, 1)">-</button>
+        <button (click)="addItem(kitMap.id, 1)">+</button>
+        <button (click)="removeItem(kitMap.id, kitMap.quantity)">X</button>
+    </li>
+    <div class="total-cost">
+        Total Cost: ${{ totalCost.toFixed(2) }}
+    </div>
+</ul>

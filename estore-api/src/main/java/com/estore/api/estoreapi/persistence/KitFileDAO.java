@@ -31,7 +31,7 @@ public class KitFileDAO implements KitDAO{
     private String filename;    // Filename to read from and write to
     
     public KitFileDAO(@Value("${kits.file}") String filename, ObjectMapper objectMapper) throws IOException{
-        this.filename = filename; // For whatever reason this is not working properly on my windows machine, trying to manually set the file path first then do it properly through REST 
+        this.filename = filename;
         this.objectMapper = objectMapper;
         load();
     }
@@ -91,7 +91,8 @@ public class KitFileDAO implements KitDAO{
         ArrayList<Kit> KitArrayList = new ArrayList<>();
 
         for (Kit kit : inventory.values()) {
-            if (containsText == null || kit.getName().contains(containsText)) {
+            String kitName = kit.getName().toLowerCase(); // most users are not going to enter the correct casing when searching for kits
+            if (containsText == null || kitName.contains(containsText.toLowerCase())) {
                 KitArrayList.add(kit);
             }
         }

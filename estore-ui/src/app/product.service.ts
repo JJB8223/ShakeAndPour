@@ -27,7 +27,9 @@ export class ProductService {
   }
   /** GET Product by id. Will 404 if id not found */
   getProduct(id: number): Observable<Product> {
-    const url = `${this.ProductsUrl}/${id}`;
+    console.log("I am in here")
+    const url = `${this.ProductsUrl}/product/${id}`;
+    console.log(url)
     return this.http.get<Product>(url).pipe(
       tap(_ => this.log(`fetched Product id=${id}`)),
       catchError(this.handleError<Product>(`getProduct id=${id}`))
@@ -66,6 +68,7 @@ export class ProductService {
     /** Log a ProductService message with the MessageService */
   private log(message: string) {
     this.messageService.add(`ProductService: ${message}`);
+    console.log(message)
   }
 
   /**

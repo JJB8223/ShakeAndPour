@@ -27,6 +27,20 @@ export class KitService {
       );
   }
 
+  /* GET Kits whose name contains search term */
+  searchKits(term: string): Observable<Kit[]> {
+    if (!term.trim()) {
+      // if not search term, return empty Kit array.
+      return of([]);
+    }
+    return this.http.get<Kit[]>(`${this.kitsUrl}/?name=${term}`).pipe(
+      tap(x => x.length ?
+        this.log(`found Kits matching "${term}"`) :
+        this.log(`no Kits matching "${term}"`)),
+      catchError(this.handleError<Kit[]>('searchKits', []))
+    );
+  }
+
   /** POST: add a new Kit to the server */
   addKit(kit: Kit): Observable<Kit> {
     return this.http.post<Kit>(`${this.kitsUrl}/create`, kit, this.httpOptions).pipe(

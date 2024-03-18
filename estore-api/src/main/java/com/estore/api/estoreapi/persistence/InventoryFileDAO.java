@@ -35,7 +35,7 @@ public class InventoryFileDAO  implements InventoryDAO{
 
 
     public InventoryFileDAO(@Value("${inventory.file}") String filename, ObjectMapper objectMapper) throws IOException{
-        this.filename = filename; // For whatever reason this is not working properly on my windows machine, trying to manually set the file path first then do it properly through REST 
+        this.filename = filename; 
         this.objectMapper = objectMapper;
         load();
 
