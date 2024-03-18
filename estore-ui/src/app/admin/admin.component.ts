@@ -38,7 +38,7 @@ export class AdminComponent{
   }
 
   addProduct(name: string, productPrice: string, productQuantity: string): void {
-    // I couldn't find a clean way to only allow floats in the price field so this can cause an error
+    // Couldn't find a clean way to only allow floats in the price field so this can cause an error
     this.productService.addProduct({ name, price: parseFloat(productPrice), quantity: parseInt(productQuantity) } as Product).
       subscribe(
         response => {
@@ -47,4 +47,13 @@ export class AdminComponent{
       );
   }
 
+  updateProduct(productID: string, name: string, productPrice: string, productQuantity: string): void {
+    // Couldn't find a clean way to only allow floats in the price field so this can cause an error
+    this.productService.updateProduct({id: parseInt(productID), name, price: parseFloat(productPrice), quantity: parseInt(productQuantity)} as Product).
+      subscribe(
+        response => {
+          this.getProducts(); // updating the products once we've received a response
+        }
+      );
+  }
 }

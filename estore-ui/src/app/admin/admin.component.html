@@ -43,7 +43,19 @@
   </form>
 </div>
 
-<div *ngIf="isEditingProduct"><p>Editing</p></div>
+<div *ngIf="isEditingProduct">
+  <form>
+    <label for="id-field">Product ID</label>
+    <input type="number" #updatedID id ="id-field"/><br>
+    <label for="name-field">Product Name</label>
+    <input type="text" #updatedName id="name-field"/><br>
+    <label for="price-field">Product Price</label>
+    <input type="text" #updatedPrice id="price-field"/><br>
+    <label for="quantity-field">Product Quantity:</label>
+    <input type="number" #updatedQuantity id="quantity-field"/><br>
+    <button (click) = "updateProduct(updatedID.value, updatedName.value, updatedPrice.value, updatedQuantity.value)">Update Product</button>
+  </form>
+</div>
 
 <div *ngIf="isDeletingProduct">
   <label for="deleted-id-field">Deleted Product ID</label>
