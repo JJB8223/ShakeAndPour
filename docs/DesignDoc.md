@@ -191,6 +191,13 @@ User Stories not under testing yet: 14
 
 >_**[Sprint 2 & 4]** **Include images of your code coverage report.** If there are any anomalies, discuss
 > those._
+> **[Sprint 2 Code Coverage]**
+> ![Sprint 2 Code Coverage Overall Report](sprint-2-overall-code-coverage.png)
+> ![Sprint 2 Controller Code Coverage](sprint-2-controller-code-coverage.png)
+> The main issue with the controller coverage was with the Shopping Cart Controller. Several if statments were not tested when removing or getting kits from the cart. Resulting in the overall less code coverage.
+> ![Sprint 2 Persistence Code Coverage](sprint-2-persistence-code-coverage.png)
+> While our tests did not miss any instructions, there were some missing branches to be tested from all FileDAO classes. More tests just need to be added to account for all cases/branches in if statements of methods.
+> ![Sprint 2 Model Code Coverage](sprint-2-model-code-coverage.png)
 
 ## Ongoing Rationale
 >_**[Sprint 1, 2, 3 & 4]** Throughout the project, provide a time stamp **(yyyy/mm/dd): Sprint # and description** of any _**major**_ team decisions or design milestones/changes and corresponding justification._
