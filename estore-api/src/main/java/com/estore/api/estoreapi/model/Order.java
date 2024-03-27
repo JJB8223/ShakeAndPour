@@ -104,4 +104,23 @@ public class Order {
     public int getId() {
         return this.id;
     }
+
+    /**
+     * This method returns whether a specified piece of text matches the names of any kits in the order
+     * 
+     * @param text A String of searched text
+     * @return Whether the specified string was found in any of the kits
+     */
+    public boolean containsMatchingKit(String text) {
+        // if the name of any kits in the order match the string, this will be true
+        boolean hasMatchingKit = false; 
+
+        for (Kit k : kits.keySet()) {
+            if (k.getName().contains(text)) {
+                hasMatchingKit = true; 
+            }
+        }
+
+        return hasMatchingKit;
+    }
 }

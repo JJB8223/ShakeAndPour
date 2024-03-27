@@ -11,6 +11,7 @@ import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 
 /**
  * Unit tests for the Order class
@@ -143,6 +144,21 @@ public class OrderTest {
     @Test
     public void testGetId() {
         assertEquals(testOrder.getId(), testId);
+    }
+
+    /**
+     * This method tests the containsMatchingKit method in the Order class
+     */
+    @Test
+    public void testContainsMatchingKit() {
+        // verifying no matches are found if the string doesn't match the names of any of the kits
+        String noMatchesString = "zzzzz"; 
+        assertFalse(testOrder.containsMatchingKit(noMatchesString));
+        // verifying a match is found if the string matches the name of 1 of the kits
+        String matchString = "a"; 
+        assertTrue(testOrder.containsMatchingKit(matchString));
+        // verifying a match is found if the string is empty
+        assertTrue(testOrder.containsMatchingKit(""));
     }
 
 }
