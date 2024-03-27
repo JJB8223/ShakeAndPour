@@ -12,12 +12,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Unit tests for the Order class
+ * 
+ * @author Duncan French
+ */
 @Tag("Model-tier")
 public class OrderTest {
 
     private Order testOrder;
     private String testUser;
     private Map<Kit, Integer> testMap;
+    private int testId;
     private Kit firstTestKit;
     private Kit secondTestKit;
     private Kit thirdTestKit;
@@ -35,7 +41,8 @@ public class OrderTest {
         testMap.put(firstTestKit, 3);
         testMap.put(secondTestKit, 5);
         testMap.put(thirdTestKit, 7);
-        testOrder = new Order(testUser, testMap);
+        testId = 1;
+        testOrder = new Order(testId, testUser, testMap);
     }
 
     /**
@@ -128,6 +135,14 @@ public class OrderTest {
         // verifying that the kit wasn't added to the order map
         Map<Kit, Integer> resultingMap = testOrder.getAllKits();
         assertEquals(resultingMap.get(fifthTestKit), null); 
+    }
+
+    /**
+     * This method tests the getId method in the Order class
+     */
+    @Test
+    public void testGetId() {
+        assertEquals(testOrder.getId(), testId);
     }
 
 }

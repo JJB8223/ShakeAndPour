@@ -1,5 +1,4 @@
 package com.estore.api.estoreapi.model;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Order {
 
+    @JsonProperty("id") private int id; // unique identifier for an order
     @JsonProperty("user") private String user; // contains the username of the user who made the order
     @JsonProperty("kit_quantities") private Map<Kit, Integer> kits;  // maps a Kit to the number of that kit in the order
 
@@ -22,7 +22,8 @@ public class Order {
      * @param user The username of the user who made the order
      * @param kits A map of each kit in the order and quantity of that kit that was ordered
      */
-    public Order(@JsonProperty("user") String user, @JsonProperty("kit_quantities") Map<Kit, Integer> kits) {
+    public Order(@JsonProperty("id") int id, @JsonProperty("user") String user, @JsonProperty("kit_quantities") Map<Kit, Integer> kits) {
+        this.id = id;
         this.user = user;
         this.kits = kits;
     }
@@ -95,4 +96,12 @@ public class Order {
         return kits;
     }
 
+    /**
+     * This method returns the order's ID
+     * 
+     * @return an int containing this order's ID
+     */
+    public int getId() {
+        return this.id;
+    }
 }
