@@ -161,4 +161,12 @@ public class OrderTest {
         assertTrue(testOrder.containsMatchingKit(""));
     }
 
+    /**
+     * This method tests the getUser method in the Order class
+     */
+    @Test
+    public void testGetUser() {
+        assertEquals(testOrder.getUser(), testUser);
+    }
+
 }

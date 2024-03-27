@@ -88,6 +88,15 @@ public class Order {
     }
 
     /**
+     * This method returns the username of the user who purchased this order
+     * 
+     * @return A string containing the username of the user who purchased this order
+     */
+    public String getUser(){
+        return user;
+    }
+    
+    /**
      * This method returns all the kits and their quantities in this order
      * 
      * @return A map of all kits and their quantities in this order
