@@ -95,7 +95,7 @@ public class Order {
     public String getUser(){
         return user;
     }
-    
+
     /**
      * This method returns all the kits and their quantities in this order
      * 
@@ -125,7 +125,8 @@ public class Order {
         boolean hasMatchingKit = false; 
 
         for (Kit k : kits.keySet()) {
-            if (k.getName().contains(text)) {
+            String lowercaseName = k.getName().toLowerCase();
+            if (lowercaseName.contains(text.toLowerCase())) {
                 hasMatchingKit = true; 
             }
         }
