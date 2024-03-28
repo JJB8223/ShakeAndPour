@@ -70,15 +70,15 @@ public class OrderFileDAOTest {
         assertEquals(twoOrderResponse[0].getUser(), twoOrderResponse[1].getUser(), "test");
         assertEquals(twoOrderResponse[0].getId(), 1);
         assertEquals(twoOrderResponse[1].getId(), 2);
-        assertEquals(twoOrderResponse[0].getAllKits(), testOrders[0].getAllKits());
-        assertEquals(twoOrderResponse[1].getAllKits(), testOrders[1].getAllKits());
+        assertEquals(twoOrderResponse[0].getKits(), testOrders[0].getKits());
+        assertEquals(twoOrderResponse[1].getKits(), testOrders[1].getKits());
 
         // testing with a username with 1 order associated with it
         Order[] oneOrderResponse = orderDAO.getOrders("zorg");
         assertEquals(oneOrderResponse.length, 1);
         assertEquals(oneOrderResponse[0].getUser(), "zorg");
         assertEquals(oneOrderResponse[0].getId(), 3);
-        assertEquals(oneOrderResponse[0].getAllKits(), testOrders[2].getAllKits());
+        assertEquals(oneOrderResponse[0].getKits(), testOrders[2].getKits());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class OrderFileDAOTest {
         // since objects are serialized when they get added by the DAO, shallow equality won't work
         assertEquals(newOrder.getId(), orderDAO.getOrder(4).getId());
         assertEquals(newOrder.getUser(), orderDAO.getOrder(4).getUser());
-        assertEquals(newOrder.getAllKits(), orderDAO.getOrder(4).getAllKits());
+        assertEquals(newOrder.getKits(), orderDAO.getOrder(4).getKits());
     }
 
     @Test

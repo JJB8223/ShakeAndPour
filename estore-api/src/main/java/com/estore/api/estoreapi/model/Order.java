@@ -22,7 +22,7 @@ public class Order {
      * @param user The username of the user who made the order
      * @param kits An array of all the kits in the order
      */
-    public Order(@JsonProperty("id") int id, @JsonProperty("user") String user, @JsonProperty("kit_quantities") ArrayList<Kit> kits) {
+    public Order(@JsonProperty("id") int id, @JsonProperty("user") String user, @JsonProperty("kits_in_order") ArrayList<Kit> kits) {
         this.id = id;
         this.user = user;
         this.kits = kits;
@@ -75,7 +75,7 @@ public class Order {
      * 
      * @return A list of all kits in this order
      */
-    public ArrayList<Kit> getAllKits() {
+    public ArrayList<Kit> getKits() {
         return kits;
     }
 

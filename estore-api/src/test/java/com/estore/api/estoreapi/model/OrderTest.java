@@ -50,12 +50,12 @@ public class OrderTest {
     }
 
     /**
-     * This method tests the getAllKits method in the Order class
+     * This method tests the getKits method in the Order class
      */
     @Test
-    public void testGetAllKits() {
+    public void testGetKits() {
         // these should be equivalent since the order class doesn't create a new list, it just uses the one provided
-        assertEquals(testOrder.getAllKits(), testList); 
+        assertEquals(testOrder.getKits(), testList); 
     }
 
     /**
@@ -74,12 +74,12 @@ public class OrderTest {
         // adding a kit that doesn't exist
         Kit testKit = new Kit(100, "test", 50.0f, 10, new ArrayList<>());
         testOrder.addKit(testKit);
-        ArrayList<Kit> resultingList = testOrder.getAllKits();
+        ArrayList<Kit> resultingList = testOrder.getKits();
         assertTrue(resultingList.contains(testKit));
         // adding a kit that already exists
-        int initialLength = testOrder.getAllKits().size();
+        int initialLength = testOrder.getKits().size();
         testOrder.addKit(firstTestKit); // this kit already exists in the order
-        assertEquals(initialLength, testOrder.getAllKits().size());
+        assertEquals(initialLength, testOrder.getKits().size());
     }
 
     /**
@@ -90,7 +90,7 @@ public class OrderTest {
         Kit clearedKit = firstTestKit;
         testOrder.clearKitFromOrder(clearedKit); 
         // once we've cleared the kit from the order, it should return a quantity of 0
-        ArrayList<Kit> resultingList = testOrder.getAllKits();
+        ArrayList<Kit> resultingList = testOrder.getKits();
         for (Kit k : resultingList) {
             assertNotEquals(clearedKit.getName(), k.getName());
         }

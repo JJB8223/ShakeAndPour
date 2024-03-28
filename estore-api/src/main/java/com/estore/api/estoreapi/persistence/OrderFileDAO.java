@@ -137,7 +137,7 @@ public class OrderFileDAO implements OrderDAO {
     public Order createOrder(Order order) throws IOException {
         synchronized(orderHistory) {
             // create new order object, assign the next unique id to it
-            Order newOrder = new Order(nextId(), order.getUser(), order.getAllKits());
+            Order newOrder = new Order(nextId(), order.getUser(), order.getKits());
             orderHistory.put(newOrder.getId(), newOrder);
             save();
             return newOrder;
