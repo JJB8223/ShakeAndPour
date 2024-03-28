@@ -1,5 +1,4 @@
 package com.estore.api.estoreapi.persistence;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,15 +6,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.estore.api.estoreapi.model.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 /**
  * Implements functionality for JSON filed-based persistence for order histories
  * 
  * @author Duncan French
  */
+@Component
 public class OrderFileDAO implements OrderDAO {
 
     private Map<Integer, Order> orderHistory; // local cache of all Orders in the store's order history
@@ -23,11 +23,8 @@ public class OrderFileDAO implements OrderDAO {
     
     private ObjectMapper objectMapper; // Provides conversion between Order objects and JSON text 
                                        // format written to the file
-
     private static int nextId; // the next ID to assign to a new Order
-
     private String filename; // filename to read and write from
-
     /**
      * This constructor creates a new OrderFileDAO 
      * 
@@ -53,12 +50,10 @@ public class OrderFileDAO implements OrderDAO {
     private boolean load() throws IOException {
         orderHistory = new TreeMap<>();
         nextId = 0;
-
         // Deserializes the JSON objects from the file into an array of products
         // readValue will throw an IOException if there's an issue with the file
         // or reading from the file
         Order[] OrderArray = objectMapper.readValue(new File(filename),Order[].class);
-
         // Add each Order to the tree map and keep track of the greatest id
         for (Order order : OrderArray) {
             orderHistory.put(order.getId(), order);
@@ -69,7 +64,6 @@ public class OrderFileDAO implements OrderDAO {
         ++nextId;
         return true;
     }
-
     /**
      * Generates the next id for a new {@linkplain Order order}
      *
@@ -80,7 +74,6 @@ public class OrderFileDAO implements OrderDAO {
         ++nextId;
         return id;
     }
-
     /**
      * Generates an array of {@linkplain Order orders} from the tree map for any
      * {@linkplain Order orders} that contains the text specified by containsText
@@ -92,18 +85,15 @@ public class OrderFileDAO implements OrderDAO {
      */
     private Order[] getOrdersArray(String containsText) { // if containsText == null, no filter
         ArrayList<Order> orderHistoryArrayList = new ArrayList<>();
-
         for (Order order : orderHistory.values()){
             if (containsText == null || order.containsMatchingKit(containsText)){
                 orderHistoryArrayList.add(order);
             }
         }
-
         Order[] orderList  = new Order[orderHistoryArrayList.size()];
         orderHistoryArrayList.toArray(orderList);
         return orderList;
     }
-
     /**
      * Gets an array of {@linkplain Order orders} from the getOrdersArray method that 
      * doesn't specify a username, then filters by the provided username
@@ -116,7 +106,6 @@ public class OrderFileDAO implements OrderDAO {
     private Order[] getOrdersArray(String containsText, String username) {
         Order[] unfilteredOrders = getOrdersArray(containsText);
         ArrayList<Order> orderHistoryArrayList = new ArrayList<>();
-
         for (Order order : unfilteredOrders) {
             if (order.purchasedBy(username)) {
                 orderHistoryArrayList.add(order);
@@ -126,7 +115,6 @@ public class OrderFileDAO implements OrderDAO {
         orderHistoryArrayList.toArray(filteredOrders);
         return filteredOrders;
     }
-
     /**
      * Saves the {@linkplain Order orders} from the map into the file as an array of JSON objects
      *
@@ -136,14 +124,12 @@ public class OrderFileDAO implements OrderDAO {
      */
     private boolean save() throws IOException {
         Order[] orders = getOrdersArray(null);
-
         // Serializes the Java Objects to JSON objects into the file
         // writeValue will thrown an IOException if there is an issue
         // with the file or reading from the file
         objectMapper.writeValue(new File(filename), orders);
         return true;
     }
-
     /**
      * {@inheritDoc}
      */
@@ -157,7 +143,6 @@ public class OrderFileDAO implements OrderDAO {
             return newOrder;
         }
     }
-
     /**
      * {@inheritDoc}
      */
@@ -167,7 +152,6 @@ public class OrderFileDAO implements OrderDAO {
             return getOrdersArray(containsText, username);
         }
     }
-
     /**
      * {@inheritDoc}
      */
@@ -177,7 +161,6 @@ public class OrderFileDAO implements OrderDAO {
             return orderHistory.get(id);
         }
     }
-
     /**
      * {@inheritDoc}
      */
@@ -187,5 +170,4 @@ public class OrderFileDAO implements OrderDAO {
             return getOrdersArray(null, username);
         }
     }
-
 }
