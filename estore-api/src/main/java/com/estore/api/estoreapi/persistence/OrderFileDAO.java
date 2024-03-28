@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.estore.api.estoreapi.model.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * 
  * @author Duncan French
  */
+@Component
 public class OrderFileDAO implements OrderDAO {
 
     private Map<Integer, Order> orderHistory; // local cache of all Orders in the store's order history
