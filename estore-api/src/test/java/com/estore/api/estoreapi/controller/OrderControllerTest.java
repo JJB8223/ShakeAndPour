@@ -5,7 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -38,7 +38,7 @@ public class OrderControllerTest {
     public void testCreateOrder() throws IOException {
         // order created successfully
         // setup
-        Order createdOrderSuccess = new Order(10, "testUser", new HashMap<Kit, Integer>());
+        Order createdOrderSuccess = new Order(10, "testUser", new ArrayList<Kit>());
         when(orderDao.createOrder(createdOrderSuccess)).thenReturn(createdOrderSuccess);
         // invoke
         ResponseEntity<Order> successResponse = orderController.createOrder(createdOrderSuccess);
@@ -48,7 +48,7 @@ public class OrderControllerTest {
 
         // conflict on creating order
         // setup 
-        Order createdOrderConflict = new Order(11, "testUser", new HashMap<Kit, Integer>());
+        Order createdOrderConflict = new Order(11, "testUser", new ArrayList<Kit>());
         when(orderDao.createOrder(createdOrderConflict)).thenReturn(null);
         // invoke
         ResponseEntity<Order> conflictResponse = orderController.createOrder(createdOrderConflict);
@@ -57,7 +57,7 @@ public class OrderControllerTest {
 
         // IOException on creating order
         // setup
-        Order createdOrderException = new Order(12, "testUser", new HashMap<Kit, Integer>());
+        Order createdOrderException = new Order(12, "testUser", new ArrayList<Kit>());
         when(orderDao.createOrder(createdOrderException)).thenThrow(new IOException());
         // invoke
         ResponseEntity<Order> exceptionResponse = orderController.createOrder(createdOrderException);
@@ -72,7 +72,7 @@ public class OrderControllerTest {
         // some orders returned
         // setup
         String responseName = "yes";
-        Order[] orderResponse = new Order[]{new Order(100, "testUser", new HashMap<Kit, Integer>())};
+        Order[] orderResponse = new Order[]{new Order(100, "testUser", new ArrayList<Kit>())};
         when(orderDao.findOrders(responseName, searchUser)).thenReturn(orderResponse);
         // invoke
         ResponseEntity<Order[]> normalResponse = orderController.searchOrders(responseName, searchUser);
@@ -105,7 +105,7 @@ public class OrderControllerTest {
         // searched order id exists
         // setup
         int foundId = 10;
-        Order foundOrder = new Order(10, "testUser", new HashMap<Kit, Integer>());
+        Order foundOrder = new Order(10, "testUser", new ArrayList<Kit>());
         when(orderDao.getOrder(foundId)).thenReturn(foundOrder);
         // invoke
         ResponseEntity<Order> foundResponse = orderController.getOrder(foundId);

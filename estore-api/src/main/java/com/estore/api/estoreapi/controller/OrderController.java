@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,10 +26,10 @@ import com.estore.api.estoreapi.persistence.OrderDAO;
  * @author Duncan French
  */
 @RestController
-@RequestMapping("orders") 
+@RequestMapping("/orders") 
 public class OrderController {
     
-    private static final Logger LOG = Logger.getLogger(ShoppingCartController.class.getName());
+    private static final Logger LOG = Logger.getLogger(OrderController.class.getName());
 
     private final OrderDAO orderDao;
 
@@ -81,8 +82,9 @@ public class OrderController {
      * 
      * @throws IOException if error occurs trying to get any Orders
      */
-    public ResponseEntity<Order[]> searchOrders(@RequestParam String name, @RequestParam String user) {
-        LOG.info("GET /orders/?name=" + name + "&user=" + user);
+    @GetMapping("/{name}/")
+    public ResponseEntity<Order[]> searchOrders(@PathVariable String name, @RequestParam String user) {
+        LOG.info("GET /orders/" + name + "?user=" + user);
         try {
             Order[] orders = orderDao.findOrders(name, user);
             return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -103,6 +105,7 @@ public class OrderController {
      * 
      * @throws IOException if error occurs trying to get any Orders
      */
+    @GetMapping("/")
     public ResponseEntity<Order[]> getOrders(@RequestParam String user) {
         LOG.info("GET /orders/?user=" + user);
         try {
@@ -122,6 +125,7 @@ public class OrderController {
      * @return ResponseEntity with located {@linkplain Order Order} object and HTTP status of OK<
      * ResponseEntity with HTTP status of NOT_FOUND if not found
      */
+    @GetMapping("/{id}")
     public ResponseEntity<Order> getOrder(@PathVariable int id) {
         LOG.info("GET /orders/" + id);
         

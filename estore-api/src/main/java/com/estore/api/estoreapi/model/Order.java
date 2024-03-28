@@ -1,5 +1,5 @@
 package com.estore.api.estoreapi.model;
-import java.util.Map;
+import java.util.ArrayList;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -15,47 +15,31 @@ public class Order {
 
     @JsonProperty("id") private int id; // unique identifier for an order
     @JsonProperty("user") private String user; // contains the username of the user who made the order
-    @JsonProperty("kit_quantities") private Map<Kit, Integer> kits;  // maps a Kit to the number of that kit in the order
+    @JsonProperty("kits_in_order") private ArrayList<Kit> kits; // contains all the kits in the order
 
     /**
      * Construct a new Order made by a user containing certain kits and their quantities
      * @param user The username of the user who made the order
-     * @param kits A map of each kit in the order and quantity of that kit that was ordered
+     * @param kits An array of all the kits in the order
      */
-    public Order(@JsonProperty("id") int id, @JsonProperty("user") String user, @JsonProperty("kit_quantities") Map<Kit, Integer> kits) {
+    public Order(@JsonProperty("id") int id, @JsonProperty("user") String user, @JsonProperty("kit_quantities") ArrayList<Kit> kits) {
         this.id = id;
         this.user = user;
         this.kits = kits;
     }
 
     /**
-     * Adds the quantity of the provided kit to the kits map. If the kit doesn't exist yet, it is 
-     * added to the order. If it already exists, the quantity is increased by the specified amount
+     * This method adds the provided kit to the order
      * 
-     * @param kit The kit being added
-     * @param quantity The number of the type of the kit being added
+     * @param kit The kit being added to the order
      */
-    public void addKits(Kit kit, int quantity) {
-        if (quantity <= 0) {
-            return; // prevents adding a Kit with an invalid quantity that will then be in the map
-        }
-        kits.put(kit, kits.getOrDefault(kit, 0) + quantity);
-    }
-
-    /**
-     * This method removes the provided quantity of a kit from an order. If this would result 
-     * in there being none of a kit left in the order, it is removed from the order
-     * 
-     * @param kit The kit whose quantity is decreased
-     * @param quantity The amount that the kit's quantity is decreased
-     */
-    public void removeKits(Kit kit, int quantity) {
-        int currentQuantity = kits.getOrDefault(kit, 0);
-        if (currentQuantity <= quantity) { // this would result in there being none of the kit left in the order
-            kits.remove(kit);
-        } else {
-            kits.put(kit, currentQuantity - quantity);
-        }
+    public void addKit(Kit kit) {
+        for (Kit k : kits) {
+            if (k.getName().equals(kit.getName())) {
+                return;
+            }
+        } // if we reach the end of the loop then the kit is not in the kits array
+        kits.add(kit);
     }
 
     /**
@@ -66,16 +50,6 @@ public class Order {
     public void clearKitFromOrder(Kit kit) {
         kits.remove(kit);
     }
-
-    /**
-     * Returns the quantity of the specified kit in the order. If it is not in the order, returns 0
-     * 
-     * @param kit The kit whose quantity is being obtained
-     * @return The quantity of the specified kit in the order
-     */
-    public int getKitQuantity(Kit kit) {
-        return kits.getOrDefault(kit, 0);
-    } 
 
     /**
      * Returns whether the specified username is the user who purchased this order
@@ -97,11 +71,11 @@ public class Order {
     }
 
     /**
-     * This method returns all the kits and their quantities in this order
+     * This method returns all the kits in this order
      * 
-     * @return A map of all kits and their quantities in this order
+     * @return A list of all kits in this order
      */
-    public Map<Kit, Integer> getAllKits() {
+    public ArrayList<Kit> getAllKits() {
         return kits;
     }
 
@@ -124,7 +98,7 @@ public class Order {
         // if the name of any kits in the order match the string, this will be true
         boolean hasMatchingKit = false; 
 
-        for (Kit k : kits.keySet()) {
+        for (Kit k : kits) {
             String lowercaseName = k.getName().toLowerCase();
             if (lowercaseName.contains(text.toLowerCase())) {
                 hasMatchingKit = true; 
@@ -133,4 +107,14 @@ public class Order {
 
         return hasMatchingKit;
     }
+
+    /**
+     * This method returns the Order in string format
+     * 
+     * @return A string version of the Order
+     */
+    public String toString() {
+        return Integer.toString(id) + user + kits.toString();
+    }
+
 }

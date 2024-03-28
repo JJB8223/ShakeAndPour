@@ -7,8 +7,6 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,18 +31,18 @@ public class OrderFileDAOTest {
         objectMapper = mock(ObjectMapper.class);
         testOrders = new Order[3];
 
-        Map<Kit, Integer> firstTestMap = new HashMap<>();
-        firstTestMap.put(new Kit(1, "yummy", 9.0f, 5, new ArrayList<Integer>()), 3);
-        testOrders[0] = new Order(1, "test", firstTestMap);
+        ArrayList<Kit> firstTestList = new ArrayList<>();
+        firstTestList.add(new Kit(1, "yummy", 9.0f, 5, new ArrayList<Integer>()));
+        testOrders[0] = new Order(1, "test", firstTestList);
 
-        Map<Kit, Integer> secondTestMap = new HashMap<>();
-        secondTestMap.put(new Kit(2, "slimy", 11.0f, 10, new ArrayList<Integer>()), 5);
-        testOrders[1] = new Order(2, "test", secondTestMap);
+        ArrayList<Kit> secondTestList = new ArrayList<>();
+        secondTestList.add(new Kit(2, "slimy", 11.0f, 10, new ArrayList<Integer>()));
+        testOrders[1] = new Order(2, "test", secondTestList);
 
-        Map<Kit, Integer> thirdTestMap = new HashMap<>();
-        thirdTestMap.put(new Kit(3, "gummy", 7.0f, 10, new ArrayList<Integer>()), 3);
-        thirdTestMap.put(new Kit(4, "runny", 5.0f, 7, new ArrayList<Integer>()), 5);
-        testOrders[2] = new Order(3, "zorg", thirdTestMap);
+        ArrayList<Kit> thirdTestList = new ArrayList<>();
+        thirdTestList.add(new Kit(3, "gummy", 7.0f, 10, new ArrayList<Integer>()));
+        thirdTestList.add(new Kit(4, "runny", 5.0f, 7, new ArrayList<Integer>()));
+        testOrders[2] = new Order(3, "zorg", thirdTestList);
 
         when(objectMapper
                 .readValue(new File("doesnt_matter.txt"),Order[].class))
@@ -85,7 +83,7 @@ public class OrderFileDAOTest {
 
     @Test
     public void testCreateOrder() throws IOException {
-        Order newOrder = new Order(4, "test", new HashMap<Kit, Integer>());
+        Order newOrder = new Order(4, "test", new ArrayList<Kit>());
         orderDAO.createOrder(newOrder);
         // since objects are serialized when they get added by the DAO, shallow equality won't work
         assertEquals(newOrder.getId(), orderDAO.getOrder(4).getId());
