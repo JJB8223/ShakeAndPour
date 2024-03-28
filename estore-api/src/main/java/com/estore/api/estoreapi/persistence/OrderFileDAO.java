@@ -38,7 +38,7 @@ public class OrderFileDAO implements OrderDAO {
      * @throws IOException Thrown if something is wrong with the underlying storage
      */
     public OrderFileDAO(@Value("${orders.file}") String filename, ObjectMapper objectMapper) throws IOException{
-        this.filename = filename; //"estore-api\\data\\orders.json"; // TODO: Change this back one I'm done testing on my machine
+        this.filename = filename; 
         this.objectMapper = objectMapper;
         load();
     }
