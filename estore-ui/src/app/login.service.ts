@@ -22,7 +22,15 @@ export class LoginService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) {}
+    private messageService: MessageService) {
+      this.checkLoginStatus();
+    }
+
+    checkLoginStatus(): void {
+      this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      this.isAdmin = localStorage.getItem('role') === 'admin';
+      this.isCust = localStorage.getItem('role') === 'user';
+    }
 
     login(username: string, password: string): Observable<string>{
       const params = new HttpParams()
@@ -32,12 +40,14 @@ export class LoginService {
       .pipe(
         map((response: string) => {
         if (response == 'admin login successful') {
-          this.isLoggedIn = true;
-          this.isAdmin = true;
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('role', 'admin');
+          this.checkLoginStatus();
         }
         else if (response == 'user login successful') {
-          this.isLoggedIn = true;
-          this.isCust = true;
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('role', 'user');
+          this.checkLoginStatus();
         }
 
         return response;
@@ -47,9 +57,9 @@ export class LoginService {
     }
 
     logout(): void {
-       this.isLoggedIn = false;
-       this.isAdmin = false;
-       this.isCust = false;
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('role');
+      this.checkLoginStatus();
     }
 
       /** Log a ProductService message with the MessageService */
