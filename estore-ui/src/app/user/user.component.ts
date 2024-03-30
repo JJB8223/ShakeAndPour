@@ -10,6 +10,8 @@ import { User } from '../user';
 export class UserComponent implements OnInit {
   username: string = ''
   name: string = ''
+  password: string = ''
+  id: number = 0
   isChangingUser: boolean = false;
   isChangingPassword: boolean = false;
 
@@ -17,10 +19,15 @@ export class UserComponent implements OnInit {
   
 
   ngOnInit(): void {
-    this.username = this.userService.getUsername()
-    this.userService.getUser().subscribe(user => {
-      this.username = user.username;
-      this.name = user.name;
+    this.userService.userDetails$.subscribe({
+      next: userDetails => {
+        if (userDetails) {
+          this.username = userDetails.username;
+          this.name = userDetails.name;
+          this.id = userDetails.id;
+          this.password = userDetails.password;
+        }
+      }
     });
   }
 

@@ -92,7 +92,7 @@ public class UserController {
         User[] users = userDAO.getUsers();
         User foundUser = null;
         for (User user: users) {
-            if (user.getUsername() == username) {
+            if (user.getUsername().equals(username)) {
                 foundUser = user;
             }
         }
