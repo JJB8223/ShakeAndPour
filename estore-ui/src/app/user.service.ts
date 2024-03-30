@@ -13,6 +13,11 @@ export class UserService {
   private usernameSource = new BehaviorSubject<string>(localStorage.getItem('username') || '');
   username$ = this.usernameSource.asObservable();
 
+  userDetails$: Observable<User | null> = this.username$.pipe(
+    switchMap(username => username ? this.getUser(username) : of(null)),
+    catchError(() => of(null)) // Handle potential errors, e.g., user not found
+  );
+
   setUsername(username: string): void {
     localStorage.setItem('username', username);
     this.usernameSource.next(username);
@@ -50,19 +55,26 @@ export class UserService {
   }
 
   changePassword(id : number, newPassword : string): Observable<any> {
-    const url = `http://localhost:8080/users/update/${id}/${newPassword}`;
-    return this.http.put<any>(url, {}).pipe(
+    const url = `http://localhost:8080/users/update/${id}/p`;
+    const params = new HttpParams().set('password', newPassword);
+    return this.http.put<any>(url, {}, { params }).pipe(
       tap(() => {
-        this.setUsername(newPassword);
+        this.log('Password successfully changed.');
       }),
       catchError(this.handleError('changePassword'))
     )
   }
 
-  userDetails$: Observable<User | null> = this.username$.pipe(
-    switchMap(username => username ? this.getUser(username) : of(null)),
-    catchError(() => of(null)) // Handle potential errors, e.g., user not found
-  );
+  changeName(id : number, newName : string): Observable<any> {
+    const url = `http://localhost:8080/users/update/${id}/n`;
+    const params = new HttpParams().set('name', newName);
+    return this.http.put<any>(url, {}, { params }).pipe(
+      tap(() => {
+        this.log('Name successfully changed.');
+      }),
+      catchError(this.handleError('changeName'))
+    )
+  }
 
    /** A logging helper method */
    private log(message: string) {

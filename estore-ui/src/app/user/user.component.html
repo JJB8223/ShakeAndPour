@@ -1,12 +1,15 @@
-<h1>Welcome Back, {{ username }}!</h1>
+<h1>Welcome Back, {{ name }}!</h1>
 <div>
 
-
-  <button (click) = "isChangingUser = true; isChangingPassword = false">
+  <button (click) = "isChangingName = true; isChangingUser = false; isChangingPassword = false">
+    Change Name
+  </button>
+  
+  <button (click) = "isChangingUser = true; isChangingPassword = false; isChangingName = false">
     Change Username
   </button>
 
-  <button (click) = "isChangingPassword = true; isChangingUser = false">
+  <button (click) = "isChangingPassword = true; isChangingUser = false; isChangingName = false">
     Change Password
   </button>
 
@@ -26,6 +29,22 @@
     <label for="name-field">New Username</label>
     <input type="text" #addedName id="name-field"/><br>
     <button (click) = "changeUsername(addedName.value)">Change Username</button>
+  </form>
+</div>
+
+<div *ngIf="isChangingPassword">
+  <form>
+    <label for="name-field">New Password</label>
+    <input type="text" #addedName id="name-field"/><br>
+    <button (click) = "changePassword(addedName.value)">Change Password</button>
+  </form>
+</div>
+
+<div *ngIf="isChangingName">
+  <form>
+    <label for="name-field">New Name</label>
+    <input type="text" #addedName id="name-field"/><br>
+    <button (click) = "changeName(addedName.value)">Change Name</button>
   </form>
 </div>
 
