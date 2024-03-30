@@ -79,7 +79,7 @@ public class ShoppingCart {
      * @return true if the cart contains the kit; false otherwise.
      */
     public boolean containsKit(Kit kit) {
-        if (kits.get(kit.getId()) != null) {
+        if (kits.get(kit) != null) {
             return false;
         }
         return true;
