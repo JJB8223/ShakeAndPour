@@ -1,4 +1,4 @@
-<h1>Welcome Back, {{ name }}!</h1>
+<h1>Welcome Back, {{ username }}!</h1>
 <div>
 
 
@@ -27,4 +27,8 @@
     <input type="text" #addedName id="name-field"/><br>
     <button (click) = "changeUsername(addedName.value)">Change Username</button>
   </form>
+</div>
+
+<div *ngIf="successMessage" class="successMessage">
+  {{ successMessage }}
 </div>

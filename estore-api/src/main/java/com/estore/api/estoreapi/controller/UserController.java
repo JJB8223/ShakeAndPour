@@ -110,16 +110,25 @@ public class UserController {
      * @return ResponseEntity indicating the status of the operation.
      * @throws IOException if an internal error occurs
      */
-    @PutMapping("/update/{id}/{username}")
-    public ResponseEntity<User> updateUsername(@PathVariable int id, @PathVariable String username)
+    @PutMapping("/update/{id}/u")
+    public ResponseEntity<User> updateUsername(@PathVariable int id, @RequestParam String username)
         throws IOException {
-        LOG.info("PUT /users/update/" + id + username);
+        LOG.info("PUT /users/update/" + id + "/u?username=" + username);
         try{
             User currU = userDAO.getUser(id);
             if (currU == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-
+            User preexisting = null;
+            User[] users = userDAO.getUsers();
+            for (User user: users) {
+                if (user.getUsername().equals(username)) {
+                    preexisting = user;
+                }
+            }
+            if (preexisting != null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             User status = userDAO.updateUsername(currU, username);
 
             if (status == null){

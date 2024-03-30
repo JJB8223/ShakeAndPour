@@ -14,6 +14,7 @@ export class UserComponent implements OnInit {
   id: number = 0
   isChangingUser: boolean = false;
   isChangingPassword: boolean = false;
+  successMessage: string = '';
 
   constructor(private userService: UserService) {}
   
@@ -32,8 +33,23 @@ export class UserComponent implements OnInit {
   }
 
   changeUsername(username: string): void {
-    this.userService.changeUsername(this.id, username)
-      .subscribe((username: string) => this.username = username);
+    if (!username.trim()) {
+      alert('Username cannot be blank');
+      return;
+    }
+    this.userService.changeUsername(this.id, username).subscribe({
+        next: (response) => {
+          this.successMessage = 'Username successfully changed to ' + username;
+          (username: string) => this.username = username;
+        },
+        error: (error) => {
+          if (error.status === 400) {
+            alert('This username is taken. Please try another.');
+          } else {
+            alert('Failed to change username. Please try again.');
+          }
+        }
+    });
   }
 
 }

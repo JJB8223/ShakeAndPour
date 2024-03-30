@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { User } from './user';
 import { MessageService } from './message.service';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, catchError, of, switchMap, tap } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable, catchError, of, switchMap, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -39,12 +39,23 @@ export class UserService {
   }
 
   changeUsername(id : number, newUsername : string): Observable<any> {
-    const url = `http://localhost:8080/users/update/${id}/${newUsername}`;
-    return this.http.put<any>(url, {}).pipe(
+    const url = `http://localhost:8080/users/update/${id}/u`;
+    const params = new HttpParams().set('username', newUsername);
+    return this.http.put<any>(url, {}, { params }).pipe(
       tap(() => {
         this.setUsername(newUsername);
       }),
       catchError(this.handleError('changeUsername'))
+    )
+  }
+
+  changePassword(id : number, newPassword : string): Observable<any> {
+    const url = `http://localhost:8080/users/update/${id}/${newPassword}`;
+    return this.http.put<any>(url, {}).pipe(
+      tap(() => {
+        this.setUsername(newPassword);
+      }),
+      catchError(this.handleError('changePassword'))
     )
   }
 
@@ -59,19 +70,16 @@ export class UserService {
     console.log(message)
   }
 
-  /** Error Handling helper method */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      // TODO: send the error to remote logging infrastructure
-      console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
-      this.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
-      return of(result as T);
-    };
+  private handleError(operation = 'operation') {
+    return (error: HttpErrorResponse): Observable<never> => {
+      if (error.status === 400) {
+        console.error(`${operation} failed due to a bad request: `, error.error);
+      } else {
+        // Log generic error messages or other specific errors
+        console.error(`${operation} failed: `, error.message);
+      }
+      return throwError(() => error);
+    }
   }
   
   constructor(private http: HttpClient, private messageService : MessageService ) {}

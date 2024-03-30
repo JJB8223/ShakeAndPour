@@ -1,1 +1,1 @@
-[{"id":100,"username":"admin","password":"1234","name":"admin","role":"ADMIN"},{"id":101,"username":"testUser","password":"0000","name":"John Doe","role":"CUSTOMER"},{"id":102,"username":"dd122903","password":"password","name":"John Doe","role":"CUSTOMER"}]
+[{"id":100,"username":"admin","password":"1234","name":"admin","role":"ADMIN"},{"id":101,"username":"dd122903","password":"0000","name":"John Doe","role":"CUSTOMER"},{"id":102,"username":"newUser","password":"password","name":"John Doe","role":"CUSTOMER"}]
