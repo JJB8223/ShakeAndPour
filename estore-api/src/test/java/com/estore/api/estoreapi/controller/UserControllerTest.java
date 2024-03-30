@@ -124,6 +124,38 @@ public class UserControllerTest {
     }
 
     @Test
+    public void testGetUserByNameSuccess() {
+        int id = 102;
+        String username = "testUser";
+        String password = "000000";
+        String name = "New User";
+        User.UserRole role = User.UserRole.CUSTOMER;
+        User foundUser = new User(id, username, password, name, role);
+
+        when(mockUserDao.getUsers()).thenReturn(new User[]{foundUser});
+
+        ResponseEntity<User> response = UserController.getUserByName(username);
+
+        // Analyze
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(foundUser, response.getBody());
+    }
+
+    @Test
+    public void testGetUserByNameNotFound() {
+        // Expected values
+        String username = "nonExistingUser";
+
+        when(mockUserDao.getUsers()).thenReturn(new User[]{});
+
+        ResponseEntity<User> response = UserController.getUserByName(username);
+
+        // Analyze
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertNull(response.getBody());
+    }
+
+    @Test
     public void testUpdateUsernameSuccess() throws IOException {
         // Expected values
         int id = 102;

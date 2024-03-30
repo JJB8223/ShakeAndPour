@@ -38,7 +38,6 @@ public class UserController {
     }
 
 
-
     /**
      * Registers a new user.
      * 
@@ -67,9 +66,9 @@ public class UserController {
      * @param id The ID of the user to retrieve.
      * @return ResponseEntity containing the retrieved user or a status indicating not found.
      */
-    @GetMapping("/get/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) { 
-        LOG.info("GET /users/get/" + id);
+        LOG.info("GET /users/getById/" + id);
 
         try {
             User u = userDAO.getUser(id);
@@ -83,6 +82,24 @@ public class UserController {
         catch(IOException e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getByUsername/{username}")
+    public ResponseEntity<User> getUserByName(@PathVariable String username) {
+        LOG.info("GET /users/getByUsername/" + username);
+
+        User[] users = userDAO.getUsers();
+        User foundUser = null;
+        for (User user: users) {
+            if (user.getUsername() == username) {
+                foundUser = user;
+            }
+        }
+        if (foundUser != null) {
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
