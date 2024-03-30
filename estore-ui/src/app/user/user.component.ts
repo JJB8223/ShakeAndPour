@@ -31,4 +31,9 @@ export class UserComponent implements OnInit {
     });
   }
 
+  changeUsername(username: string): void {
+    this.userService.changeUsername(this.id, username)
+      .subscribe((username: string) => this.username = username);
+  }
+
 }

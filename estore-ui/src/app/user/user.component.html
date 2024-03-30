@@ -2,11 +2,11 @@
 <div>
 
 
-  <button>
+  <button (click) = "isChangingUser = true; isChangingPassword = false">
     Change Username
   </button>
 
-  <button>
+  <button (click) = "isChangingPassword = true; isChangingUser = false">
     Change Password
   </button>
 
@@ -19,4 +19,12 @@
   </button>
 
 
+</div>
+
+<div *ngIf="isChangingUser">
+  <form>
+    <label for="name-field">New Username</label>
+    <input type="text" #addedName id="name-field"/><br>
+    <button (click) = "changeUsername(addedName.value)">Change Username</button>
+  </form>
 </div>

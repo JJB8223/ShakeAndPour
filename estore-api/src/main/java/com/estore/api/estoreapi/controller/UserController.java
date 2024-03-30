@@ -110,10 +110,10 @@ public class UserController {
      * @return ResponseEntity indicating the status of the operation.
      * @throws IOException if an internal error occurs
      */
-    @PutMapping("/update/{id}/u")
-    public ResponseEntity<User> updateUsername(@PathVariable int id, @RequestParam String username)
+    @PutMapping("/update/{id}/{username}")
+    public ResponseEntity<User> updateUsername(@PathVariable int id, @PathVariable String username)
         throws IOException {
-        LOG.info("PUT /users/update/" + id + "/u?username=" + username);
+        LOG.info("PUT /users/update/" + id + username);
         try{
             User currU = userDAO.getUser(id);
             if (currU == null){
