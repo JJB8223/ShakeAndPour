@@ -1,5 +1,9 @@
-<h1>Login</h1>
+<h1>Register New User</h1>
 <form [formGroup]="form" (ngSubmit)="login()">
+
+  <label for="name">Name:</label>
+  <input type="text" id="name" formControlName="name"/>
+
   <label for="username">Username:</label>
   <input type="text" id="username" formControlName="username" />
 
@@ -9,4 +13,4 @@
   <button type="submit">Login</button>
 </form>
 
-<a routerLink="/register"><Button>Register New User</Button></a>
+<a routerLink="/login"><Button>Already Have an Account?</Button></a>
