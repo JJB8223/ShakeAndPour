@@ -49,6 +49,22 @@ public class UserController {
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         LOG.info("POST users/register " + user);
         try {
+            boolean usernameExists = false;
+            String newU = user.getUsername();
+
+            // check if newly inputted username exists within all users
+            User[] users = userDAO.getUsers();
+            for(User u: users){
+                if(u.getUsername().equals(newU)){
+                    usernameExists = true;
+                    break;
+                }
+            }
+            // if username exists new user cannot be registered
+            if(usernameExists){
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
             User createdU = userDAO.createUser(user);
             if(createdU == null){
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
