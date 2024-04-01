@@ -125,19 +125,21 @@ public class UserFileDAO implements UserDAO{
 
     /**
      * Create and save a new  {@linkplain User User}
-     * @param user {@linkplain User User} object to be created and saved.
+     * @param username the username of the new user
+     * @param password the password of the new user
+     * @param name the name of the new user
      * The id of the User object is assigned uniquely when a new User is created
      *
      * @return new {@linkplain User User} if successful, False otherwise
      * @throws IOException if there is an issue with underlying storage
      */
     @Override
-    public User createUser(User user) throws IOException {
+    public User createUser(String username, String password, String name) throws IOException {
         synchronized(users) {
-            User newU = new User(nextId(), user.getUsername(), user.getPassword(),
-                    user.getName(), user.getRole());
+            User newU = new User(nextId(), username, password,
+                    name, User.UserRole.CUSTOMER);
             users.put(newU.getId(), newU);
-            loginCreds.put(user.getUsername(), user.getPassword());
+            loginCreds.put(username, password);
             save();
             return newU;
         }

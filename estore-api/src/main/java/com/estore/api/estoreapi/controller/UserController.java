@@ -41,21 +41,26 @@ public class UserController {
 
     /**
      * Registers a new user.
-     * 
-     * @param user The user to register.
+     *
+     * @param username the username of the new user
+     * @param password the password of the new user
+     * @param name the name of the new user
+     *
      * @return ResponseEntity indicating the status of the registration operation.
      */
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        LOG.info("POST users/register " + user);
+    public ResponseEntity<User> registerUser(@RequestParam String username,
+                                             @RequestParam String password,
+                                             @RequestParam String name) {
+        LOG.info("GET /users/login?username=" + username + "&password=" +
+                password + "&name=" + name);
         try {
             boolean usernameExists = false;
-            String newU = user.getUsername();
 
             // check if newly inputted username exists within all users
             User[] users = userDAO.getUsers();
             for(User u: users){
-                if(u.getUsername().equals(newU)){
+                if(u.getUsername().equals(username)){
                     usernameExists = true;
                     break;
                 }
@@ -65,7 +70,7 @@ public class UserController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
-            User createdU = userDAO.createUser(user);
+            User createdU = userDAO.createUser(username, password, name);
             if(createdU == null){
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
