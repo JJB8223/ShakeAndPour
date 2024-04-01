@@ -12,11 +12,23 @@ export class UserService {
   user: User | undefined
   private usernameSource = new BehaviorSubject<string>(localStorage.getItem('username') || '');
   username$ = this.usernameSource.asObservable();
+  private userIdSource = new BehaviorSubject<number | null>(this.getUserIdFromStorage());
+  userId$ = this.userIdSource.asObservable();
 
   userDetails$: Observable<User | null> = this.username$.pipe(
     switchMap(username => username ? this.getUser(username) : of(null)),
     catchError(() => of(null)) // Handle potential errors, e.g., user not found
   );
+
+  private getUserIdFromStorage(): number | null {
+    const userId = localStorage.getItem('userId');
+    return userId ? parseInt(userId, 10) : null;
+  }
+
+  setUserId(userId: number): void {
+    localStorage.setItem('userId', userId.toString());
+    this.userIdSource.next(userId);
+  }
 
   setUsername(username: string): void {
     localStorage.setItem('username', username);
@@ -40,6 +52,14 @@ export class UserService {
       return this.user.name
     } else {
       return '';
+    }
+  }
+
+  getUserId(): number {
+    if (this.user) {
+      return this.user.id
+    } else {
+      return 0;
     }
   }
 

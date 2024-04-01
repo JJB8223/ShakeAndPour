@@ -40,6 +40,7 @@ export class LoginComponent {
         else if (response == 'user login successful') {
           this.userService.setUsername(username);
           this.router.navigateByUrl('/user');
+          this.userService.setUserId(this.userService.getUserId());
         }
         else {
           alert('Invalid username or password');
