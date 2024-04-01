@@ -32,5 +32,25 @@ export class RegisterComponent {
       const username: string = this.form.value.username || '';
       const password: string = this.form.value.password || '';
       const name: string = this.form.value.name || '';
+
+      if (username == '' || password == '' || name == ''){
+        alert("No fields can be left blank!");
+      }
+      else{
+         this.registerService.register(
+         username, password, string).subscribe(
+            response => {
+              console.log("Registration successful for user", username);
+              alert("Registration Successful!");
+            },
+            error => {
+              console.error("Registration error:", error);
+              alert("Registration failed, please try again");
+            }
+
+
+         )
+      }
+
     }
 }

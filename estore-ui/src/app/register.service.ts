@@ -25,7 +25,7 @@ export class RegisterService {
     register(user: User): Observable<string>{
         return this.http.post<User>(`${this.registerUrl}`, user, this.httpOptions).pipe(
           tap((newUser: User) => this.log(`New User Registered with id=${newUser.id}`)),
-          catchError(this.handleError<User>('register'))
+          catchError(this.handleError)
         );
     }
 
@@ -34,18 +34,16 @@ export class RegisterService {
       this.messageService.add(`LoginService: ${message}`);
     }
 
-    private handleError<T>(operation = 'operation', result?: T) {
-      return (error: any): Observable<T> => {
-
-        // TODO: send the error to remote logging infrastructure
-        console.error(error); // log to console instead
-
-        // TODO: better job of transforming error for user consumption
-        this.log(`${operation} failed: ${error.message}`);
-
-        // Let the app keep running by returning an empty result.
-        return of(result as T);
-      };
+    private handleError(error: HttpErrorResponse) {
+      if (error.status === 400) {
+        return throwError('Username is already in use!');
+      } else if (error.status === 409) {
+        return throwError('Conflict occurred when creating new user.');
+      } else if (error.status === 500) {
+        return throwError('Internal Server Error. Please try again later.');
+      } else {
+        return throwError('Something went wrong. Please try again later.');
+      }
     }
 
 }
