@@ -30,6 +30,10 @@ export class UserService {
     this.userIdSource.next(userId);
   }
 
+  getUserId(): number | null {
+    return this.userIdSource.value;
+  }
+
   setUsername(username: string): void {
     localStorage.setItem('username', username);
     this.usernameSource.next(username);
@@ -52,14 +56,6 @@ export class UserService {
       return this.user.name
     } else {
       return '';
-    }
-  }
-
-  getUserId(): number {
-    if (this.user) {
-      return this.user.id
-    } else {
-      return 0;
     }
   }
 

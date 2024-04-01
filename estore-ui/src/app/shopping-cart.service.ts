@@ -21,12 +21,12 @@ export class ShoppingCartService {
 
   private getUserId(): number {
     const userId = localStorage.getItem('userId');
-    return userId ? parseInt(userId, 10) : 101;
+    return userId ? parseInt(userId, 10) : 0;
   }
   
   addToShoppingCart(kitId: number, quantity: number): Observable<any> {
     const userId = this.getUserId();
-    const url = `${this.ShoppingCartURL}/${userId}/add/${kitId}/${quantity}`;
+    const url = `${this.ShoppingCartURL}/add/${userId}/${kitId}/${quantity}`;
     return this.http.post<any>(url, null, this.httpOptions).pipe(
       tap((response) => console.log('Item added to the shopping cart successfully:', response))
     );
@@ -34,7 +34,7 @@ export class ShoppingCartService {
 
   removeItem(kitId: number, quantity: number): Observable<any> {
     const userId = this.getUserId();
-    const url = `${this.ShoppingCartURL}/${userId}/remove/${kitId}/${quantity}`;
+    const url = `${this.ShoppingCartURL}/remove/${userId}/${kitId}/${quantity}`;
     return this.http.delete<any>(url, this.httpOptions).pipe(
       tap((response) => console.log('Item removed from the shopping cart', response))
     );
@@ -51,7 +51,7 @@ export class ShoppingCartService {
 
   getTotalCost(): Observable<any> {
     const userId = this.getUserId();
-    const url = `${this.ShoppingCartURL}/${userId}/total`;
+    const url = `${this.ShoppingCartURL}/total/${userId}`;
     return this.http.get<number>(url, this.httpOptions).pipe(
       tap(_ => this.log('fetched total cost of the shopping cart')),
       catchError(this.handleError<number>('getTotalCost', 0))

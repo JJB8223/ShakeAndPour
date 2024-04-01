@@ -25,27 +25,30 @@ export class LoginComponent {
     private userService: UserService
     ) {}
 
-  login(): void {
-
-    const username: string = this.form.value.username || '';
-    const password: string = this.form.value.password || '';
-
-    this.loginService.login(
-      username, password
-    ).subscribe(
-      response => {
-        if (response == 'admin login successful') {
-          this.router.navigateByUrl('/admin');
-        }
-        else if (response == 'user login successful') {
-          this.userService.setUsername(username);
-          this.router.navigateByUrl('/user');
-          this.userService.setUserId(this.userService.getUserId());
-        }
-        else {
-          alert('Invalid username or password');
-        }
-      }
-    );
+    login(): void {
+      const username: string = this.form.value.username || '';
+      const password: string = this.form.value.password || '';
+  
+      this.loginService.login(username, password).subscribe({
+          next: (response) => {
+              // Assuming response.userType tells if the user is an admin or a regular user
+              if (response.userType === 'admin') {
+                  this.router.navigateByUrl('/admin');
+              } else if (response.userType === 'user') {
+                  this.userService.setUsername(username);
+                  this.router.navigateByUrl('/user');
+              } else {
+                  // Handle unexpected userType
+                  console.error('Unexpected user type received', response);
+                  alert('Invalid login attempt');
+              }
+          },
+          error: (err) => {
+              // Handle HTTP errors or unsuccessful login attempts
+              console.error('Login failed', err);
+              alert('Invalid username or password');
+          }
+      });
   }
+  
 }
