@@ -1,1 +1,23 @@
-<p>orders works!</p>
+<h1>Order History</h1>
+<ul class="orders">
+    <li *ngFor="let order of orders">
+        <div>
+            <span>Order Number: </span>{{order.id}} |
+            <span>User: </span>{{order.user}}
+        </div>
+        <ul>
+            <li *ngFor="let kit of order.kits_in_order">
+                <div>
+                    <span>Kit Name: </span>{{kit.name}} |
+                    <span>Price: </span>{{kit.price}}:
+                </div>
+                <div>
+                    <span>Products in Kit: </span>
+                    <ul>
+                        <li *ngFor="let product of kit.products_in_kit">{{product.name}}</li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </li>
+</ul>

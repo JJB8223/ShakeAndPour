@@ -27,6 +27,14 @@ export class KitService {
       );
   }
 
+  getKit(id : number): Observable<Kit> {
+    return this.http.get<Kit>(this.kitsUrl + id)
+      .pipe(
+        tap(_ => this.log(`fetched Kit id=${id}`)),
+        catchError(this.handleError<Kit>(`getKit id=${id}`))
+      );
+  }
+
   /* GET Kits whose name contains search term */
   searchKits(term: string): Observable<Kit[]> {
     if (!term.trim()) {
