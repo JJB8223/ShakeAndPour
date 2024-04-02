@@ -1,6 +1,7 @@
 package com.estore.api.estoreapi.controller;
 
 
+import com.estore.api.estoreapi.controller.UserController.LoginResponse;
 import com.estore.api.estoreapi.model.User;
 import com.estore.api.estoreapi.persistence.UserDAO;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
@@ -157,35 +159,39 @@ public class UserControllerTest {
 
     @Test
     public void testUpdateUsernameSuccess() throws IOException {
-        // Expected values
         int id = 102;
-        String username = "testUser";
+        String originalUsername = "testUser";
         String password = "000000";
         String name = "New User";
         User.UserRole role = User.UserRole.CUSTOMER;
 
-        User u = new User(id, username, password, name, role);
+        // This represents the existing user before username update.
+        User originalUser = new User(id, originalUsername, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
-        // analyze
-        assertEquals(HttpStatus.CREATED,r.getStatusCode());
+        // Simulate that the user exists for the given ID.
+        when(mockUserDao.getUser(id)).thenReturn(originalUser);
 
-        // update username
+        // Simulate getUsers() to avoid null pointer exception by returning an empty array.
+        when(mockUserDao.getUsers()).thenReturn(new User[]{});
+
         String newUsername = "newUser";
 
-        User updated = new User(id, newUsername, password, name, role);
+        // This represents the user after the username has been successfully updated.
+        User updatedUser = new User(id, newUsername, password, name, role);
 
-        when(mockUserDao.getUser(u.getId())).thenReturn(u);
-        when(mockUserDao.updateUsername(u, newUsername)).thenReturn(updated);
-        ResponseEntity<User> s = UserController.updateUsername(u.getId(), newUsername);
-        assertEquals(HttpStatus.OK,s.getStatusCode());
+        // Simulate successful username update operation.
+        when(mockUserDao.updateUsername(originalUser, newUsername)).thenReturn(updatedUser);
 
+        // Attempt to update the username.
+        ResponseEntity<User> response = UserController.updateUsername(id, newUsername);
 
-        assertEquals(updated,s.getBody());
-
-
+        // Verify the operation was successful.
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(newUsername, response.getBody().getUsername());
     }
+
+
 
     @Test
     public void testUpdateUsernameNotFound() throws IOException {
@@ -215,32 +221,67 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testUpdateUsernameFail() throws IOException {
-        // Expected values
+    public void testUpdateUsernameTaken() throws IOException {
         int id = 102;
         String username = "testUser";
         String password = "000000";
         String name = "New User";
         User.UserRole role = User.UserRole.CUSTOMER;
 
-        User u = new User(id, username, password, name, role);
+        User existingUser = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
-        // analyze
-        assertEquals(HttpStatus.CREATED,r.getStatusCode());
+        // Simulate registering the user successfully
+        when(mockUserDao.createUser(existingUser)).thenReturn(existingUser);
+        ResponseEntity<User> registrationResponse = UserController.registerUser(existingUser);
+        assertEquals(HttpStatus.CREATED, registrationResponse.getStatusCode());
 
-        // update username
+        String newUsername = "newUser";
+    
+        // Setup to simulate that the user is found successfully
+        when(mockUserDao.getUser(id)).thenReturn(existingUser);
+
+        // Simulate that another user with the newUsername already exists
+        User conflictingUser = new User(103, newUsername, "anotherPass", "Another User", User.UserRole.CUSTOMER);
+        User[] users = new User[] { existingUser, conflictingUser };
+        when(mockUserDao.getUsers()).thenReturn(users);
+    
+        // Execute update username
+        ResponseEntity<User> updateResponse = UserController.updateUsername(id, newUsername);
+    
+        // Verify the response is HttpStatus.BAD_REQUEST due to username being in use
+        assertEquals(HttpStatus.BAD_REQUEST, updateResponse.getStatusCode());
+        assertNull(updateResponse.getBody());
+    }
+
+    @Test
+    public void testUpdateUsernameConflict() throws IOException {   
+        int id = 102;
+        String originalUsername = "testUser";
+        String password = "000000";
+        String name = "New User";
+        User.UserRole role = User.UserRole.CUSTOMER;
+
+        // Create a user instance that represents the existing user.
+        User existingUser = new User(id, originalUsername, password, name, role);
+
+        // Simulate the user is found for the provided ID.
+        when(mockUserDao.getUser(id)).thenReturn(existingUser);
+
+        // No other user has the new username, so getUsers() can return just the existing user for simplicity.
+        when(mockUserDao.getUsers()).thenReturn(new User[] { existingUser });
+
         String newUsername = "newUser";
 
-        // cannot find user
-        when(mockUserDao.getUser(u.getId())).thenReturn(u);
-        when(mockUserDao.updateUsername(u, newUsername)).thenReturn(null);
-        ResponseEntity<User> s = UserController.updateUsername(102, newUsername);
-        assertEquals(HttpStatus.CONFLICT,s.getStatusCode());
+        // Simulate that the update operation fails for some reason, indicated by returning null.
+        when(mockUserDao.updateUsername(existingUser, newUsername)).thenReturn(null);
 
-        assertNull(s.getBody());
-    }
+        // Attempt to update the username.
+        ResponseEntity<User> response = UserController.updateUsername(id, newUsername);
+
+        // Verify that the operation failed and returned HttpStatus.CONFLICT.
+        assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
+        assertNull(response.getBody());
+        }
 
     @Test
     public void testUpdateUsernameException() throws IOException {
@@ -253,6 +294,7 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
+        when(mockUserDao.getUsers()).thenReturn(new User[]{ u });
         when(mockUserDao.createUser(u)).thenReturn(u);
         ResponseEntity<User> r = UserController.registerUser(u);
         // analyze
@@ -532,49 +574,83 @@ public class UserControllerTest {
     public void testLoginAdmin() {
         String username = "admin";
         String password = "000000";
+        int id = 102;
+        User.UserRole role = User.UserRole.CUSTOMER;
+        User expectedUser = new User(id, username, password, "User Name", role);
 
+        when(mockUserDao.getUsers()).thenReturn(new User[]{ expectedUser });
         when(mockUserDao.authorize(username, password)).thenReturn(true);
-        ResponseEntity<String> r = UserController.login(username, password);
 
-        assertEquals(HttpStatus.OK,r.getStatusCode());
-        assertEquals("admin login successful", r.getBody());
+        // Execute the login method. 
+        ResponseEntity<LoginResponse> response = UserController.login(username, password);
+
+        // Validate the response
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(id, response.getBody().getUserId());
+        assertEquals("admin", response.getBody().getUserType()); 
+        assertEquals("admin login successful", response.getBody().getMessage());
     }
 
     @Test
     public void testLoginAdminFail() {
         String username = "admin";
         String password = "000000";
-
+        // Simulate authorization failure
+        when(mockUserDao.getUsers()).thenReturn(new User[]{});
         when(mockUserDao.authorize(username, password)).thenReturn(false);
-        ResponseEntity<String> r = UserController.login(username, password);
 
-        assertEquals(HttpStatus.UNAUTHORIZED,r.getStatusCode());
-        assertEquals("Invalid username or password", r.getBody());
+        ResponseEntity<LoginResponse> response = UserController.login(username, password);
+
+        // Validate the response for failed login
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(0, response.getBody().getUserId());
+        assertEquals("none", response.getBody().getUserType());
+        assertEquals("Invalid username or password", response.getBody().getMessage());
     }
 
     @Test
-    public void testLoginUser() {
-        // Expected values
-        String username = "user";
-        String password = "000000";
+public void testLoginUser() {
+    // Setup mock behavior
+    int id = 102;
+    String username = "testUser";
+    String password = "000000";
+    User.UserRole role = User.UserRole.CUSTOMER;
+    User expectedUser = new User(id, username, password, "User Name", role);
 
-        when(mockUserDao.authorize(username, password)).thenReturn(true);
-        ResponseEntity<String> r = UserController.login(username, password);
+    when(mockUserDao.getUsers()).thenReturn(new User[]{ expectedUser });
+    when(mockUserDao.authorize(username, password)).thenReturn(true);
 
-        assertEquals(HttpStatus.OK,r.getStatusCode());
-        assertEquals("user login successful", r.getBody());
-    }
+    // Execute the login method
+    ResponseEntity<LoginResponse> response = UserController.login(username, password);
 
-    @Test
-    public void testLoginFail() {
-        // Expected values
-        String username = "user";
-        String password = "000000";
+    // Assert the response details
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(id, response.getBody().getUserId());
+    assertEquals("user", response.getBody().getUserType());
+    assertEquals("user login successful", response.getBody().getMessage());
+}
 
-        when(mockUserDao.authorize("false", password)).thenReturn(false);
-        ResponseEntity<String> r = UserController.login(username, password);
 
-        assertEquals(HttpStatus.UNAUTHORIZED,r.getStatusCode());
-        assertEquals("Invalid username or password", r.getBody());
-    }
+@Test
+public void testLoginFail() {
+    // Setup mock behavior
+    String username = "user";
+    String password = "wrongPassword";
+
+    when(mockUserDao.getUsers()).thenReturn(new User[]{});
+    when(mockUserDao.authorize(username, password)).thenReturn(false);
+
+    // Execute the login method
+    ResponseEntity<LoginResponse> response = UserController.login(username, password);
+
+    // Assert the response details
+    assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertEquals(0, response.getBody().getUserId()); // Assuming 0 indicates an unauthorized or nonexistent user
+    assertEquals("none", response.getBody().getUserType());
+    assertEquals("Invalid username or password", response.getBody().getMessage());
+}
 }

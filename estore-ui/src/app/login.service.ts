@@ -6,6 +6,7 @@ import { MessageService } from './message.service';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { catchError, map } from 'rxjs/operators';
 import {User} from './user';
+import { LoginResponse } from './login-response';
 
 
 @Injectable({
@@ -32,28 +33,23 @@ export class LoginService {
       this.isCust = localStorage.getItem('role') === 'user';
     }
 
-    login(username: string, password: string): Observable<string>{
+    login(username: string, password: string): Observable<LoginResponse> {
       const params = new HttpParams()
         .set('username', username)
         .set('password', password);
-    return this.http.post(this.loginUrl, {}, { params, responseType: 'text' })
-      .pipe(
-        map((response: string) => {
-        if (response == 'admin login successful') {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('role', 'admin');
-          this.checkLoginStatus();
-        }
-        else if (response == 'user login successful') {
-          localStorage.setItem('isLoggedIn', 'true');
-          localStorage.setItem('role', 'user');
-          this.checkLoginStatus();
-        }
-
-        return response;
-      }),
-        catchError(this.handleError<string>('login'))
-      );
+  
+      return this.http.post<LoginResponse>(this.loginUrl, {}, { params })
+        .pipe(
+          map(response => {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('role', response.userType);
+            localStorage.setItem('userId', response.userId.toString());
+            this.checkLoginStatus();
+  
+            return response;
+          }),
+          catchError(this.handleError<LoginResponse>('login'))
+        );
     }
 
     logout(): void {
