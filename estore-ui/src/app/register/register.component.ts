@@ -24,7 +24,7 @@ export class RegisterComponent {
       private router: Router,
       private formBuilder: FormBuilder,
       private registerService: RegisterService
-    )
+    ) {}
 
 
     register(): void {
@@ -38,7 +38,7 @@ export class RegisterComponent {
       }
       else{
          this.registerService.register(
-         username, password, string).subscribe(
+         username, password, name).subscribe(
             response => {
               console.log("Registration successful for user", username);
               alert("Registration Successful!");

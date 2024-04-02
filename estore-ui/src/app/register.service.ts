@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 
 import {RegisterComponent} from './register/register.component';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { MessageService } from './message.service';
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
-import { catchError, map } from 'rxjs/operators';
+import { HttpClientModule, HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError, tap } from 'rxjs/operators';
 import {User} from './user';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -18,13 +19,19 @@ export class RegisterService {
     };
 
   constructor(
+  private router: Router,
     private http: HttpClient,
     private messageService: MessageService) { }
 
     /** POST: add a new user to the server */
-    register(user: User): Observable<string>{
-        return this.http.post<User>(`${this.registerUrl}`, user, this.httpOptions).pipe(
-          tap((newUser: User) => this.log(`New User Registered with id=${newUser.id}`)),
+    register(username: string, password: string, name: string): Observable<User>{
+        return this.http.post<User>(`${this.registerUrl}/?username=${username}&password=${password}&name=${name}`,
+         this.httpOptions).pipe(
+          tap((newUser: User) => {
+          this.log(`New User Registered with username=${newUser.username}`);
+          this.router.navigateByUrl('/login');
+
+          }),
           catchError(this.handleError)
         );
     }
