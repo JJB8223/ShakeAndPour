@@ -34,7 +34,7 @@ import { OrdersComponent } from './orders/orders.component';
     KitSearchComponent,
     ShoppingCartComponent,
     KitsDisplayComponent,
-    RegisterComponent
+    RegisterComponent,
     OrdersComponent
   ],
   imports: [
