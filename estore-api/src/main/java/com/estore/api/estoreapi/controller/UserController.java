@@ -262,20 +262,50 @@ public class UserController {
      * successful or not.
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username,
-                                      @RequestParam String password){
-        LOG.info("GET /users/login?username=" + username + "&password=" + password);
-        if(username.equals("admin") && userDAO.authorize(username, password)){
-            return new ResponseEntity<>("admin login successful",
-                    HttpStatus.OK);
+    public ResponseEntity<LoginResponse> login(@RequestParam String username, @RequestParam String password) {
+        LOG.info("POST /users/login?username=" + username);
+        
+        User foundUser = null;
+        User[] users = userDAO.getUsers();
+        for (User user: users) {
+            if (user.getUsername().equals(username)) {
+                foundUser = user;
+            }
         }
-        else if (userDAO.authorize(username, password)) {
-            return new ResponseEntity<>("user login successful" ,
-                    HttpStatus.OK);
+        
+        if (foundUser != null && userDAO.authorize(username, password)) {
+            String userType = username.equals("admin") ? "admin" : "user";
+            LoginResponse response = new LoginResponse(foundUser.getId(), userType, userType + " login successful");
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new LoginResponse(0, "none", "Invalid username or password"));
         }
-        else {
-            return new ResponseEntity<>("Invalid username or password",
-                    HttpStatus.UNAUTHORIZED);
+    }
+
+    public class LoginResponse {
+        private final int userId;
+        private final String userType;
+        private final String message;
+    
+        public LoginResponse(int userId, String userType, String message) {
+            this.userId = userId;
+            this.userType = userType;
+            this.message = message;
+        }
+    
+        // Getters
+        public long getUserId() {
+            return userId;
+        }
+    
+        public String getUserType() {
+            return userType;
+        }
+    
+        public String getMessage() {
+            return message;
         }
     }
 }

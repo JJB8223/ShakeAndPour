@@ -105,9 +105,9 @@ public class OrderController {
      * 
      * @throws IOException if error occurs trying to get any Orders
      */
-    @GetMapping("/")
-    public ResponseEntity<Order[]> getOrders(@RequestParam String user) {
-        LOG.info("GET /orders/?user=" + user);
+    @GetMapping("/{user}")
+    public ResponseEntity<Order[]> getOrders(@PathVariable String user) {
+        LOG.info("GET /orders/" + user);
         try {
             Order[] orders = orderDao.getOrders(user);
             return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -125,7 +125,7 @@ public class OrderController {
      * @return ResponseEntity with located {@linkplain Order Order} object and HTTP status of OK<
      * ResponseEntity with HTTP status of NOT_FOUND if not found
      */
-    @GetMapping("/{id}")
+    @GetMapping("getSpecific/{id}")
     public ResponseEntity<Order> getOrder(@PathVariable int id) {
         LOG.info("GET /orders/" + id);
         
