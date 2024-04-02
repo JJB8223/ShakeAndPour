@@ -44,8 +44,9 @@ export class RegisterComponent {
               alert("Registration Successful!");
             },
             error => {
+
               console.error("Registration error:", error);
-              alert("Registration failed, please try again");
+              alert(error)
             }
 
 

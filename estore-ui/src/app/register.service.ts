@@ -43,7 +43,7 @@ export class RegisterService {
 
     private handleError(error: HttpErrorResponse) {
       if (error.status === 400) {
-        return throwError('Username is already in use!');
+        return throwError('Username is already in use! Please try again.');
       } else if (error.status === 409) {
         return throwError('Conflict occurred when creating new user.');
       } else if (error.status === 500) {
