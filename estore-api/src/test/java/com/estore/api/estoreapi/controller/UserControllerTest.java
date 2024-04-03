@@ -27,10 +27,21 @@ public class UserControllerTest {
     private UserDAO mockUserDao;
     private UserController UserController;
 
+    private User[] testUsers;
+
     @BeforeEach
     public void setUpUserController(){
         mockUserDao = mock(UserDAO.class);
         UserController = new UserController((mockUserDao));
+
+        testUsers = new User[2];
+        User admin = new User(100, "admin", "1234",
+                "admin", User.UserRole.ADMIN);
+        User testCustomer = new User(101, "test", "0000",
+                "John Doe", User.UserRole.CUSTOMER);
+
+        testUsers[0] = admin;
+        testUsers[1] = testCustomer;
     }
 
     @Test
@@ -44,10 +55,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
 
 
-        ResponseEntity<User> r = UserController.registerUser(u);
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
         assertEquals(u,r.getBody());
@@ -55,8 +67,42 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testCreateKitFail() throws IOException {
+    public void testCreateUserFail() throws IOException {
         // Expected values
+        String username = "testUser";
+        String password = "000000";
+        String name = "New User";
+
+
+        when(mockUserDao.createUser(username, password, name)).thenReturn(null);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
+        // analyze
+        assertEquals(HttpStatus.CONFLICT,r.getStatusCode());
+    }
+
+    @Test
+    public void testCreateUserUsernameFound() throws IOException {
+        // Expected values
+        int id = 102;
+        String username = "test";
+        String password = "000000";
+        String name = "New User";
+        User.UserRole role = User.UserRole.CUSTOMER;
+
+        User u = new User(id, username, password, name, role);
+
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
+        // analyze
+        assertEquals(HttpStatus.BAD_REQUEST,r.getStatusCode());
+    }
+
+    @Test
+    public void testCreateUserException() throws IOException{
         int id = 102;
         String username = "testUser";
         String password = "000000";
@@ -64,19 +110,10 @@ public class UserControllerTest {
         User.UserRole role = User.UserRole.CUSTOMER;
 
         User u = new User(id, username, password, name, role);
+        doThrow(new IOException()).when(mockUserDao).createUser(username, password, name);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
 
-        when(mockUserDao.createUser(u)).thenReturn(null);
-
-        ResponseEntity<User> r = UserController.registerUser(u);
-        // analyze
-        assertEquals(HttpStatus.CONFLICT,r.getStatusCode());
-    }
-
-    @Test
-    public void testCreateKitException() throws IOException{
-        doThrow(new IOException()).when(mockUserDao).createUser(null);
-
-        ResponseEntity<User> r = UserController.registerUser(null);
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, r.getStatusCode());
     }
@@ -168,18 +205,21 @@ public class UserControllerTest {
         // This represents the existing user before username update.
         User originalUser = new User(id, originalUsername, password, name, role);
 
-        // Simulate that the user exists for the given ID.
-        when(mockUserDao.getUser(id)).thenReturn(originalUser);
+        when(mockUserDao.createUser(originalUsername, password, name)).thenReturn(originalUser);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
 
-        // Simulate getUsers() to avoid null pointer exception by returning an empty array.
-        when(mockUserDao.getUsers()).thenReturn(new User[]{});
+        ResponseEntity<User> r = UserController.registerUser(originalUsername, password, name);
+        // analyze
+        assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
         String newUsername = "newUser";
 
         // This represents the user after the username has been successfully updated.
         User updatedUser = new User(id, newUsername, password, name, role);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
 
         // Simulate successful username update operation.
+        when(mockUserDao.getUser(id)).thenReturn(originalUser);
         when(mockUserDao.updateUsername(originalUser, newUsername)).thenReturn(updatedUser);
 
         // Attempt to update the username.
@@ -204,8 +244,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -230,10 +273,13 @@ public class UserControllerTest {
 
         User existingUser = new User(id, username, password, name, role);
 
-        // Simulate registering the user successfully
-        when(mockUserDao.createUser(existingUser)).thenReturn(existingUser);
-        ResponseEntity<User> registrationResponse = UserController.registerUser(existingUser);
-        assertEquals(HttpStatus.CREATED, registrationResponse.getStatusCode());
+        when(mockUserDao.createUser(username, password, name)).thenReturn(existingUser);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
+        // analyze
+        assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
         String newUsername = "newUser";
     
@@ -293,10 +339,11 @@ public class UserControllerTest {
         User.UserRole role = User.UserRole.CUSTOMER;
 
         User u = new User(id, username, password, name, role);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
 
-        when(mockUserDao.getUsers()).thenReturn(new User[]{ u });
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
+
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -321,8 +368,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -353,8 +403,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -380,8 +433,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -408,8 +464,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -434,8 +493,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -466,8 +528,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -493,8 +558,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -521,8 +589,11 @@ public class UserControllerTest {
 
         User u = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(u)).thenReturn(u);
-        ResponseEntity<User> r = UserController.registerUser(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
+
+
+        ResponseEntity<User> r = UserController.registerUser(username, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 

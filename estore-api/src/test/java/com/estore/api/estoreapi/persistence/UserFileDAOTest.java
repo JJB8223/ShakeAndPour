@@ -64,8 +64,11 @@ public class UserFileDAOTest {
 
     @Test
     public void testCreateUser() throws IOException {
+        String username = "user";
+        String password = "pass";
+        String name = "User";
         User u = new User(102, "user" , "pass", "User", User.UserRole.CUSTOMER);
-        User r = assertDoesNotThrow(() -> userFileDAO.createUser(u),
+        User r = assertDoesNotThrow(() -> userFileDAO.createUser(username, password, name),
                 "Unexpected exception thrown");
 
         assertNotNull(r);
@@ -103,9 +106,12 @@ public class UserFileDAOTest {
 
     @Test
     public void testUpdateUsername() throws IOException{
+        String username = "user";
+        String password = "pass";
+        String name = "User";
         User u = new User(102, "user" , "pass", "User", User.UserRole.CUSTOMER);
 
-        userFileDAO.createUser(u);
+        userFileDAO.createUser(username, password, name);
 
         String newUsername = "newuser";
 
@@ -135,9 +141,12 @@ public class UserFileDAOTest {
 
     @Test
     public void testUpdatePassword() throws IOException{
+        String username = "user";
+        String password = "pass";
+        String name = "User";
         User u = new User(102, "user" , "pass", "User", User.UserRole.CUSTOMER);
 
-        userFileDAO.createUser(u);
+        userFileDAO.createUser(username, password, name);
 
         String newPassword = "newpass";
 
@@ -167,9 +176,12 @@ public class UserFileDAOTest {
 
     @Test
     public void testUpdateName() throws IOException{
+        String username = "user";
+        String password = "pass";
+        String name = "User";
         User u = new User(102, "user" , "pass", "User", User.UserRole.CUSTOMER);
 
-        userFileDAO.createUser(u);
+        userFileDAO.createUser(username, password, name);
 
         String newName = "newname";
 
@@ -197,9 +209,12 @@ public class UserFileDAOTest {
 
     @Test
     public void testAuthorize() throws IOException {
+        String username = "user";
+        String password = "pass";
+        String name = "User";
         User u = new User(102, "user" , "pass", "User", User.UserRole.CUSTOMER);
 
-        userFileDAO.createUser(u);
+        userFileDAO.createUser(username, password, name);
 
         assertTrue(userFileDAO.authorize(u.getUsername(), u.getPassword()));
         // incorrect username

@@ -16,6 +16,7 @@ import { LoginComponent } from './login/login.component';
 import { AdminComponent } from './admin/admin.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import { UserComponent } from './user/user.component';
+import { RegisterComponent } from './register/register.component';
 import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
@@ -33,6 +34,7 @@ import { OrdersComponent } from './orders/orders.component';
     KitSearchComponent,
     ShoppingCartComponent,
     KitsDisplayComponent,
+    RegisterComponent,
     OrdersComponent
   ],
   imports: [
