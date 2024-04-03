@@ -54,19 +54,14 @@ public class UserController {
         LOG.info("GET /users/login?username=" + username + "&password=" +
                 password + "&name=" + name);
         try {
-            boolean usernameExists = false;
 
             // check if newly inputted username exists within all users
             User[] users = userDAO.getUsers();
             for(User u: users){
                 if(u.getUsername().equals(username)){
-                    usernameExists = true;
-                    break;
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
                 }
-            }
-            // if username exists new user cannot be registered
-            if(usernameExists){
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
 
             User createdU = userDAO.createUser(username, password, name);
