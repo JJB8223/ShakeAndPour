@@ -1,13 +1,10 @@
 package com.estore.api.estoreapi.controller;
+import com.estore.api.estoreapi.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.estore.api.estoreapi.model.Kit;
-import com.estore.api.estoreapi.model.ShoppingCart;
 import com.estore.api.estoreapi.persistence.KitDAO;
-import com.estore.api.estoreapi.model.ShoppingCartKit;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
@@ -165,5 +162,28 @@ public class ShoppingCartController {
         float totalCost = shoppingCart.getTotalCost();
         LOG.info("Total cost of cart: " + totalCost);
         return new ResponseEntity<>(totalCost, HttpStatus.OK);
+    }
+
+    /**
+     * Purchase the user's shopping cart of kits
+     * @return an array list of all the kits that are being purchased OR
+     * NOT FOUND if nothing is in the cart
+     */
+    @PostMapping("/purchase")
+    public ResponseEntity<ArrayList<Kit>> purchaseCart() {
+        LOG.info("POST /cart/purchase/");
+
+        Map<Kit, Integer> kits = shoppingCart.getKits();
+
+        if(kits.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        ArrayList<Kit> kits_in_order = new ArrayList<>(kits.keySet());
+
+        shoppingCart.clearCart();
+
+        return new ResponseEntity<>(kits_in_order, HttpStatus.OK);
+
     }
 }
