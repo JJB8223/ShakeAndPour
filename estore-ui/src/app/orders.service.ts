@@ -4,6 +4,7 @@ import { Kit } from './kit';
 import { Order } from './order';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from './message.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,12 @@ export class OrdersService {
         catchError(this.handleError<Order[]>('getOrders', []))
       );
   }
-  constructor(private http : HttpClient, private messageService : MessageService) { }
+
+  createOrder(): Observable<any> {
+    return this.http.post(this.ordersUrl + "create", null);
+  }
+
+  constructor(private http : HttpClient, private messageService : MessageService, private userService : UserService) { }
 
   private log(message: string) {
     this.messageService.add(`KitService: ${message}`);

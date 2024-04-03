@@ -1,11 +1,13 @@
 package com.estore.api.estoreapi.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import com.estore.api.estoreapi.model.Kit;
 import com.estore.api.estoreapi.model.Order;
 import com.estore.api.estoreapi.persistence.OrderDAO;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Test the OrderController class
@@ -36,32 +39,30 @@ public class OrderControllerTest {
 
     @Test
     public void testCreateOrder() throws IOException {
-        // order created successfully
-        // setup
-        Order createdOrderSuccess = new Order(10, "testUser", new ArrayList<Kit>());
-        when(orderDao.createOrder(createdOrderSuccess)).thenReturn(createdOrderSuccess);
-        // invoke
-        ResponseEntity<Order> successResponse = orderController.createOrder(createdOrderSuccess);
-        // analyze
+        ObjectMapper mapper = new ObjectMapper();
+
+        // Order created successfully
+        String username = "testUser";
+        ArrayList<Kit> kitsList = new ArrayList<>();
+        String kitsJson = mapper.writeValueAsString(kitsList);
+        Order createdOrderSuccess = new Order(10, username, kitsList);
+
+        when(orderDao.createOrder(any(String.class), any(ArrayList.class))).thenReturn(createdOrderSuccess);
+
+        ResponseEntity<Order> successResponse = orderController.createOrder(username, kitsJson);
         assertEquals(HttpStatus.CREATED, successResponse.getStatusCode());
         assertEquals(createdOrderSuccess, successResponse.getBody());
 
-        // conflict on creating order
-        // setup 
-        Order createdOrderConflict = new Order(11, "testUser", new ArrayList<Kit>());
-        when(orderDao.createOrder(createdOrderConflict)).thenReturn(null);
-        // invoke
-        ResponseEntity<Order> conflictResponse = orderController.createOrder(createdOrderConflict);
-        // analyze
+        // Conflict on creating order
+        when(orderDao.createOrder(any(String.class), any(ArrayList.class))).thenReturn(null);
+
+        ResponseEntity<Order> conflictResponse = orderController.createOrder(username, kitsJson);
         assertEquals(HttpStatus.CONFLICT, conflictResponse.getStatusCode());
 
         // IOException on creating order
-        // setup
-        Order createdOrderException = new Order(12, "testUser", new ArrayList<Kit>());
-        when(orderDao.createOrder(createdOrderException)).thenThrow(new IOException());
-        // invoke
-        ResponseEntity<Order> exceptionResponse = orderController.createOrder(createdOrderException);
-        // analyze
+        when(orderDao.createOrder(any(String.class), any(ArrayList.class))).thenThrow(new IOException());
+
+        ResponseEntity<Order> exceptionResponse = orderController.createOrder(username, kitsJson);
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exceptionResponse.getStatusCode());
     }
     

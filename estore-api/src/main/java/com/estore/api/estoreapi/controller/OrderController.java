@@ -1,6 +1,8 @@
 package com.estore.api.estoreapi.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -14,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.estore.api.estoreapi.model.Kit;
 import com.estore.api.estoreapi.model.Order;
+import com.estore.api.estoreapi.controller.UserController;
 import com.estore.api.estoreapi.persistence.OrderDAO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Controller for managing updating and getting a customer's order history.
@@ -32,6 +38,7 @@ public class OrderController {
     private static final Logger LOG = Logger.getLogger(OrderController.class.getName());
 
     private final OrderDAO orderDao;
+
 
     /**
      * Constructs an OrderController with the specified order DAO
@@ -53,20 +60,23 @@ public class OrderController {
      * 
      * @throws IOException if error occurs with the server
      */
-    // TODO Chagne to take userid and orders, not order object
     @PostMapping("/create")
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        LOG.info("POST /orders/create" + order);
+    public ResponseEntity<Order> createOrder(@RequestParam("username") String username, @RequestParam("kits") String kitsJson) {
+        LOG.info("POST /orders/create/" + username);
 
         try {
-            Order createdOrder = orderDao.createOrder(order);
-            if (createdOrder == null) { // attempting to create an order with an already existing ID
-                return new ResponseEntity<>(HttpStatus.CONFLICT); 
+            // Deserialize kitsJson into an ArrayList<Kit>
+            ObjectMapper mapper = new ObjectMapper();
+            ArrayList<Kit> kits = (ArrayList<Kit>) mapper.readValue(kitsJson, new TypeReference<List<Kit>>(){});
+
+            Order createdOrder = orderDao.createOrder(username, kits);
+            if (createdOrder == null) { // Attempting to create an order that conflicts with an existing order
+                return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
             return new ResponseEntity<>(createdOrder, HttpStatus.CREATED);
-        } catch (IOException e) { // something went wrong with server storage
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
+        } catch (IOException e) { // Error in deserialization or server storage
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
