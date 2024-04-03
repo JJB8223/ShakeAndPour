@@ -38,18 +38,33 @@ public class UserController {
     }
 
 
-
     /**
      * Registers a new user.
-     * 
-     * @param user The user to register.
+     *
+     * @param username the username of the new user
+     * @param password the password of the new user
+     * @param name the name of the new user
+     *
      * @return ResponseEntity indicating the status of the registration operation.
      */
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        LOG.info("POST users/register " + user);
+    public ResponseEntity<User> registerUser(@RequestParam String username,
+                                             @RequestParam String password,
+                                             @RequestParam String name) {
+        LOG.info("GET /users/login?username=" + username + "&password=" +
+                password + "&name=" + name);
         try {
-            User createdU = userDAO.createUser(user);
+
+            // check if newly inputted username exists within all users
+            User[] users = userDAO.getUsers();
+            for(User u: users){
+                if(u.getUsername().equals(username)){
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+                }
+            }
+
+            User createdU = userDAO.createUser(username, password, name);
             if(createdU == null){
                 return new ResponseEntity<>(HttpStatus.CONFLICT);
             }
@@ -67,9 +82,9 @@ public class UserController {
      * @param id The ID of the user to retrieve.
      * @return ResponseEntity containing the retrieved user or a status indicating not found.
      */
-    @GetMapping("/get/{id}")
+    @GetMapping("/getById/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) { 
-        LOG.info("GET /users/get/" + id);
+        LOG.info("GET /users/getById/" + id);
 
         try {
             User u = userDAO.getUser(id);
@@ -83,6 +98,24 @@ public class UserController {
         catch(IOException e) {
             LOG.log(Level.SEVERE,e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getByUsername/{username}")
+    public ResponseEntity<User> getUserByName(@PathVariable String username) {
+        LOG.info("GET /users/getByUsername/" + username);
+
+        User[] users = userDAO.getUsers();
+        User foundUser = null;
+        for (User user: users) {
+            if (user.getUsername().equals(username)) {
+                foundUser = user;
+            }
+        }
+        if (foundUser != null) {
+            return new ResponseEntity<>(foundUser, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -102,7 +135,16 @@ public class UserController {
             if (currU == null){
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-
+            User preexisting = null;
+            User[] users = userDAO.getUsers();
+            for (User user: users) {
+                if (user.getUsername().equals(username)) {
+                    preexisting = user;
+                }
+            }
+            if (preexisting != null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
             User status = userDAO.updateUsername(currU, username);
 
             if (status == null){
@@ -215,20 +257,50 @@ public class UserController {
      * successful or not.
      */
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username,
-                                      @RequestParam String password){
-        LOG.info("GET /users/login?username=" + username + "&password=" + password);
-        if(username.equals("admin") && userDAO.authorize(username, password)){
-            return new ResponseEntity<>("admin login successful",
-                    HttpStatus.OK);
+    public ResponseEntity<LoginResponse> login(@RequestParam String username, @RequestParam String password) {
+        LOG.info("POST /users/login?username=" + username);
+        
+        User foundUser = null;
+        User[] users = userDAO.getUsers();
+        for (User user: users) {
+            if (user.getUsername().equals(username)) {
+                foundUser = user;
+            }
         }
-        else if (userDAO.authorize(username, password)) {
-            return new ResponseEntity<>("user login successful" ,
-                    HttpStatus.OK);
+        
+        if (foundUser != null && userDAO.authorize(username, password)) {
+            String userType = username.equals("admin") ? "admin" : "user";
+            LoginResponse response = new LoginResponse(foundUser.getId(), userType, userType + " login successful");
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new LoginResponse(0, "none", "Invalid username or password"));
         }
-        else {
-            return new ResponseEntity<>("Invalid username or password",
-                    HttpStatus.UNAUTHORIZED);
+    }
+
+    public class LoginResponse {
+        private final int userId;
+        private final String userType;
+        private final String message;
+    
+        public LoginResponse(int userId, String userType, String message) {
+            this.userId = userId;
+            this.userType = userType;
+            this.message = message;
+        }
+    
+        // Getters
+        public long getUserId() {
+            return userId;
+        }
+    
+        public String getUserType() {
+            return userType;
+        }
+    
+        public String getMessage() {
+            return message;
         }
     }
 }

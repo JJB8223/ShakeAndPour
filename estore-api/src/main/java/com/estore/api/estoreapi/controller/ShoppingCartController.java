@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.estore.api.estoreapi.persistence.KitDAO;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +28,8 @@ public class ShoppingCartController {
     private static final Logger LOG = Logger.getLogger(ShoppingCartController.class.getName());
 
     private final KitDAO kitDao;
-    private ShoppingCart shoppingCart;
+    private Map<Integer, ShoppingCart> userCarts = new HashMap<>();
+
     
     /**
      * Constructs a ShoppingCartController with the specified kit DAO and shopping cart.
@@ -37,7 +39,10 @@ public class ShoppingCartController {
      */
     public ShoppingCartController(KitDAO kitDao) {
         this.kitDao = kitDao;
-        this.shoppingCart = new ShoppingCart();
+    }
+
+    private ShoppingCart getShoppingCartForUser(Integer userId) {
+        return userCarts.computeIfAbsent(userId, k -> new ShoppingCart());
     }
 
     /**
@@ -48,11 +53,12 @@ public class ShoppingCartController {
      * @param quantity the quantity of the kit to add
      * @return ResponseEntity representing the result of the operation (OK, BAD_REQUEST, NOT_FOUND, INTERNAL_SERVER_ERROR)
      */
-    @PostMapping("/add/{id}/{quantity}")
-    public ResponseEntity<Void> addtoCart(@PathVariable int id, @PathVariable int quantity) {
-        LOG.info("POST /cart/add/id/?quantity="+quantity);
+    @PostMapping("/add/{userId}/{id}/{quantity}")
+    public ResponseEntity<Void> addToCart(@PathVariable Integer userId, @PathVariable int id, @PathVariable int quantity) {
+        LOG.info(String.format("POST /cart/add/%d/%d/?quantity=%d", userId, id, quantity));
         try {
             Kit kit = kitDao.getKit(id);
+            ShoppingCart shoppingCart = getShoppingCartForUser(userId);
             if (kit != null) {
                 if (kit.getQuantity() > 0) {
                     int prevQuantity = kit.getQuantity();
@@ -72,7 +78,7 @@ public class ShoppingCartController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             } 
         } catch (IOException e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -85,11 +91,12 @@ public class ShoppingCartController {
      * @param quantity the quantity of the kit to remove
      * @return ResponseEntity representing the result of the operation (OK, NOT_FOUND, INTERNAL_SERVER_ERROR)
      */
-    @DeleteMapping("/remove/{id}/{quantity}")
-    public ResponseEntity<Void> removeFromCart(@PathVariable int id, @PathVariable int quantity) {
-        LOG.info("DELETE /cart/remove/id/?quantity=");
+    @DeleteMapping("/remove/{userId}/{id}/{quantity}")
+    public ResponseEntity<Void> removeFromCart(@PathVariable Integer userId, @PathVariable int id, @PathVariable int quantity) {
+        LOG.info(String.format("DELETE /cart/remove/%d/%d/?quantity=", userId, id, quantity));
         try {
             Kit kit = kitDao.getKit(id);
+            ShoppingCart shoppingCart = getShoppingCartForUser(userId);
             if (kit == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
@@ -103,10 +110,10 @@ public class ShoppingCartController {
                 shoppingCart.removeKit(kit, quantity);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         } catch (IOException e) {
-            LOG.log(Level.SEVERE,e.getLocalizedMessage());
+            LOG.log(Level.SEVERE, e.getLocalizedMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -118,34 +125,18 @@ public class ShoppingCartController {
     * @return A ResponseEntity containing a map of kits to their quantities in the cart and the HTTP status code.
     * @throws IOException if an I/O error occurs during kit retrieval.
     */
-    @GetMapping("")
-    public ResponseEntity<ArrayList<ShoppingCartKit>> getCartKits() throws IOException {
-        LOG.info("GET /cart");
+    @GetMapping("/{userId}")
+    public ResponseEntity<ArrayList<ShoppingCartKit>> getCartKits(@PathVariable Integer userId) throws IOException {
+        LOG.info("GET /cart/" + userId);
+        ShoppingCart shoppingCart = getShoppingCartForUser(userId);
         Map<Kit, Integer> cartItems = shoppingCart.getKits();
-        
-        
-        // get the kit from kitDAO and add to a list to be returned
-        ArrayList<ShoppingCartKit> shoppingCartItems = new ArrayList<>();
 
+        ArrayList<ShoppingCartKit> shoppingCartItems = new ArrayList<>();
         for (Map.Entry<Kit, Integer> entry : cartItems.entrySet()) {
             Kit kit = entry.getKey();
-            int quantity = entry.getValue();
-
-            // Step 2: Extract the kit ID
-            int kitId = kit.getId();
-
-            // getting the name
-            String name = kit.getName();
-
-            float price = kit.getPrice();
-
-            // Step 3: Create a new data structure pairing the ID with the quantity
-            // and add it to the list
-            shoppingCartItems.add(new ShoppingCartKit(kitId, quantity, name, price));
+            shoppingCartItems.add(new ShoppingCartKit(kit.getId(), entry.getValue(), kit.getName(), kit.getPrice()));
         }
 
-
-        LOG.info(cartItems.toString());
         return new ResponseEntity<>(shoppingCartItems, HttpStatus.OK);
     }
 
@@ -156,11 +147,11 @@ public class ShoppingCartController {
     * @return A ResponseEntity containing the total cost and the HTTP status code.
     * @throws IOException if an I/O error occurs during kit retrieval.
     */
-    @GetMapping("/total")
-    public ResponseEntity<Float> getTotalCost() throws IOException {
-        LOG.info("GET /cart/total");
+    @GetMapping("/total/{userId}")
+    public ResponseEntity<Float> getTotalCost(@PathVariable Integer userId) throws IOException {
+        LOG.info("GET /cart/total/" + userId);
+        ShoppingCart shoppingCart = getShoppingCartForUser(userId);
         float totalCost = shoppingCart.getTotalCost();
-        LOG.info("Total cost of cart: " + totalCost);
         return new ResponseEntity<>(totalCost, HttpStatus.OK);
     }
 

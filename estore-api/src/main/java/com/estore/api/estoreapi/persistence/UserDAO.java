@@ -14,13 +14,15 @@ public interface UserDAO {
 
     /**
      * Create and save a new  {@linkplain User User}
-     * @param user {@linkplain User User} object to be created and saved.
+     * @param username the username of the new user
+     * @param password the password of the new user
+     * @param name the name of the new user
      * The id of the User object is assigned uniquely when a new User is created
      *
      * @return new {@linkplain User User} if successful, False otherwise
      * @throws IOException if there is an issue with underlying storage
      */
-    User createUser (User user) throws IOException;
+    User createUser(String username, String password, String name) throws IOException;
 
     /**
      * Delete a {@linkplain User User} with their id
