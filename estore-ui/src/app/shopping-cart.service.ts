@@ -1,9 +1,11 @@
 import { Injectable, numberAttribute } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { MessageService } from './message.service';
 import { Kit } from './kit';
+import { Order } from './order';
 import { KitMap } from './kit-map';
-import { Observable, catchError, tap, of} from 'rxjs';
+import { Observable, catchError, tap, of, switchMap} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,7 @@ export class ShoppingCartService {
 
   // setting the header opitions and url
   private ShoppingCartURL = 'http://localhost:8080/cart';
+  private orderURL = 'http://localhost:8080/orders';
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
@@ -23,7 +26,7 @@ export class ShoppingCartService {
     const userId = localStorage.getItem('userId');
     return userId ? parseInt(userId, 10) : 0;
   }
-  
+
   addToShoppingCart(kitId: number, quantity: number): Observable<any> {
     const userId = this.getUserId();
     const url = `${this.ShoppingCartURL}/add/${userId}/${kitId}/${quantity}`;
@@ -44,7 +47,7 @@ export class ShoppingCartService {
     const userId = this.getUserId();
     const url = `${this.ShoppingCartURL}/${userId}`;
     return this.http.get<KitMap[]>(url, this.httpOptions).pipe(
-      tap(_ => this.log('fetched shopping cart')),
+      tap(_ => console.log('fetched shopping cart')),
       catchError(this.handleError<KitMap[]>('getShoppingCart'))
     );
   }
@@ -56,6 +59,25 @@ export class ShoppingCartService {
       tap(_ => this.log('fetched total cost of the shopping cart')),
       catchError(this.handleError<number>('getTotalCost', 0))
     );
+  }
+
+  purchaseCart(): Observable<any> {
+    const userId = this.getUserId();
+    const purchase_url = `${this.ShoppingCartURL}/purchase?userid=${userId}`;
+    return this.http.post<KitMap[]>(purchase_url, this.httpOptions).pipe(
+      switchMap(
+        (kitmap: KitMap[]) => {
+          console.log("Shopping Cart Fetched");
+          const order_url = `${this.orderURL}/create?userid=${userId}&kits=${JSON.stringify(kitmap)}`;
+          return this.http.post<Order>(order_url, this.httpOptions).pipe(
+            tap((order: Order) => {
+              console.log("Order Created Successfully:", order);
+            }),
+            catchError(this.handleError<Order>('createOrder'))
+          );
+        }),
+        catchError(this.handleError<KitMap[]>('purchaseCart'))
+      );
   }
 
   /** A logging helper method */

@@ -35,7 +35,6 @@ public class ShoppingCartController {
      * Constructs a ShoppingCartController with the specified kit DAO and shopping cart.
      * 
      * @param kitDao the DAO responsible for kit operations
-     * @param shoppingCart the shopping cart for the current user session
      */
     public ShoppingCartController(KitDAO kitDao) {
         this.kitDao = kitDao;
@@ -161,20 +160,27 @@ public class ShoppingCartController {
      * NOT FOUND if nothing is in the cart
      */
     @PostMapping("/purchase")
-    public ResponseEntity<ArrayList<Kit>> purchaseCart() {
-        LOG.info("POST /cart/purchase/");
+    public ResponseEntity<ArrayList<ShoppingCartKit>> purchaseCart(@RequestParam int userID) {
+        LOG.info("POST /cart/purchase?userid=" + userID);
 
-        Map<Kit, Integer> kits = shoppingCart.getKits();
+        ShoppingCart user_cart = userCarts.get(userID);
+        Map<Kit, Integer> user_kits = user_cart.getKits();
 
-        if(kits.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if(user_kits.isEmpty()){
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        ArrayList<Kit> kits_in_order = new ArrayList<>(kits.keySet());
+        ArrayList<ShoppingCartKit> shoppingCartItems = new ArrayList<>();
+        for (Map.Entry<Kit, Integer> entry : user_kits.entrySet()) {
+            Kit kit = entry.getKey();
+            shoppingCartItems.add(new ShoppingCartKit(kit.getId(), entry.getValue(), kit.getName(), kit.getPrice()));
+        }
 
-        shoppingCart.clearCart();
+        user_cart.clearCart();
 
-        return new ResponseEntity<>(kits_in_order, HttpStatus.OK);
+        userCarts.put(userID, user_cart);
+
+        return new ResponseEntity<>(shoppingCartItems, HttpStatus.OK);
 
     }
 }

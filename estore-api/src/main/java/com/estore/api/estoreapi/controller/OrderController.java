@@ -45,7 +45,7 @@ public class OrderController {
     /**
      * Creates a {@linkplain Order Order} with the provided Order object
      *
-     * @param Order - The {@link Order Order} to create
+     * @param order - The {@link Order Order} to create
      *
      * @return ResponseEntity with created {@link Order Order} object and HTTP status of CREATED<br>
      * ResponseEntity with HTTP status of CONFLICT if {@link Order Order} object already exists<br>
@@ -53,6 +53,7 @@ public class OrderController {
      * 
      * @throws IOException if error occurs with the server
      */
+    // TODO Chagne to take userid and orders, not order object
     @PostMapping("/create")
     public ResponseEntity<Order> createOrder(@RequestBody Order order) {
         LOG.info("POST /orders/create" + order);
