@@ -205,10 +205,10 @@ public class UserControllerTest {
         // This represents the existing user before username update.
         User originalUser = new User(id, originalUsername, password, name, role);
 
-        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.createUser(originalUsername, password, name)).thenReturn(originalUser);
         when(mockUserDao.getUsers()).thenReturn(testUsers);
 
-        ResponseEntity<User> r = UserController.registerUser(username, password, name);
+        ResponseEntity<User> r = UserController.registerUser(originalUsername, password, name);
         // analyze
         assertEquals(HttpStatus.CREATED,r.getStatusCode());
 
@@ -216,8 +216,10 @@ public class UserControllerTest {
 
         // This represents the user after the username has been successfully updated.
         User updatedUser = new User(id, newUsername, password, name, role);
+        when(mockUserDao.getUsers()).thenReturn(testUsers);
 
         // Simulate successful username update operation.
+        when(mockUserDao.getUser(id)).thenReturn(originalUser);
         when(mockUserDao.updateUsername(originalUser, newUsername)).thenReturn(updatedUser);
 
         // Attempt to update the username.
@@ -271,7 +273,7 @@ public class UserControllerTest {
 
         User existingUser = new User(id, username, password, name, role);
 
-        when(mockUserDao.createUser(username, password, name)).thenReturn(u);
+        when(mockUserDao.createUser(username, password, name)).thenReturn(existingUser);
         when(mockUserDao.getUsers()).thenReturn(testUsers);
 
 
