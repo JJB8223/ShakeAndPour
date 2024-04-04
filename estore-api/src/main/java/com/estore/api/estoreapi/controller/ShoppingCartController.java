@@ -140,6 +140,28 @@ public class ShoppingCartController {
     }
 
     /**
+     * Get the full data of the kits in the shopping cart, including products in kit
+     * @param userId the user's id number
+     *
+     * @return A ResponseEntity containing a map of kits to their quantities in the cart and the HTTP status code.
+     * @throws IOException if an I/O error occurs during kit retrieval.
+     */
+    @GetMapping("/fullkits/{userId}")
+    public ResponseEntity<ArrayList<Kit>> getFullCartKits(@PathVariable Integer userId) throws IOException {
+        LOG.info("GET /carts/fullkits/" + userId);
+        ShoppingCart shoppingCart = getShoppingCartForUser(userId);
+        Map<Kit, Integer> cartItems = shoppingCart.getKits();
+
+        ArrayList<Kit> shoppingCartItems = new ArrayList<>();
+        for (Map.Entry<Kit, Integer> entry : cartItems.entrySet()) {
+            Kit kit = entry.getKey();
+            shoppingCartItems.add(new Kit(kit.getId(), kit.getName(), kit.getPrice(), entry.getValue(), kit.getProductsInKit()));
+        }
+
+        return new ResponseEntity<>(shoppingCartItems, HttpStatus.OK);
+    }
+
+    /**
     * Calculates and returns the total cost of all kits currently in the shopping cart.
     * This endpoint allows the client to view the total cost of the items in the cart.
     * 
@@ -160,7 +182,7 @@ public class ShoppingCartController {
      * NOT FOUND if nothing is in the cart
      */
     @PostMapping("/purchase")
-    public ResponseEntity<ArrayList<ShoppingCartKit>> purchaseCart(@RequestParam int userID) {
+    public ResponseEntity<ArrayList<Kit>> purchaseCart(@RequestParam int userID) {
         LOG.info("POST /cart/purchase?userid=" + userID);
 
         ShoppingCart user_cart = userCarts.get(userID);
@@ -170,17 +192,27 @@ public class ShoppingCartController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        ArrayList<ShoppingCartKit> shoppingCartItems = new ArrayList<>();
+        ArrayList<Kit> shoppingCartItems = new ArrayList<>();
         for (Map.Entry<Kit, Integer> entry : user_kits.entrySet()) {
             Kit kit = entry.getKey();
-            shoppingCartItems.add(new ShoppingCartKit(kit.getId(), entry.getValue(), kit.getName(), kit.getPrice()));
+            shoppingCartItems.add(kit);
         }
-
-        user_cart.clearCart();
-
-        userCarts.put(userID, user_cart);
 
         return new ResponseEntity<>(shoppingCartItems, HttpStatus.OK);
 
+    }
+
+    /**
+     * Clear the user's cart to become empty after purchasing their shopping cart
+     * @param userId the user's id number
+     * @return ResponseEntity representing the result of the operation
+     */
+    @DeleteMapping("/clear/{userId}")
+    public ResponseEntity<Void> clearCart(@PathVariable Integer userId) {
+        LOG.info("DELETE /cart/clear/" + userId);
+        ShoppingCart shoppingCart = getShoppingCartForUser(userId);
+        shoppingCart.clearCart();
+        userCarts.put(userId, shoppingCart);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

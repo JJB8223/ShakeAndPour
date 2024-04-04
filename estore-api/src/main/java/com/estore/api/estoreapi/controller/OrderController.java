@@ -52,7 +52,8 @@ public class OrderController {
     /**
      * Creates a {@linkplain Order Order} with the provided Order object
      *
-     * @param order - The {@link Order Order} to create
+     * @param username - the username of the user
+     * @param kitsJson the string json list of all the kits the user has purchased
      *
      * @return ResponseEntity with created {@link Order Order} object and HTTP status of CREATED<br>
      * ResponseEntity with HTTP status of CONFLICT if {@link Order Order} object already exists<br>
@@ -61,7 +62,7 @@ public class OrderController {
      * @throws IOException if error occurs with the server
      */
     @PostMapping("/create")
-    public ResponseEntity<Order> createOrder(@RequestParam("username") String username, @RequestParam("kits") String kitsJson) {
+    public ResponseEntity<Order> createOrder(@RequestParam String username, @RequestParam String kitsJson) {
         LOG.info("POST /orders/create/" + username);
 
         try {

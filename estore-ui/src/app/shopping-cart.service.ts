@@ -1,11 +1,12 @@
 import { Injectable, numberAttribute } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MessageService } from './message.service';
 import { Kit } from './kit';
 import { Order } from './order';
 import { KitMap } from './kit-map';
-import { Observable, catchError, tap, of, switchMap} from 'rxjs';
+import{UserService} from './user.service';
+import { Observable, catchError, tap, of, switchMap, mergeMap, map} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ import { Observable, catchError, tap, of, switchMap} from 'rxjs';
 export class ShoppingCartService {
 
   constructor(private http: HttpClient,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private userService: UserService) { }
 
   // setting the header opitions and url
   private ShoppingCartURL = 'http://localhost:8080/cart';
@@ -52,6 +54,15 @@ export class ShoppingCartService {
     );
   }
 
+  getFullShoppingCart(): Observable<Kit[]> {
+      const userId = this.getUserId();
+      const url = `${this.ShoppingCartURL}/fullkits/${userId}`;
+      return this.http.get<Kit[]>(url, this.httpOptions).pipe(
+        tap(_ => console.log('fetched shopping cart')),
+        catchError(this.handleError<Kit[]>('getShoppingCart'))
+      );
+  }
+
   getTotalCost(): Observable<any> {
     const userId = this.getUserId();
     const url = `${this.ShoppingCartURL}/total/${userId}`;
@@ -61,23 +72,36 @@ export class ShoppingCartService {
     );
   }
 
-  purchaseCart(): Observable<any> {
+  createOrder(kitmap: Kit[]): Observable<Order> {
+    const username = this.userService.getUsername();
+    this.log(JSON.stringify(kitmap))
+    const params = new HttpParams()
+        .set('username', username)
+        .set('kitsJson', JSON.stringify(kitmap));
+
+    const order_url = `${this.orderURL}/create`;
+     return this.http.post<Order>(order_url, params).pipe(
+      tap(order => console.log("Order Created Successfully:", order)),
+      catchError(this.handleError<Order>('createOrder'))
+     );
+  }
+
+  clearCart(): Observable<any> {
     const userId = this.getUserId();
-    const purchase_url = `${this.ShoppingCartURL}/purchase?userid=${userId}`;
-    return this.http.post<KitMap[]>(purchase_url, this.httpOptions).pipe(
-      switchMap(
-        (kitmap: KitMap[]) => {
-          console.log("Shopping Cart Fetched");
-          const order_url = `${this.orderURL}/create?userid=${userId}&kits=${JSON.stringify(kitmap)}`;
-          return this.http.post<Order>(order_url, this.httpOptions).pipe(
-            tap((order: Order) => {
-              console.log("Order Created Successfully:", order);
-            }),
-            catchError(this.handleError<Order>('createOrder'))
-          );
-        }),
-        catchError(this.handleError<KitMap[]>('purchaseCart'))
-      );
+        const delete_url = `${this.ShoppingCartURL}/clear/${userId}`;
+    return this.http.delete<any>(delete_url, this.httpOptions).pipe(
+       tap(_ => this.log('Cart Has Been Cleared')),
+           catchError(this.handleError<void>('getTotalCost'))
+     );
+  }
+
+  purchaseCart(): Observable<any> {
+     return this.getFullShoppingCart().pipe(
+         switchMap(kit => this.createOrder(kit)),
+         switchMap(order => this.clearCart()),
+         catchError(this.handleError<any>('purchaseCart'))
+
+       );
   }
 
   /** A logging helper method */

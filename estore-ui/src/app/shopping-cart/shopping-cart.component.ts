@@ -3,6 +3,7 @@ import { KitMap } from '../kit-map';
 import { ShoppingCartService } from '../shopping-cart.service';
 import { switchMap } from 'rxjs';
 import { OnInit } from '@angular/core';
+import {Order} from '../order';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -36,7 +37,7 @@ export class ShoppingCartComponent {
       this.getTotalCost();
     });
   }
-  
+
   removeItem(id: number, quantity: number): void {
     console.log(id);
     this.shoppingCartService.removeItem(id, quantity).pipe(
@@ -57,4 +58,22 @@ export class ShoppingCartComponent {
       }
     })
   }
+
+  purchaseCart(): void {
+    this.shoppingCartService.purchaseCart().subscribe(
+      response => {
+        console.log("Order Created Successfully!");
+        alert("Shopping Cart Purchased!");
+        this.getShoppingCart();
+        this.getTotalCost();
+      },
+      error => {
+        console.error("Error occurred while purchasing cart:", error);
+        alert("There was an error in purchasing your cart");
+      }
+
+
+    );
+  }
+
 }
