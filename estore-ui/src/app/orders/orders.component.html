@@ -24,6 +24,9 @@
         </ul>
         <div>
             <li *ngFor = "let order_custom of custom_order">
+                <div>
+                    <span>Order Number: </span>{{order.id}}
+                </div>
                 <ul>
                     <li *ngFor = "let kit of order_custom.kits_in_order">
                         <div>
