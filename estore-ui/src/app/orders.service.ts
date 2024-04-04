@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { Kit } from './kit';
 import { Order } from './order';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 
 @Injectable({
@@ -10,6 +10,9 @@ import { MessageService } from './message.service';
 })
 export class OrdersService {
   ordersUrl : string = "http://localhost:8080/orders/"
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  }
   
   getOrders(user : string): Observable<Order[]> {
     return this.http.get<Order[]>(this.ordersUrl + user)
@@ -19,6 +22,15 @@ export class OrdersService {
       );
   }
   constructor(private http : HttpClient, private messageService : MessageService) { }
+
+  addOrders(newOrder: Order): Observable<Order> {
+    return this.http.post<Order>(`${this.ordersUrl}/create`, newOrder, this.httpOptions).pipe(
+      tap((newOrdered: Order) => this.log(`added new order to history with ID ${newOrdered.id}`)),
+      catchError(this.handleError<Order>('addOrder'))
+    )
+  }
+
+
 
   private log(message: string) {
     this.messageService.add(`KitService: ${message}`);
