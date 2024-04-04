@@ -5,6 +5,7 @@ import { ProductService } from '../product.service';
 import { Order } from '../order';
 import { Observable, Subject, debounceTime, distinctUntilChanged, forkJoin, map, switchMap } from 'rxjs';
 import { Kit } from '../kit';
+import { MessageService } from '../message.service';
 
 @Component({
   selector: 'app-order-search',
@@ -14,7 +15,7 @@ import { Kit } from '../kit';
 export class OrderSearchComponent {
 
   constructor(private orderService: OrdersService, private kitService : KitService, 
-    private productService : ProductService) {
+    private productService : ProductService, private messageService : MessageService) {
       const username = localStorage.getItem('username');
       if (username) {
         this.user = username; 
@@ -42,6 +43,9 @@ export class OrderSearchComponent {
   // add a search term to the searchKeywords stream
   search(term: string): void {
     this.searchKeywords.next(term);
+    this.messageService.add(`attempting to search with term ${term}`);
+    this.messageService.add(`Orders:${this.orders}`);
+    this.messageService.add(`Search results:${this.orderService.searchOrders('Kit', this.user)}`);
   }
 
 }
