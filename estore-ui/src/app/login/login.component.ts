@@ -31,7 +31,6 @@ export class LoginComponent {
   
       this.loginService.login(username, password).subscribe({
           next: (response) => {
-              // Assuming response.userType tells if the user is an admin or a regular user
               if (response.userType === 'admin') {
                   this.router.navigateByUrl('/admin');
               } else if (response.userType === 'user') {
