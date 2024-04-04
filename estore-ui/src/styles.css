@@ -12,7 +12,7 @@ h1 {
   }
   body {
     margin: 2em;
-    background-color: #fff200; /*#fFFDD0 This is the color I"m actually thinking, but temporary pee color funny*/
+    background-color: #fFFDD0;
   }
   body, input[type="text"], button {
     color: #333;
