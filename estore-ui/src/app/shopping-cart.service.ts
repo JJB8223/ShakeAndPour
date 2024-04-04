@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { Kit } from './kit';
 import { KitMap } from './kit-map';
-import { Observable, catchError, tap, of} from 'rxjs';
+import { Observable, catchError, tap, of, forkJoin} from 'rxjs';
+import { OrdersService } from './orders.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ import { Observable, catchError, tap, of} from 'rxjs';
 export class ShoppingCartService {
 
   constructor(private http: HttpClient,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private orderService: OrdersService) { }
 
   // setting the header opitions and url
   private ShoppingCartURL = 'http://localhost:8080/cart';
@@ -24,13 +26,32 @@ export class ShoppingCartService {
     return userId ? parseInt(userId, 10) : 0;
   }
   
-  addToShoppingCart(kitId: number, quantity: number): Observable<any> {
+  addKitToShoppingCart(kitId: number, quantity: number): Observable<any> {
     const userId = this.getUserId();
     const url = `${this.ShoppingCartURL}/add/${userId}/${kitId}/${quantity}`;
     return this.http.post<any>(url, null, this.httpOptions).pipe(
       tap((response) => console.log('Item added to the shopping cart successfully:', response))
     );
   }
+
+  addOrderToShoppingCart(orderId: number): Observable<any> {
+    return this.orderService.getOrderById(orderId).pipe(
+      tap(order => {
+        if (order) {
+          order.kits_in_order.forEach(kit => {
+            this.addKitToShoppingCart(kit.id, 1).subscribe(
+              () => {},
+              error => console.error('Error adding kit to cart:', error)
+            );
+          });
+          console.log('All kits added to cart');
+        } else {
+          console.error('Order not found:', orderId);
+        }
+      })
+    );
+  }
+                
 
   removeItem(kitId: number, quantity: number): Observable<any> {
     const userId = this.getUserId();

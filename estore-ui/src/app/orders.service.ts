@@ -24,6 +24,15 @@ export class OrdersService {
     this.messageService.add(`KitService: ${message}`);
   }
 
+  getOrderById(orderId: number): Observable<Order> {
+    const url = `${this.ordersUrl}getSpecific/${orderId}`;
+    return this.http.get<Order>(url)
+      .pipe(
+        tap(_ => this.log(`fetched order with ID=${orderId}`)),
+        catchError(this.handleError<Order>(`getOrderById id=${orderId}`))
+      );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 

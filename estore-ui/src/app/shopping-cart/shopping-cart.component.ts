@@ -29,7 +29,7 @@ export class ShoppingCartComponent {
 
   addItem(id: number, quantity: number): void {
     console.log(id);
-    this.shoppingCartService.addToShoppingCart(id, quantity).pipe(
+    this.shoppingCartService.addKitToShoppingCart(id, quantity).pipe(
       switchMap(() => this.shoppingCartService.getShoppingCart())
     ).subscribe(kitMap => {
       this.kitMaps = kitMap;

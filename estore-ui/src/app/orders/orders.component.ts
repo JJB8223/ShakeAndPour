@@ -49,9 +49,20 @@ export class OrdersComponent {
       });
   }
 
-  addToShoppingCart(id: number, quantity: number): void {
+  addKitToShoppingCart(id: number, quantity: number): void {
     console.log("This is the number we are adding: " + id);
-    this.shoppingCartService.addToShoppingCart(id, quantity).subscribe({
+    this.shoppingCartService.addKitToShoppingCart(id, quantity).subscribe({
+      next: (response) => {
+        console.log('Response from adding to cart:', response);
+      },
+      error: (err) => {
+        console.error('Error adding item to cart:', err);
+      }
+    });
+  }
+
+  addOrderToShoppingCart(id: number): void {
+    this.shoppingCartService.addOrderToShoppingCart(id).subscribe({
       next: (response) => {
         console.log('Response from adding to cart:', response);
       },
