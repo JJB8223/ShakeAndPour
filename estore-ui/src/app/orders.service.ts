@@ -18,6 +18,14 @@ export class OrdersService {
         catchError(this.handleError<Order[]>('getOrders', []))
       );
   }
+
+  searchOrders(term: string, user : string): Observable<Order[]> {
+    return this.http.get<Order[]>(this.ordersUrl + '/' + term + '?=' + user)
+      .pipe(
+        tap(_ => this.log('fetched Orders')),
+        catchError(this.handleError<Order[]>('getOrders', []))
+      );
+  }
   constructor(private http : HttpClient, private messageService : MessageService) { }
 
   private log(message: string) {
