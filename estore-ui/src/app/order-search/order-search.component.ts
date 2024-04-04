@@ -38,6 +38,24 @@ export class OrderSearchComponent {
       // switch to new search observable each time the term changes
       switchMap((term: string) => this.orderService.searchOrders(term, this.user)),
     );
+    /* .pipe(
+      function to display kit name
+
+        switchMap(kits => {
+          const productObservables = kits.map(kit => {
+            const observables = kit.products_in_kit.map(productId =>
+              this.getSpecificProduct(productId)
+            );
+            return forkJoin(observables).pipe(
+              map(productNames => {
+                kit.products_in_kit = productNames;
+                return kit;      // Do something with each kit and its corresponding quantity
+              })
+            );
+          });
+          return forkJoin(productObservables);
+        })
+      )*/
   }
 
   // add a search term to the searchKeywords stream

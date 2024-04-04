@@ -26,7 +26,7 @@ export class OrdersService {
     }
     let url: string = `${this.ordersUrl}${term}/?user=${user}`;
     this.log(`Request url: ${url}`);
-    let response : Observable<Order[]> = this.http.get<Order[]>(url).pipe(
+    let response : Observable<Order[]> = this.http.get<Order[]>('http://localhost:8080/orders/Fizzy%20Fussion/?user=dd122903').pipe(
       tap(x => x.length ?
         this.log(`found Orders matching "${term}"`) :
         this.log(`no Orders matching "${term}"`)),
@@ -38,7 +38,7 @@ export class OrdersService {
   constructor(private http : HttpClient, private messageService : MessageService) { }
 
   private log(message: string) {
-    this.messageService.add(`KitService: ${message}`);
+    this.messageService.add(`OrderService: ${message}`);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
