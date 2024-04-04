@@ -18,39 +18,44 @@ export class ShoppingCartService {
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
+
+  private getUserId(): number {
+    const userId = localStorage.getItem('userId');
+    return userId ? parseInt(userId, 10) : 0;
+  }
   
-  
-  addToShoppingCart(id: number, quantity: number): Observable<any> {
-    const url = `http://localhost:8080/cart/add/${id}/${quantity}`;
-    console.log(url); // Check the constructed URL
-    return this.http.post<any>(url, null).pipe(
-      tap((response) => console.log('Item added to the shopping cart successfully:', response)), 
+  addToShoppingCart(kitId: number, quantity: number): Observable<any> {
+    const userId = this.getUserId();
+    const url = `${this.ShoppingCartURL}/add/${userId}/${kitId}/${quantity}`;
+    return this.http.post<any>(url, null, this.httpOptions).pipe(
+      tap((response) => console.log('Item added to the shopping cart successfully:', response))
     );
   }
 
-
-  removeItem(id: number, quantity: number): Observable<any> {
-      const url = `http://localhost:8080/cart/remove/${id}/${quantity}`;
-      return this.http.delete<any>(url).pipe(
-          tap((response) => console.log('Item removed from the shopping cart', response))
-      );
+  removeItem(kitId: number, quantity: number): Observable<any> {
+    const userId = this.getUserId();
+    const url = `${this.ShoppingCartURL}/remove/${userId}/${kitId}/${quantity}`;
+    return this.http.delete<any>(url, this.httpOptions).pipe(
+      tap((response) => console.log('Item removed from the shopping cart', response))
+    );
   }
 
   getShoppingCart(): Observable<KitMap[]> {
-    return this.http.get<KitMap[]>(this.ShoppingCartURL)
-    .pipe(
-      tap(_=> this.log('fetched shopping cart')),
+    const userId = this.getUserId();
+    const url = `${this.ShoppingCartURL}/${userId}`;
+    return this.http.get<KitMap[]>(url, this.httpOptions).pipe(
+      tap(_ => this.log('fetched shopping cart')),
       catchError(this.handleError<KitMap[]>('getShoppingCart'))
-    )
-  } 
+    );
+  }
 
   getTotalCost(): Observable<any> {
-    const url = `${this.ShoppingCartURL}/total`;
-    return this.http.get<number>(url, this.httpOptions)
-      .pipe(
-        tap(_ => this.log('fetched total cost of the shopping cart')),
-        catchError(this.handleError<number>('getTotalCost', 0))
-      );
+    const userId = this.getUserId();
+    const url = `${this.ShoppingCartURL}/total/${userId}`;
+    return this.http.get<number>(url, this.httpOptions).pipe(
+      tap(_ => this.log('fetched total cost of the shopping cart')),
+      catchError(this.handleError<number>('getTotalCost', 0))
+    );
   }
 
   /** A logging helper method */
