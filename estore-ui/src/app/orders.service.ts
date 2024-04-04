@@ -12,7 +12,7 @@ export class OrdersService {
   ordersUrl : string = "http://localhost:8080/orders/"
   
   getOrders(user : string): Observable<Order[]> {
-    return this.http.get<Order[]>(this.ordersUrl + user)
+    return this.http.get<Order[]>(`${this.ordersUrl}?user=${user}`)
       .pipe(
         tap(_ => this.log('fetched Orders')),
         catchError(this.handleError<Order[]>('getOrders', []))
@@ -20,11 +20,20 @@ export class OrdersService {
   }
 
   searchOrders(term: string, user : string): Observable<Order[]> {
-    return this.http.get<Order[]>(this.ordersUrl + '/' + term + '?=' + user)
-      .pipe(
-        tap(_ => this.log('fetched Orders')),
-        catchError(this.handleError<Order[]>('getOrders', []))
-      );
+    if (!term.trim()) {
+      // if not search term, return empty Kit array.
+      return of([]);
+    }
+    let url: string = `${this.ordersUrl}${term}/?user=${user}`;
+    this.log(`Request url: ${url}`);
+    let response : Observable<Order[]> = this.http.get<Order[]>(url).pipe(
+      tap(x => x.length ?
+        this.log(`found Orders matching "${term}"`) :
+        this.log(`no Orders matching "${term}"`)),
+      catchError(this.handleError<Order[]>('searchOrders', []))
+    );
+    this.log(`${response}`);
+    return response;
   }
   constructor(private http : HttpClient, private messageService : MessageService) { }
 
