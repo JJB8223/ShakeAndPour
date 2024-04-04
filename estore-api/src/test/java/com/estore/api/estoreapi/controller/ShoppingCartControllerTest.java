@@ -17,13 +17,13 @@ import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 @Tag("Controller-tier")
 public class ShoppingCartControllerTest {
 
     private ShoppingCartController shoppingCartController;
     private KitDAO mockKitDAO;
+
 
     @BeforeEach
     public void setup() {
@@ -205,6 +205,53 @@ public class ShoppingCartControllerTest {
     }
 
     @Test
+    public void testGetFullCartKits() throws IOException{
+        int kitId1 = 1, kitId2 = 2;
+        int userId = 123;
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        ArrayList<Integer> products2 = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        products2.add(4);
+        products2.add(5);
+        Kit kit1 = new Kit(kitId1, "Milk", 2.99f, 50, products);
+        Kit kit2 = new Kit(kitId2, "Cola", 1.99f, 50, products2);
+        when(mockKitDAO.getKit(kitId1)).thenReturn(kit1);
+        when(mockKitDAO.getKit(kitId2)).thenReturn(kit2);
+        shoppingCartController.addToCart(userId, kitId1, 2); // Add kits to the cart
+        shoppingCartController.addToCart(userId, kitId2, 3);
+
+        ResponseEntity<ArrayList<Kit>> response = shoppingCartController.getFullCartKits(userId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        Kit k1 = response.getBody().get(0);
+        assertEquals(1, k1.getId());
+        assertEquals("Milk", k1.getName());
+        assertEquals(2.99f, k1.getPrice());
+        assertEquals(2, k1.getQuantity());
+        assertEquals(products, k1.getProductsInKit());
+
+        Kit k2 = response.getBody().get(1);
+        assertEquals(2, k2.getId());
+        assertEquals("Cola", k2.getName());
+        assertEquals(1.99f, k2.getPrice());
+        assertEquals(3, k2.getQuantity());
+        assertEquals(products2, k2.getProductsInKit());
+
+    }
+
+    @Test
+    public void testGetFullCartKitsEmpty() throws IOException{
+        int userId = 123;
+        ResponseEntity<ArrayList<Kit>> response = shoppingCartController.getFullCartKits(userId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertTrue(response.getBody().isEmpty());
+    }
+
+
+    @Test
     public void testGetTotalCost_EmptyCart() throws IOException {
         int userId = 123;
         ResponseEntity<Float> response = shoppingCartController.getTotalCost(userId);
@@ -234,6 +281,28 @@ public class ShoppingCartControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(11.95f, response.getBody());
+    }
+
+    @Test
+    public void testClearCart() throws IOException {
+        int kitId1 = 1, kitId2 = 2;
+        int userId = 123;
+        ArrayList<Integer> products = new ArrayList<Integer>();
+        ArrayList<Integer> products2 = new ArrayList<Integer>();
+        products.add(1);
+        products.add(2);
+        products.add(3);
+        products2.add(4);
+        products2.add(5);
+        Kit kit1 = new Kit(kitId1, "Milk", 2.99f, 50, products);
+        Kit kit2 = new Kit(kitId2, "Cola", 1.99f, 50, products2);
+        when(mockKitDAO.getKit(kitId1)).thenReturn(kit1);
+        when(mockKitDAO.getKit(kitId2)).thenReturn(kit2);
+        shoppingCartController.addToCart(userId, kitId1, 2); // Add kits to the cart
+        shoppingCartController.addToCart(userId, kitId2, 3);
+
+        ResponseEntity<Void> response = shoppingCartController.clearCart(userId);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
 

@@ -1,4 +1,6 @@
 <h1>Order History</h1>
+<app-order-search></app-order-search>
+<h1>Order History</h1>
 <ul class="orders">
     <li *ngFor="let order of orders" class="order-item">
         <div class="order-info">
@@ -9,6 +11,8 @@
                 <div>
                     <span class="kit-label">Kit Name:</span> <span class="kit-value">{{kit.name}}</span> |
                     <span class="kit-label">Price:</span> <span class="kit-value">{{kit.price}}</span>
+
+                    <button (click)="addKitToShoppingCart(kit.id, 1)">Add Kit to Cart</button>
                 </div>
                 <div class="products-in-kit">
                     <span class="product-label">Products in Kit:</span>
@@ -18,5 +22,21 @@
                 </div>
             </li>
         </ul>
-    </li>
+        <div>
+            <li *ngFor = "let order_custom of custom_order">
+                <ul>
+                    <li *ngFor = "let kit of order_custom.kits_in_order">
+                        <div>
+                            <span>Kit Name: </span> {{kit.name}} |
+                            <span>Price: </span> {{kit.price}} |
+                            <button (click)="reRoute()">Recreate Kit</button>
+                        </div>
+                        <span class="products-in-kit">Products in Kit: </span>
+                        <ul>
+                            <li *ngFor = "let product of kit.products_in_kit">{{product.name}}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </div>
 </ul>

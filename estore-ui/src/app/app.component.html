@@ -6,6 +6,7 @@
   <a *ngIf="isUser()" routerLink="/cart">Shopping Cart</a>
   <a *ngIf="isAdmin()" routerLink="/admin">Admin Page</a>
   <a *ngIf="isUser()" routerLink="/user">User Page</a>
+  <a *ngIf="isUser()" routerLink="/custom">Custom Kit Creation</a>
   <a *ngIf="isLoggedIn()" (click)="logout()">Logout</a>
 </nav>
 <router-outlet></router-outlet>

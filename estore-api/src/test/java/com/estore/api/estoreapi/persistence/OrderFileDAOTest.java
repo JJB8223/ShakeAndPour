@@ -1,6 +1,8 @@
 package com.estore.api.estoreapi.persistence;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -83,12 +85,23 @@ public class OrderFileDAOTest {
 
     @Test
     public void testCreateOrder() throws IOException {
-        Order newOrder = new Order(4, "test", new ArrayList<Kit>());
-        orderDAO.createOrder(newOrder);
-        // since objects are serialized when they get added by the DAO, shallow equality won't work
-        assertEquals(newOrder.getId(), orderDAO.getOrder(4).getId());
-        assertEquals(newOrder.getUser(), orderDAO.getOrder(4).getUser());
-        assertEquals(newOrder.getKits(), orderDAO.getOrder(4).getKits());
+        // Given
+        String username = "testUser";
+        ArrayList<Kit> kits = new ArrayList<>();
+
+        // When
+        Order createdOrder = orderDAO.createOrder(username, kits);
+
+        // Then
+        assertNotNull(createdOrder, "Order should not be null");
+        assertEquals(username, createdOrder.getUser(), "Username should match");
+        assertEquals(kits, createdOrder.getKits(), "Kits list should be equal");
+
+        Order retrievedOrder = orderDAO.getOrder(createdOrder.getId());
+        assertNotNull(retrievedOrder, "Retrieved order should not be null");
+        assertEquals(createdOrder.getId(), retrievedOrder.getId(), "Retrieved order ID should match");
+        assertEquals(createdOrder.getUser(), retrievedOrder.getUser(), "Retrieved username should match");
+        assertEquals(createdOrder.getKits(), retrievedOrder.getKits(), "Retrieved kits list should be equal");
     }
 
     @Test
