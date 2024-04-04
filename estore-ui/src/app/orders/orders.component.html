@@ -3,7 +3,6 @@
     <li *ngFor="let order of orders">
         <div>
             <span>Order Number: </span>{{order.id}}
-            <button (click)="addOrderToShoppingCart(order.id)">Add Order to Cart</button>
         </div>
         <ul>
             <li *ngFor="let kit of order.kits_in_order">
@@ -20,5 +19,21 @@
                 </div>
             </li>
         </ul>
-    </li>
+        <div>
+            <li *ngFor = "let order_custom of custom_order">
+                <ul>
+                    <li *ngFor = "let kit of order_custom.kits_in_order">
+                        <div>
+                            <span>Kit Name: </span> {{kit.name}} |
+                            <span>Price: </span> {{kit.price}} |
+                            <button (click)="reRoute()">Recreate Kit</button>
+                        </div>
+                        <span class="products-in-kit">Products in Kit: </span>
+                        <ul>
+                            <li *ngFor = "let product of kit.products_in_kit">{{product.name}}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </div>
 </ul>

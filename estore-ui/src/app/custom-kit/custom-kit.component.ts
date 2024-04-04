@@ -52,16 +52,10 @@ export class CustomKitComponent {
   }
 
   private orderCustomKit(customKit: Kit): void {
-    let add_to_order : Kit[] = []
+    let add_to_order: Kit [] = []
     add_to_order.push(customKit)
-
-    let newOrder : Order = {
-      id: 10000,
-      user: this.user.getUsername(),
-      kits_in_order: add_to_order
-    }
-    console.log(newOrder)
-    this.orderService.addOrders(newOrder)
+    console.log(add_to_order)
+    this.orderService.createOrder(add_to_order)
       .subscribe(
         response => {
           console.log('Purchased kit')
