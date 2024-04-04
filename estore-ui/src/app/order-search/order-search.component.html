@@ -4,21 +4,21 @@
     <br>
     <h1>Orders Found</h1>
     <ul class="orders">
-        <li *ngFor="let order of orders">
-            <div>
-                <span>Order Number: </span>{{order.id}}
-                <button (click)="addOrderToShoppingCart(order.id)">Add Order to Cart</button>
+        <li *ngFor="let order of orders" class="order-item">
+            <div class="order-info">
+                <span class="order-label">Order Number:</span> <span class="order-value">{{order.id}}</span>
+                <button (click)="addOrderToShoppingCart(order.id)" class="order-button">Add Order to Cart</button>
             </div>
-            <ul>
-                <li *ngFor="let kit of order.kits_in_order">
+            <ul class="kits-list">
+                <li *ngFor="let kit of order.kits_in_order" class="kit-item">
                     <div>
-                        <span>Kit Name: </span>{{kit.name}} |
-                        <span>Price: </span>{{kit.price}} |
-                        <button (click)="addKitToShoppingCart(kit.id, 1)">Add Kit to Cart</button>
+                        <span class="kit-label">Kit Name:</span> <span class="kit-value">{{kit.name}}</span> |
+                        <span class="kit-label">Price:</span> <span class="kit-value">{{kit.price}}</span>
+                        <button (click)="addKitToShoppingCart(kit.id, 1)" class="add-button">Add Kit to Cart</button>
                     </div>
-                    <div>
-                        <span class="products-in-kit">Products in Kit: </span>
-                        <ul>
+                    <div class="products-in-kit">
+                        <span class="product-label">Products in Kit:</span>
+                        <ul class="product-list">
                             <li *ngFor="let product of kit.products_in_kit">{{product.name}}</li>
                         </ul>
                     </div>
@@ -26,5 +26,21 @@
             </ul>
         </li>
     </ul>
-    
+    <div>
+        <li *ngFor = "let order_custom of custom_order">
+            <ul>
+                <li *ngFor = "let kit of order_custom.kits_in_order">
+                    <div>
+                        <span>Kit Name: </span> {{kit.name}} |
+                        <span>Price: </span> {{kit.price}} |
+                        <button (click)="reRoute()" class = "Recreate">Recreate Kit</button>
+                    </div>
+                    <span class="products-in-kit">Products in Kit: </span>
+                    <ul>
+                        <li *ngFor = "let product of kit.products_in_kit">{{product.name}}</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </div>
 </ul>

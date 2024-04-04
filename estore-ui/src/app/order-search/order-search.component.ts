@@ -7,6 +7,7 @@ import { Observable, Subject, debounceTime, distinctUntilChanged, forkJoin, map,
 import { Kit } from '../kit';
 import { MessageService } from '../message.service';
 import { ShoppingCartService } from '../shopping-cart.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-search',
@@ -16,13 +17,13 @@ import { ShoppingCartService } from '../shopping-cart.service';
 export class OrderSearchComponent {
 
   constructor(private orderService: OrdersService, private kitService : KitService, 
-    private productService : ProductService, private messageService : MessageService, private shoppingCartService : ShoppingCartService) {
+    private productService : ProductService, private messageService : MessageService, private shoppingCartService : ShoppingCartService, private router: Router) {
       const username = localStorage.getItem('username');
       if (username) {
         this.user = username; 
       }
   }
-
+  custom_order: Order[] = []
   orders: Order[] = [];
   user : string = '';
 
@@ -79,6 +80,10 @@ export class OrderSearchComponent {
         console.error('Error adding item to cart:', err);
       }
     });
+  }
+
+  reRoute(): void {
+    this.router.navigate (['/custom']);
   }
 
 }
