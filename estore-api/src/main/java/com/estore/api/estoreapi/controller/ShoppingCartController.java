@@ -1,13 +1,10 @@
 package com.estore.api.estoreapi.controller;
+import com.estore.api.estoreapi.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.estore.api.estoreapi.model.Kit;
-import com.estore.api.estoreapi.model.ShoppingCart;
 import com.estore.api.estoreapi.persistence.KitDAO;
-import com.estore.api.estoreapi.model.ShoppingCartKit;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +35,6 @@ public class ShoppingCartController {
      * Constructs a ShoppingCartController with the specified kit DAO and shopping cart.
      * 
      * @param kitDao the DAO responsible for kit operations
-     * @param shoppingCart the shopping cart for the current user session
      */
     public ShoppingCartController(KitDAO kitDao) {
         this.kitDao = kitDao;
@@ -144,6 +140,28 @@ public class ShoppingCartController {
     }
 
     /**
+     * Get the full data of the kits in the shopping cart, including products in kit
+     * @param userId the user's id number
+     *
+     * @return A ResponseEntity containing a map of kits to their quantities in the cart and the HTTP status code.
+     * @throws IOException if an I/O error occurs during kit retrieval.
+     */
+    @GetMapping("/fullkits/{userId}")
+    public ResponseEntity<ArrayList<Kit>> getFullCartKits(@PathVariable Integer userId) throws IOException {
+        LOG.info("GET /carts/fullkits/" + userId);
+        ShoppingCart shoppingCart = getShoppingCartForUser(userId);
+        Map<Kit, Integer> cartItems = shoppingCart.getKits();
+
+        ArrayList<Kit> shoppingCartItems = new ArrayList<>();
+        for (Map.Entry<Kit, Integer> entry : cartItems.entrySet()) {
+            Kit kit = entry.getKey();
+            shoppingCartItems.add(new Kit(kit.getId(), kit.getName(), kit.getPrice(), entry.getValue(), kit.getProductsInKit()));
+        }
+
+        return new ResponseEntity<>(shoppingCartItems, HttpStatus.OK);
+    }
+
+    /**
     * Calculates and returns the total cost of all kits currently in the shopping cart.
     * This endpoint allows the client to view the total cost of the items in the cart.
     * 
@@ -156,5 +174,19 @@ public class ShoppingCartController {
         ShoppingCart shoppingCart = getShoppingCartForUser(userId);
         float totalCost = shoppingCart.getTotalCost();
         return new ResponseEntity<>(totalCost, HttpStatus.OK);
+    }
+
+    /**
+     * Clear the user's cart to become empty after purchasing their shopping cart
+     * @param userId the user's id number
+     * @return ResponseEntity representing the result of the operation
+     */
+    @DeleteMapping("/clear/{userId}")
+    public ResponseEntity<Void> clearCart(@PathVariable Integer userId) {
+        LOG.info("DELETE /cart/clear/" + userId);
+        ShoppingCart shoppingCart = getShoppingCartForUser(userId);
+        shoppingCart.clearCart();
+        userCarts.put(userId, shoppingCart);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
