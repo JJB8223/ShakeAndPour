@@ -5,8 +5,8 @@
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
-  display: flex; /* Set display to flex */
-  flex-direction: column; /* Arrange items vertically */
+  display: flex; 
+  flex-direction: column; 
   width : 10%
 }
 
