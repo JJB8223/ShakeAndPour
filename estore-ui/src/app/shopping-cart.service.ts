@@ -1,12 +1,12 @@
 import { Injectable, numberAttribute } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MessageService } from './message.service';
 import { Kit } from './kit';
 import { Order } from './order';
 import { KitMap } from './kit-map';
 import{UserService} from './user.service';
-import { Observable, catchError, tap, of, switchMap, mergeMap, map} from 'rxjs';
+import { Observable, catchError, tap, of, switchMap, mergeMap, map, throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -118,6 +118,11 @@ export class ShoppingCartService {
   private log(message: string) {
     this.messageService.add(`ProductService: ${message}`);
     console.log(message)
+  }
+
+  private handleErrorAlert<T>(message: string){
+    alert(message)
+    return "Not enough" as T;
   }
 
   /** Error Handling helper method */
