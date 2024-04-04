@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { Kit } from './kit';
 import { Order } from './order';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { MessageService } from './message.service';
 import { UserService } from './user.service';
 
@@ -23,17 +23,21 @@ export class OrdersService {
       );
   }
 
-  createOrder(): Observable<any> {
-    return this.http.post(this.ordersUrl + "create", null);
-  }
 
   constructor(private http : HttpClient, private messageService : MessageService, private userService : UserService) { }
 
-  addOrders(newOrder: Order): Observable<Order> {
-    return this.http.post<Order>(this.ordersUrl + "create", newOrder, this.httpOptions).pipe(
-      tap((newOrdered: Order) => this.log(`added new order to history with ID ${newOrdered.id}`)),
-      catchError(this.handleError<Order>('addOrder'))
-    )
+  createOrder(kitmap: Kit[]): Observable<Order> {
+    const username = this.userService.getUsername();
+    this.log(JSON.stringify(kitmap))
+    const params = new HttpParams()
+        .set('username', username)
+        .set('kitsJson', JSON.stringify(kitmap));
+
+    const order_url = `${this.ordersUrl}/create`;
+     return this.http.post<Order>(order_url, params).pipe(
+      tap(order => console.log("Order Created Successfully:", order)),
+      catchError(this.handleError<Order>('createOrder'))
+     );
   }
 
 

@@ -7,6 +7,9 @@ import { Observable, forkJoin, map, switchMap } from 'rxjs';
 import { KitService } from '../kits.service';
 import { ProductService } from '../product.service';
 import { ShoppingCartService } from '../shopping-cart.service';
+import { Kit } from '../kit';
+import {Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-orders',
@@ -15,8 +18,11 @@ import { ShoppingCartService } from '../shopping-cart.service';
 })
 export class OrdersComponent {
   orders : Order[] = [];
+  myOrders: Order[] = [];
+  custom_order: Order[] = [];
   user : string = ''
-  constructor(private orderService : OrdersService, private userService : UserService, private kitService : KitService, private productService : ProductService, private shoppingCartService: ShoppingCartService) {
+  constructor(private orderService : OrdersService, private userService : UserService, private kitService : KitService, private productService : ProductService, private shoppingCartService: ShoppingCartService,
+              private router: Router) {
     const username = localStorage.getItem('username');
     if (username) {
       this.user = username; 
@@ -25,6 +31,11 @@ export class OrdersComponent {
 
   ngOnInit() {
     this.getOrders();
+    console.log(this.myOrders)
+  }
+
+  reRoute(): void {
+    this.router.navigate (['/custom']);
   }
 
   getSpecificKit(id : number) {
@@ -33,7 +44,7 @@ export class OrdersComponent {
   );
   }
 
-  getOrders() : void {
+  getOrders(): void {
     this.orderService.getOrders(this.user)
       .subscribe(orders => {
         orders.forEach(order => {
@@ -44,8 +55,12 @@ export class OrdersComponent {
               kit.products_in_kit = products;
             });
           });
+          if (order.kits_in_order.some(kit => kit.id > 1000)) {
+            this.myOrders.push(order); // Add the entire order to otherArray
+          }
         });
-        this.orders = orders;
+        this.orders = orders.filter(order => order.kits_in_order.every(kit => kit.id <= 1000));
+        this.custom_order = this.myOrders
       });
   }
 
