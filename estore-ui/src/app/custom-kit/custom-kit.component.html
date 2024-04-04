@@ -8,13 +8,11 @@
 </ul>
 
 <form>
-    <form>
-        <label for="name-field">Kit Name</label>
-        <input type="text" #addedName id="name-field"/><br>
-        <label for="product-ids">Product IDs (separate with commas):</label>
-        <input type="text" #addedProductIDs id="product-ids"/><br>
-        <button (click) = "addKit(addedName.value,  addedProductIDs.value)">Purchase Kit</button>
-      </form>
+    <label for="name-field">Kit Name</label>
+    <input type="text" [(ngModel)]="kitName" name="kitName" id="name-field"/><br>
+    <label for="product-ids">Product IDs (separate with commas):</label>
+    <input type="text" [(ngModel)]="productIDs" name="productIDs" id="product-ids"/><br>
+    <button type="button" (click)="addKit(kitName, productIDs)">Purchase Kit</button>
 </form>
 
 

@@ -20,6 +20,8 @@ export class CustomKitComponent {
   products: Product[] = [];
   product_recieved : Product = {} as Product;
   customizedKit: Kit = {} as Kit;
+  kitName: string = '';
+  productIDs: string = '';
 
   constructor(private productService: ProductService, private orderService: OrdersService, private user: UserService) { }
 
@@ -58,7 +60,10 @@ export class CustomKitComponent {
     this.orderService.createOrder(add_to_order)
       .subscribe(
         response => {
+          alert("Purchased kit.");
           console.log('Purchased kit')
+          this.kitName = '';
+          this.productIDs = '';
         }
       )
   }
