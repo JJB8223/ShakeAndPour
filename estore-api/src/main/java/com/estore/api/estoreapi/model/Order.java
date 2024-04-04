@@ -104,7 +104,6 @@ public class Order {
                 hasMatchingKit = true; 
             }
         }
-
         return hasMatchingKit;
     }
 

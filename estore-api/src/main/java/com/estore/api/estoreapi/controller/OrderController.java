@@ -96,7 +96,7 @@ public class OrderController {
      */
     @GetMapping("/{name}/")
     public ResponseEntity<Order[]> searchOrders(@PathVariable String name, @RequestParam String user) {
-        LOG.info("GET /orders/" + name + "?user=" + user);
+        LOG.info("GET /orders/" + name + "/?user=" + user);
         try {
             Order[] orders = orderDao.findOrders(name, user);
             return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -117,9 +117,9 @@ public class OrderController {
      * 
      * @throws IOException if error occurs trying to get any Orders
      */
-    @GetMapping("/{user}")
-    public ResponseEntity<Order[]> getOrders(@PathVariable String user) {
-        LOG.info("GET /orders/" + user);
+    @GetMapping("/")
+    public ResponseEntity<Order[]> getOrders(@RequestParam String user) {
+        LOG.info("GET /orders/?user=" + user);
         try {
             Order[] orders = orderDao.getOrders(user);
             return new ResponseEntity<>(orders, HttpStatus.OK);

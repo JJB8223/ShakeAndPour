@@ -19,6 +19,7 @@ import { UserComponent } from './user/user.component';
 import { RegisterComponent } from './register/register.component';
 import { OrdersComponent } from './orders/orders.component';
 import { CustomKitComponent } from './custom-kit/custom-kit.component';
+import { OrderSearchComponent } from './order-search/order-search.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { CustomKitComponent } from './custom-kit/custom-kit.component';
     KitsDisplayComponent,
     RegisterComponent,
     OrdersComponent,
-    CustomKitComponent
+    CustomKitComponent,
+    OrderSearchComponent
   ],
   imports: [
     BrowserModule,
