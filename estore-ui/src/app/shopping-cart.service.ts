@@ -97,8 +97,18 @@ export class ShoppingCartService {
 
   purchaseCart(): Observable<any> {
      return this.getFullShoppingCart().pipe(
-         switchMap(kit => this.createOrder(kit)),
-         switchMap(order => this.clearCart()),
+
+         switchMap(kit => {
+            if (kit.length === 0) {
+              alert("Nothing to Purchase!");
+              return of([]);
+            }
+            return this.createOrder(kit).pipe(
+                     switchMap(order => this.clearCart())
+                   );
+
+
+         }),
          catchError(this.handleError<any>('purchaseCart'))
 
        );

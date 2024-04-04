@@ -62,10 +62,14 @@ export class ShoppingCartComponent {
   purchaseCart(): void {
     this.shoppingCartService.purchaseCart().subscribe(
       response => {
-        console.log("Order Created Successfully!");
+      if (response && response.length === 0){
+        console.log("Shopping Cart is empty!");
+      }
+      else{
         alert("Shopping Cart Purchased!");
         this.getShoppingCart();
         this.getTotalCost();
+      }
       },
       error => {
         console.error("Error occurred while purchasing cart:", error);
