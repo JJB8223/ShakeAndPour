@@ -30,7 +30,7 @@ export class OrdersService {
   constructor(private http : HttpClient, private messageService : MessageService, private userService : UserService) { }
 
   addOrders(newOrder: Order): Observable<Order> {
-    return this.http.post<Order>(`${this.ordersUrl}/create`, newOrder, this.httpOptions).pipe(
+    return this.http.post<Order>(this.ordersUrl + "create", newOrder, this.httpOptions).pipe(
       tap((newOrdered: Order) => this.log(`added new order to history with ID ${newOrdered.id}`)),
       catchError(this.handleError<Order>('addOrder'))
     )
