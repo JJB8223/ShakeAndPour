@@ -60,8 +60,7 @@ public class ShoppingCartController {
                 if (kit.getQuantity() > 0) {
                     int prevQuantity = kit.getQuantity();
                     if ((prevQuantity - quantity) < 0) {
-                        shoppingCart.addKit(kit, prevQuantity);
-                        kit.setQuantity(0);
+                        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                     } else {
                         shoppingCart.addKit(kit, quantity);
                         kit.setQuantity(prevQuantity - quantity);
@@ -69,7 +68,7 @@ public class ShoppingCartController {
                     kitDao.updateKit(kit);
                     return new ResponseEntity<>(HttpStatus.OK);
                 } else {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);

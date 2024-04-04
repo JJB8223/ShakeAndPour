@@ -1,9 +1,9 @@
 import { Injectable, numberAttribute } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 import { Kit } from './kit';
 import { KitMap } from './kit-map';
-import { Observable, catchError, tap, of} from 'rxjs';
+import { Observable, catchError, tap, of, throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +19,15 @@ export class ShoppingCartService {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
   
+  
   addToShoppingCart(id: number, quantity: number): Observable<any> {
     const url = `http://localhost:8080/cart/add/${id}/${quantity}`;
     console.log(url); // Check the constructed URL
     return this.http.post<any>(url, null).pipe(
-        tap((response) => console.log('Item added to the shopping cart successfully:', response))
+      tap((response) => console.log('Item added to the shopping cart successfully:', response)), 
     );
   }
+
 
   removeItem(id: number, quantity: number): Observable<any> {
       const url = `http://localhost:8080/cart/remove/${id}/${quantity}`;
@@ -55,6 +57,11 @@ export class ShoppingCartService {
   private log(message: string) {
     this.messageService.add(`ProductService: ${message}`);
     console.log(message)
+  }
+
+  private handleErrorAlert<T>(message: string){
+    alert(message)
+    return "Not enough" as T;
   }
 
   /** Error Handling helper method */
