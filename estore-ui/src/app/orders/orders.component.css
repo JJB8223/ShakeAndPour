@@ -1,6 +1,50 @@
-.products-in-kit::before {
-    content: '• '; /* Unicode character for bullet */
-    display: inline-block;
-    margin-right: 5px; /* Adjust spacing as needed */
-  }
-  
+.order-item {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 10%;
+}
+
+.order-info {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.order-label {
+  color: #333;
+}
+
+.order-value {
+  color: #777;
+}
+
+.kit-item {
+  margin-top: 15px;
+}
+
+.kit-label {
+  color: #333;
+}
+
+.kit-value {
+  color: #777;
+}
+
+.products-in-kit {
+  margin-top: 10px;
+}
+
+.product-label {
+  color: #333;
+}
+
+.product-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.product-list li {
+  color: #777;
+}

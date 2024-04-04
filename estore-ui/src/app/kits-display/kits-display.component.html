@@ -1,10 +1,12 @@
 <app-kit-search></app-kit-search>
-<h1>Kits Avaliable</h1>
+<h1>Kits Available</h1>
 <ul class="kits-display">
-    <li *ngFor="let kit of kits">
-        <span>Kit Name: </span> {{kit.name}} | 
-        <span>Price: </span> {{kit.price}} | 
-        <span>Products in Kit: </span> {{kit.products_in_kit}}
-        <button (click)="addToShoppingCart(kit.id, 1)">Add to Cart</button>
+    <li *ngFor="let kit of kits" class="kit-item">
+        <div class="kit-details">
+            <span class="kit-label">Kit Name: </span><span class="kit-value">{{kit.name}}</span> |
+            <span class="kit-label">Price: </span><span class="kit-value">{{kit.price}}</span> |
+            <span class="kit-label">Products in Kit: </span><span class="kit-value">{{kit.products_in_kit}}</span>
+        </div>
+        <button (click)="addToShoppingCart(kit.id, 1)" class="add-to-cart">Add to Cart</button>
     </li>
 </ul>

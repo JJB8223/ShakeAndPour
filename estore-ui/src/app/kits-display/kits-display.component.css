@@ -1,0 +1,54 @@
+h1 {
+  margin-top: 3%;
+}
+
+.kit-item {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex; 
+    flex-direction: column; 
+    width: 10%;
+  }
+  
+  .kit-details {
+    margin-bottom: 10px;
+  }
+  
+  .kit-label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .kit-value {
+    color: #777;
+  }
+  
+  .add-to-cart {
+    background-color: #eee;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: black;
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    margin-top: 10px;
+  }
+  
+  .add-to-cart:hover {
+    background-color: #435A60;
+    color: white;
+  }
+  
+  input {
+    padding: .5rem;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+    display: block;
+  }
+  
+  input:focus {
+    outline: #336699 auto 1px;
+  }

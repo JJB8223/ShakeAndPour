@@ -2,20 +2,21 @@
 <app-order-search></app-order-search>
 <h1>Order History</h1>
 <ul class="orders">
-    <li *ngFor="let order of orders">
-        <div>
-            <span>Order Number: </span>{{order.id}}
+    <li *ngFor="let order of orders" class="order-item">
+        <div class="order-info">
+            <span class="order-label">Order Number:</span> <span class="order-value">{{order.id}}</span>
         </div>
-        <ul>
-            <li *ngFor="let kit of order.kits_in_order">
+        <ul class="kits-list">
+            <li *ngFor="let kit of order.kits_in_order" class="kit-item">
                 <div>
-                    <span>Kit Name: </span>{{kit.name}} |
-                    <span>Price: </span>{{kit.price}} |
+                    <span class="kit-label">Kit Name:</span> <span class="kit-value">{{kit.name}}</span> |
+                    <span class="kit-label">Price:</span> <span class="kit-value">{{kit.price}}</span>
+
                     <button (click)="addKitToShoppingCart(kit.id, 1)">Add Kit to Cart</button>
                 </div>
-                <div>
-                    <span class="products-in-kit">Products in Kit: </span>
-                    <ul>
+                <div class="products-in-kit">
+                    <span class="product-label">Products in Kit:</span>
+                    <ul class="product-list">
                         <li *ngFor="let product of kit.products_in_kit">{{product.name}}</li>
                     </ul>
                 </div>
