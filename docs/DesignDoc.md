@@ -62,7 +62,7 @@ The MVP consists of a basic login system to allow users and an admin to log into
 
 This section describes the application domain.
 
-![Domain Model](sprint-3-domain-analysis.png)
+![Domain Model](sprint-3-domain-analysis.drawio.png)
 
 Owner: This entity represents the individual or group responsible for managing the e-store. They have administrative access, enabling them to add, remove, and edit inventory items, including both products and kits.
 
