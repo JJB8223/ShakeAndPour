@@ -177,32 +177,6 @@ public class ShoppingCartController {
     }
 
     /**
-     * Purchase the user's shopping cart of kits
-     * @return an array list of all the kits that are being purchased OR
-     * NOT FOUND if nothing is in the cart
-     */
-    @PostMapping("/purchase")
-    public ResponseEntity<ArrayList<Kit>> purchaseCart(@RequestParam int userID) {
-        LOG.info("POST /cart/purchase?userid=" + userID);
-
-        ShoppingCart user_cart = userCarts.get(userID);
-        Map<Kit, Integer> user_kits = user_cart.getKits();
-
-        if(user_kits.isEmpty()){
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-
-        ArrayList<Kit> shoppingCartItems = new ArrayList<>();
-        for (Map.Entry<Kit, Integer> entry : user_kits.entrySet()) {
-            Kit kit = entry.getKey();
-            shoppingCartItems.add(kit);
-        }
-
-        return new ResponseEntity<>(shoppingCartItems, HttpStatus.OK);
-
-    }
-
-    /**
      * Clear the user's cart to become empty after purchasing their shopping cart
      * @param userId the user's id number
      * @return ResponseEntity representing the result of the operation
