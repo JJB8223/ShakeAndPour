@@ -12,7 +12,7 @@ h1 {
   }
   body {
     margin: 2em;
-    background-color: #fFFDD0;
+    background-color: #c8e8f5; /*#fFFDD0 cream*/
   }
   body, input[type="text"], button {
     color: #333;
