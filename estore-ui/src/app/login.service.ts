@@ -66,6 +66,8 @@ export class LoginService {
     private handleError<T>(operation = 'operation', result?: T) {
       return (error: any): Observable<T> => {
 
+        alert("Login failed. Please check your credentials and try again.");
+
         // TODO: send the error to remote logging infrastructure
         console.error(error); // log to console instead
 
