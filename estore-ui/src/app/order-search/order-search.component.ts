@@ -25,45 +25,36 @@ export class OrderSearchComponent {
   orders: Order[] = [];
   user : string = '';
 
-  orders$!: Observable<Order[]>;
-  private searchKeywords = new Subject<string>();
-
-  ngOnInit() {
-    this.orders$ = this.searchKeywords.pipe(
-      // wait 300ms after the user types to prevent unnecessary requests and lag
-      debounceTime(300),
-
-      // ignore if the searchbar isn't changed
-      distinctUntilChanged(),
-      // switch to new search observable each time the term changes
-      switchMap((term: string) => this.orderService.searchOrders(term, this.user)),
-    );
-    /* .pipe(
-      function to display kit name
-
-        switchMap(kits => {
-          const productObservables = kits.map(kit => {
-            const observables = kit.products_in_kit.map(productId =>
-              this.getSpecificProduct(productId)
-            );
-            return forkJoin(observables).pipe(
-              map(productNames => {
-                kit.products_in_kit = productNames;
-                return kit;      // Do something with each kit and its corresponding quantity
-              })
-            );
-          });
-          return forkJoin(productObservables);
-        })
-      )*/
-  }
-
-  // add a search term to the searchKeywords stream
+  // get all orders the currently logged in user has made, then filter based on the entered search term
   search(term: string): void {
-    this.searchKeywords.next(term);
-    this.messageService.add(`attempting to search with term ${term}`);
-    this.messageService.add(`Orders:${this.orders}`);
-    this.messageService.add(`Search results:${this.orderService.searchOrders('Kit', this.user)}`);
+    debounceTime(300); // delaying for 300 milliseconds to avoid unnecessary API calls
+
+    this.orderService.getOrders(this.user)
+      .subscribe(orders => {
+
+        let finalOrders : Order[] = [] // this array contains the orders that will ultimately be displayed based on the filter results
+        orders.forEach(order => {
+          let addOrder : boolean = false; // this indicates whether we ultimately add this order to the search results
+
+          order.kits_in_order.forEach(kit => {
+
+            let lowercaseName: string = kit.name.toLowerCase();
+            if (lowercaseName.includes(term.toLowerCase())) {  // checking if this kit contains the entered search terms
+              addOrder = true; // if the kit contains the entered search terms, the order is added to the search results
+            }
+
+            const productObservables = kit.products_in_kit.map((productId: number) =>
+            this.productService.getProduct(productId));
+            forkJoin(productObservables).subscribe(products => {
+              kit.products_in_kit = products;
+            });
+          });
+          if (addOrder) { // checking if this order contained kits with the entered search terms
+            finalOrders.push(order);
+          }
+        });
+        this.orders = finalOrders;
+      });
   }
 
 }
