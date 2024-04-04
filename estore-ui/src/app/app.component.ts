@@ -13,13 +13,7 @@ export class AppComponent {
   constructor(
   private router: Router,
   private loginService: LoginService
-  ) {
-    this.ngOnInit();
-  }
-
-    ngOnInit(): void {
-      this.loginService.logout();
-    }
+  ) {}
 
     // Method to check if the current user is an admin
     isAdmin(): boolean {
