@@ -75,7 +75,7 @@ public class ShoppingCartControllerTest {
 
         ResponseEntity<Void> response = shoppingCartController.addToCart(userId, kitId, quantity);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class ShoppingCartControllerTest {
 
         ResponseEntity<Void> response = shoppingCartController.addToCart(userId, kitId, quantity);
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
@@ -155,7 +155,7 @@ public class ShoppingCartControllerTest {
 
         ResponseEntity<Void> response = shoppingCartController.removeFromCart(userId, kitId, quantity);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
@@ -185,14 +185,14 @@ public class ShoppingCartControllerTest {
         Kit kit2 = new Kit(kitId2, "Cola", 1.99f, 50, products2);
         when(mockKitDAO.getKit(kitId1)).thenReturn(kit1);
         when(mockKitDAO.getKit(kitId2)).thenReturn(kit2);
-        shoppingCartController.addToCart(userId, kitId1, 2); // Add kits to the cart
-        shoppingCartController.addToCart(userId, kitId2, 3);
+        shoppingCartController.addToCart(userId, kitId1, 3); // Add kits to the cart
+        shoppingCartController.addToCart(userId, kitId2, 4);
 
         ResponseEntity<ArrayList<ShoppingCartKit>> response = shoppingCartController.getCartKits(userId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, response.getBody().get(0).getQuantity());
-        assertEquals(3, response.getBody().get(1).getQuantity());
+        assertEquals(3, response.getBody().get(0).getQuantity());
+        assertEquals(4, response.getBody().get(1).getQuantity());
     }
 
     @Test

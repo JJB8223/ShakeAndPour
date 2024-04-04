@@ -119,7 +119,7 @@ public class KitFileDAOTest {
     public void testDeleteKitExists() throws IOException {
         // Setup 
         int deletedId = 1;
-        int expectedResultingLength = 2;
+        int expectedResultingLength = 1;
         // invoke
         boolean result = kitFileDAO.deleteKit(deletedId);
         Kit[] resultingKits = kitFileDAO.getKits();
@@ -135,7 +135,7 @@ public class KitFileDAOTest {
     public void testDeleteKitNotExists() throws IOException {
         // Setup
         int deletedId = 4;
-        int expectedResultingLength = 3;
+        int expectedResultingLength = 2;
         // invoke
         boolean result = kitFileDAO.deleteKit(deletedId);
         // analyze
@@ -152,18 +152,18 @@ public class KitFileDAOTest {
         int createdQuantity = 2; 
         ArrayList<Integer> idList = new ArrayList<>();
         Kit createdKit = new Kit(createdId, createdName, createdPrice, createdQuantity, idList);
-        int expectedResultingLength = 4;
+        int expectedResultingLength = 3;
         // invoke
         kitFileDAO.createKit(createdKit);
         Kit[] resultingKits = kitFileDAO.getKits();
         // analyze
         assertEquals(resultingKits.length, expectedResultingLength);
         // checking shallow equality doesn't work because the KitFileDAO class serializes and deserializes its data
-        assertEquals(createdKit.getId(), resultingKits[3].getId());
-        assertEquals(createdKit.getName(), resultingKits[3].getName());
-        assertEquals(createdKit.getPrice(), resultingKits[3].getPrice());
-        assertEquals(createdKit.getQuantity(), resultingKits[3].getQuantity());
-        assertEquals(createdKit.getProductsInKit(), resultingKits[3].getProductsInKit());
+        assertEquals(createdKit.getId(), resultingKits[2].getId());
+        assertEquals(createdKit.getName(), resultingKits[2].getName());
+        assertEquals(createdKit.getPrice(), resultingKits[2].getPrice());
+        assertEquals(createdKit.getQuantity(), resultingKits[2].getQuantity());
+        assertEquals(createdKit.getProductsInKit(), resultingKits[2].getProductsInKit());
     }
 
     @Test

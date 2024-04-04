@@ -93,7 +93,7 @@ public class InventoryFileDAO  implements InventoryDAO{
         ArrayList<Product> inventoryArrayList = new ArrayList<>();
 
         for (Product p : inventory.values()){
-            if (containsText == null || p.getName().contains(containsText)){
+            if ((containsText == null || p.getName().contains(containsText)) && p.getQuantity() >= 1){
                 inventoryArrayList.add(p);
             }
         }
