@@ -16,7 +16,7 @@ export class OrdersService {
   }
   
   getOrders(user : string): Observable<Order[]> {
-    return this.http.get<Order[]>(this.ordersUrl + user)
+    return this.http.get<Order[]>(`${this.ordersUrl}?user=${user}`)
       .pipe(
         tap(_ => this.log('fetched Orders')),
         catchError(this.handleError<Order[]>('getOrders', []))
