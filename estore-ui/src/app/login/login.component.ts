@@ -32,11 +32,13 @@ export class LoginComponent {
       this.loginService.login(username, password).subscribe({
           next: (response) => {
               // Assuming response.userType tells if the user is an admin or a regular user
-              if (response.userType === 'admin') {
+              if (response) {
+                if (response.userType === 'admin') {
                   this.router.navigateByUrl('/admin');
               } else if (response.userType === 'user') {
                   this.userService.setUsername(username);
                   this.router.navigateByUrl('/user');
+              } 
               } else {
                   // Handle unexpected userType
                   console.error('Unexpected user type received', response);
