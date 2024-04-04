@@ -6,6 +6,7 @@ import { Order } from '../order';
 import { Observable, Subject, debounceTime, distinctUntilChanged, forkJoin, map, switchMap } from 'rxjs';
 import { Kit } from '../kit';
 import { MessageService } from '../message.service';
+import { ShoppingCartService } from '../shopping-cart.service';
 
 @Component({
   selector: 'app-order-search',
@@ -15,7 +16,7 @@ import { MessageService } from '../message.service';
 export class OrderSearchComponent {
 
   constructor(private orderService: OrdersService, private kitService : KitService, 
-    private productService : ProductService, private messageService : MessageService) {
+    private productService : ProductService, private messageService : MessageService, private shoppingCartService : ShoppingCartService) {
       const username = localStorage.getItem('username');
       if (username) {
         this.user = username; 
@@ -55,6 +56,29 @@ export class OrderSearchComponent {
         });
         this.orders = finalOrders;
       });
+  }
+
+  addKitToShoppingCart(id: number, quantity: number): void {
+    console.log("This is the number we are adding: " + id);
+    this.shoppingCartService.addKitToShoppingCart(id, quantity).subscribe({
+      next: (response) => {
+        console.log('Response from adding to cart:', response);
+      },
+      error: (err) => {
+        console.error('Error adding item to cart:', err);
+      }
+    });
+  }
+
+  addOrderToShoppingCart(id: number): void {
+    this.shoppingCartService.addOrderToShoppingCart(id).subscribe({
+      next: (response) => {
+        console.log('Response from adding to cart:', response);
+      },
+      error: (err) => {
+        console.error('Error adding item to cart:', err);
+      }
+    });
   }
 
 }
