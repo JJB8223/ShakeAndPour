@@ -5,12 +5,14 @@
     <li *ngFor="let order of orders">
         <div>
             <span>Order Number: </span>{{order.id}}
+            <button (click)="addOrderToShoppingCart(order.id)">Add Order to Cart</button>
         </div>
         <ul>
             <li *ngFor="let kit of order.kits_in_order">
                 <div>
                     <span>Kit Name: </span>{{kit.name}} |
                     <span>Price: </span>{{kit.price}} |
+                    <button (click)="addKitToShoppingCart(kit.id, 1)">Add Kit to Cart</button>
                 </div>
                 <div>
                     <span class="products-in-kit">Products in Kit: </span>

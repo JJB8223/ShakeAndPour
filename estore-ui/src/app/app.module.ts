@@ -18,6 +18,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import { UserComponent } from './user/user.component';
 import { RegisterComponent } from './register/register.component';
 import { OrdersComponent } from './orders/orders.component';
+import { CustomKitComponent } from './custom-kit/custom-kit.component';
 import { OrderSearchComponent } from './order-search/order-search.component';
 
 @NgModule({
@@ -37,6 +38,7 @@ import { OrderSearchComponent } from './order-search/order-search.component';
     KitsDisplayComponent,
     RegisterComponent,
     OrdersComponent,
+    CustomKitComponent,
     OrderSearchComponent
   ],
   imports: [

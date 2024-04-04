@@ -1,9 +1,13 @@
 import { Injectable, numberAttribute } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { MessageService } from './message.service';
 import { Kit } from './kit';
+import { Order } from './order';
 import { KitMap } from './kit-map';
-import { Observable, catchError, tap, of} from 'rxjs';
+import { OrdersService } from './orders.service';
+import { UserService } from './user.service';
+import { Observable, catchError, tap, of, forkJoin, switchMap, mergeMap, map, throwError} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +15,13 @@ import { Observable, catchError, tap, of} from 'rxjs';
 export class ShoppingCartService {
 
   constructor(private http: HttpClient,
-              private messageService: MessageService) { }
+              private messageService: MessageService,
+              private orderService: OrdersService,
+              private userService: UserService) { }
 
   // setting the header opitions and url
   private ShoppingCartURL = 'http://localhost:8080/cart';
+  private orderURL = 'http://localhost:8080/orders';
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
@@ -23,14 +30,33 @@ export class ShoppingCartService {
     const userId = localStorage.getItem('userId');
     return userId ? parseInt(userId, 10) : 0;
   }
-  
-  addToShoppingCart(kitId: number, quantity: number): Observable<any> {
+
+  addKitToShoppingCart(kitId: number, quantity: number): Observable<any> {
     const userId = this.getUserId();
     const url = `${this.ShoppingCartURL}/add/${userId}/${kitId}/${quantity}`;
     return this.http.post<any>(url, null, this.httpOptions).pipe(
       tap((response) => console.log('Item added to the shopping cart successfully:', response))
     );
   }
+
+  addOrderToShoppingCart(orderId: number): Observable<any> {
+    return this.orderService.getOrderById(orderId).pipe(
+      tap(order => {
+        if (order) {
+          order.kits_in_order.forEach(kit => {
+            this.addKitToShoppingCart(kit.id, 1).subscribe(
+              () => {},
+              error => console.error('Error adding kit to cart:', error)
+            );
+          });
+          console.log('All kits added to cart');
+        } else {
+          console.error('Order not found:', orderId);
+        }
+      })
+    );
+  }
+                
 
   removeItem(kitId: number, quantity: number): Observable<any> {
     const userId = this.getUserId();
@@ -44,9 +70,18 @@ export class ShoppingCartService {
     const userId = this.getUserId();
     const url = `${this.ShoppingCartURL}/${userId}`;
     return this.http.get<KitMap[]>(url, this.httpOptions).pipe(
-      tap(_ => this.log('fetched shopping cart')),
+      tap(_ => console.log('fetched shopping cart')),
       catchError(this.handleError<KitMap[]>('getShoppingCart'))
     );
+  }
+
+  getFullShoppingCart(): Observable<Kit[]> {
+      const userId = this.getUserId();
+      const url = `${this.ShoppingCartURL}/fullkits/${userId}`;
+      return this.http.get<Kit[]>(url, this.httpOptions).pipe(
+        tap(_ => console.log('fetched shopping cart')),
+        catchError(this.handleError<Kit[]>('getShoppingCart'))
+      );
   }
 
   getTotalCost(): Observable<any> {
@@ -58,10 +93,57 @@ export class ShoppingCartService {
     );
   }
 
+  createOrder(kitmap: Kit[]): Observable<Order> {
+    const username = this.userService.getUsername();
+    this.log(JSON.stringify(kitmap))
+    const params = new HttpParams()
+        .set('username', username)
+        .set('kitsJson', JSON.stringify(kitmap));
+
+    const order_url = `${this.orderURL}/create`;
+     return this.http.post<Order>(order_url, params).pipe(
+      tap(order => console.log("Order Created Successfully:", order)),
+      catchError(this.handleError<Order>('createOrder'))
+     );
+  }
+
+  clearCart(): Observable<any> {
+    const userId = this.getUserId();
+        const delete_url = `${this.ShoppingCartURL}/clear/${userId}`;
+    return this.http.delete<any>(delete_url, this.httpOptions).pipe(
+       tap(_ => this.log('Cart Has Been Cleared')),
+           catchError(this.handleError<void>('getTotalCost'))
+     );
+  }
+
+  purchaseCart(): Observable<any> {
+     return this.getFullShoppingCart().pipe(
+
+         switchMap(kit => {
+            if (kit.length === 0) {
+              alert("Nothing to Purchase!");
+              return of([]);
+            }
+            return this.createOrder(kit).pipe(
+                     switchMap(order => this.clearCart())
+                   );
+
+
+         }),
+         catchError(this.handleError<any>('purchaseCart'))
+
+       );
+  }
+
   /** A logging helper method */
   private log(message: string) {
     this.messageService.add(`ProductService: ${message}`);
     console.log(message)
+  }
+
+  private handleErrorAlert<T>(message: string){
+    alert(message)
+    return "Not enough" as T;
   }
 
   /** Error Handling helper method */

@@ -1,0 +1,1 @@
+ALTER USER mySonarUser SET search_path to mySonarQubeSchema

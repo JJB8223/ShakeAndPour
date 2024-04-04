@@ -1,7 +1,10 @@
 package com.estore.api.estoreapi.persistence;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.estore.api.estoreapi.model.Kit;
 import com.estore.api.estoreapi.model.Order;
 
 /**
@@ -22,7 +25,7 @@ public interface OrderDAO {
      *
      * @throws IOException if an issue with underlying storage
      */
-    Order createOrder(Order order) throws IOException;
+    Order createOrder(String username, ArrayList<Kit> kits) throws IOException;
 
     /**
      * Finds all {@linkplain Order Orders} that contain kits with names that contain the given text that were

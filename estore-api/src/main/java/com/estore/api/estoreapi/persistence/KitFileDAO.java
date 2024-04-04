@@ -86,7 +86,7 @@ public class KitFileDAO implements KitDAO{
         ArrayList<Kit> inventoryArrayList = new ArrayList<>();
 
         for (Kit k : inventory.values()){
-            if (containsText == null || k.getName().contains(containsText)){
+            if ((containsText == null || k.getName().contains(containsText)) && k.getQuantity() != 0){
                 inventoryArrayList.add(k);
             }
         }

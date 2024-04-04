@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { Kit } from './kit';
 import { Order } from './order';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdersService {
   ordersUrl : string = "http://localhost:8080/orders/"
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  }
   
   getOrders(user : string): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.ordersUrl}?user=${user}`)
@@ -19,26 +23,32 @@ export class OrdersService {
       );
   }
 
-  searchOrders(term: string, user : string): Observable<Order[]> {
-    if (!term.trim()) {
-      // if not search term, return empty Kit array.
-      return of([]);
-    }
-    let url: string = `${this.ordersUrl}${term}/?user=${user}`;
-    this.log(`Request url: ${url}`);
-    let response : Observable<Order[]> = this.http.get<Order[]>('http://localhost:8080/orders/Fizzy%20Fussion/?user=dd122903').pipe(
-      tap(x => x.length ?
-        this.log(`found Orders matching "${term}"`) :
-        this.log(`no Orders matching "${term}"`)),
-      catchError(this.handleError<Order[]>('searchOrders', []))
-    );
-    this.log(`${response}`);
-    return response;
+  createOrder(): Observable<any> {
+    return this.http.post(this.ordersUrl + "create", null);
   }
-  constructor(private http : HttpClient, private messageService : MessageService) { }
+
+  constructor(private http : HttpClient, private messageService : MessageService, private userService : UserService) { }
+
+  addOrders(newOrder: Order): Observable<Order> {
+    return this.http.post<Order>(`${this.ordersUrl}/create`, newOrder, this.httpOptions).pipe(
+      tap((newOrdered: Order) => this.log(`added new order to history with ID ${newOrdered.id}`)),
+      catchError(this.handleError<Order>('addOrder'))
+    )
+  }
+
+
 
   private log(message: string) {
-    this.messageService.add(`OrderService: ${message}`);
+    this.messageService.add(`KitService: ${message}`);
+  }
+
+  getOrderById(orderId: number): Observable<Order> {
+    const url = `${this.ordersUrl}getSpecific/${orderId}`;
+    return this.http.get<Order>(url)
+      .pipe(
+        tap(_ => this.log(`fetched order with ID=${orderId}`)),
+        catchError(this.handleError<Order>(`getOrderById id=${orderId}`))
+      );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
