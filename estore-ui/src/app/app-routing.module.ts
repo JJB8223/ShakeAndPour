@@ -10,6 +10,8 @@ import {AdminComponent} from './admin/admin.component';
 import { UserComponent } from './user/user.component';
 import {RegisterComponent} from './register/register.component';
 import { OrdersComponent } from './orders/orders.component';
+import { CustomKitComponent } from './custom-kit/custom-kit.component';
+
 
 const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
@@ -22,7 +24,8 @@ const routes: Routes = [
   { path: 'admin', component: AdminComponent},
   { path: 'user', component: UserComponent },
   { path: 'register', component: RegisterComponent },
-  {path: 'orders', component: OrdersComponent }
+  {path: 'orders', component: OrdersComponent },
+  {path: 'custom', component: CustomKitComponent}
 ];
 
 @NgModule({

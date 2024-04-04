@@ -1,0 +1,22 @@
+<h2>Product Inventory</h2>
+<ul>
+    <li *ngFor="let product of products">
+        <div>
+            Name: {{product.name}},     Price: {{product.price}},   ID: {{product.id}}
+    </div>
+    </li>
+</ul>
+
+<form>
+    <form>
+        <label for="name-field">Kit Name</label>
+        <input type="text" #addedName id="name-field"/><br>
+        <label for="product-ids">Product IDs (separate with commas):</label>
+        <input type="text" #addedProductIDs id="product-ids"/><br>
+        <button (click) = "addKit(addedName.value,  addedProductIDs.value)">Purchase Kit</button>
+      </form>
+</form>
+
+
+
+
