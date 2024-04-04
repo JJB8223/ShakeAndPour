@@ -69,6 +69,7 @@ export class UserComponent implements OnInit {
     })
   }
 
+
   changeName(name: string): void {
     if (!name.trim()) {
       alert('Name cannot be blank');

@@ -2,12 +2,14 @@ package com.estore.api.estoreapi.persistence;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.estore.api.estoreapi.model.Kit;
 import com.estore.api.estoreapi.model.Order;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /**
@@ -134,10 +136,10 @@ public class OrderFileDAO implements OrderDAO {
      * {@inheritDoc}
      */
     @Override
-    public Order createOrder(Order order) throws IOException {
+    public Order createOrder(String username, ArrayList<Kit> kits) throws IOException {
         synchronized(orderHistory) {
             // create new order object, assign the next unique id to it
-            Order newOrder = new Order(nextId(), order.getUser(), order.getKits());
+            Order newOrder = new Order(nextId(), username, kits);
             orderHistory.put(newOrder.getId(), newOrder);
             save();
             return newOrder;
