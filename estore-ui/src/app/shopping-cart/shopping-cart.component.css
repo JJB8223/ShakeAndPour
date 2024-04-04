@@ -14,6 +14,8 @@
   
   .cart-dets {
     flex: 1; 
+    display: flex;
+    flex-direction: column;
   }
   
   .cart-label {
@@ -28,21 +30,22 @@
   
   .cart-but {
     background-color: #eee;
-    border: none;
+    border: 2px solid #369;
     border-radius: 4px;
     cursor: pointer;
     color: black;
-    font-size: 1rem;
+    font-size: 1.5rem;
     padding: 0.5rem 1rem;
     margin-left: 10px;
   }
   
   .cart-but:hover {
-    background-color: #435A60;
+    background-color: #369;
     color: white;
   }
   
   .total-cost {
     font-weight: bold;
     margin-top: 20px; 
+    font-size: 1.3rem;
   }

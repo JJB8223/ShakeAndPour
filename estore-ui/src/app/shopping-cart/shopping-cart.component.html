@@ -2,12 +2,12 @@
 <ul class="shopping-cart">
     <li *ngFor="let kitMap of kitMaps" class="cart-item">
         <div class="cart-dets">
-            <span class="cart-label">Kit Name: </span><span class="cart-val">{{kitMap.name}}</span> | 
-            <span class="cart-label">Quantity: </span><span class="cart-val">{{kitMap.quantity}}</span> |
+            <span class="cart-label">Kit Name: </span><span class="cart-val">{{kitMap.name}}</span>  
+            <span class="cart-label">Quantity: </span><span class="cart-val">{{kitMap.quantity}}</span> 
             <span class="cart-label">Price: </span><span class="cart-val">{{ (kitMap.quantity * kitMap.price).toFixed(2) }}</span>
         </div>
-        <button (click)="removeItem(kitMap.id, 1)" class="cart-btn">-</button>
-        <button (click)="addItem(kitMap.id, 1)" class="cart-btn">+</button>
+        <button (click)="removeItem(kitMap.id, 1)" class="cart-but">-</button>
+        <button (click)="addItem(kitMap.id, 1)" class="cart-but">+</button>
         <button (click)="removeItem(kitMap.id, kitMap.quantity)" class="cart-but">X</button>
     </li>
     <div class="total-cost">
