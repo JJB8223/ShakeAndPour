@@ -62,7 +62,7 @@ The MVP consists of a basic login system to allow users and an admin to log into
 
 This section describes the application domain.
 
-![Domain Model](sprint-3-domain-analysis.drawio.png)
+![Domain Model](domain-analysis.png)
 
 Owner: This entity represents the individual or group responsible for managing the e-store. They have administrative access, enabling them to add, remove, and edit inventory items, including both products and kits.
 
@@ -74,11 +74,21 @@ Product: Individual items for sale, each with its own price. Products can be sol
 
 Kit: A significant addition to the model, a Kit is a bundled group of products sold together at a specific price. Each Kit includes a list of products, making it a convenient option for customers looking for package deals or themed collections.
 
-Customer: Customers are the end-users of the platform, capable of browsing the inventory, adding products and kits to their shopping cart, and making purchases. They interact with the e-store by logging in, searching for items, and checking out.
+Customer: Customers are the end-users of the platform, capable of browsing the inventory, adding kits to their shopping cart, and making purchases. They interact with the e-store by logging in, searching for items, and checking out.
 
 Shopping Cart: The Shopping Cart is an essential component of the online shopping experience, allowing customers to accumulate a list of items they intend to purchase. Updated to include kits, it tracks both individual products and kits, along with the total price.
 
-Payment Method: This entity facilitates the transaction process, offering customers various options to complete their purchases, including Credit Card, Paypal, and Apple Pay.
+Customized Kits: This entity allows customers to create personalized product combinations tailored to their preferences. Customized kits empower users to design and buy kits that contain a selection of products of their choosing, providing a personalized shopping experience.
+
+Order: Represents a completed purchase by a customer. When a shopping cart's contents are finalized and paid for, an Order is generated. This entity captures all relevant details of the transaction, including the customer's information, the purchased items, and the total price.
+
+Order History: This component is a record of all past purchases made by a customer. It enables customers to view their transaction history, track previous orders, and facilitates easy repurchasing of the same products or kits. It provides a valuable reference for both the customer and the business for repurchases, customer service, and order tracking.
+
+Kit List: Contained within a Shopping Cart, the Kit List is a catalog of all the kits that a customer intends to purchase. This list details each kit's contents and price, contributing to the total price calculation for the shopping cart.
+
+Total Kit Price: This is the sum of the prices of all the kits present in a Shopping Cart. It provides a quick reference for customers to know how much the kits will cost as part of their overall purchase before final checkout.
+
+Product List: An attribute of the Kit entity, the Product List outlines all the individual products included within a kit. It serves to detail what customers will receive when purchasing a kit, ensuring transparency and allowing customers to verify the contents before making a decision.
 
 
 ## Architecture and Design
