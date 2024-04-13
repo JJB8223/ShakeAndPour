@@ -36,26 +36,38 @@ This product is an e-store for a producer of custom drink kits, also known as a 
 
 This section describes the features of the application.
 
-> _In this section you do not need to be exhaustive and list every
-> story.  Focus on top-level features from the Vision document and
-> maybe Epics and critical Stories._
-
 ### Definition of MVP
 
-The MVP consists of a basic login system to allow users and an admin to log into the e-store. The admin will be able to modify the contents of the inventory, while the user will be able to find, view, and purchase drink kits. All of these actions will be reflected by changes to the data stored on the server.
+The MVP, encompassing a fundamental login system, enables both regular users and an administrator to access the e-store with distinct capabilities. Upon successful login, the admin is empowered to manage the inventory — adding, updating, or removing products and/or drink kits as necessary. Conversely, users are provided with functionalities to browse, search, and select drink kits, which they can then add or remove from their shopping cart to purchase. These interactions, from administrative adjustments to user purchases, are directly mirrored in the server's data files, ensuring persistence and consistency of the e-store's state across sessions. This setup lays the groundwork for a streamlined and user-friendly online shopping environment, prioritizing essential features while setting the stage for future enhancements.
 
 ### MVP Features
->  _**[Sprint 4]** Provide a list of top-level Epics and/or Stories of the MVP._
+
+Epic: Buyer -
+  *View Drink Kits - As a buyer I want to be able to browse drink kits and drinks so that I can purchase drink kits which interest me.
+  *Filter Kits - As a buyer I want to be able to search for a drink kit by name so I can find what I’m looking for quickly.
+  *Buyer Login - As a buyer I want to login to my account so I can view products and make a choice if I want to buy the product or not.
+Epic: Owner/Admin - 
+  *Edit Inventory - As an Owner I want to be able to create, update, and delete items in my inventory to keep the inventory up-to-date.
+  *Login to Admin View - As a admin of my e-store I want to login into my e-store with admin rights so that I have permissions to add, delete, and modify products in my inventory.
+Epic: Cart Management - 
+  *Add Drinks to Cart - As a buyer I want to add drink kits to my shopping cart so I can see what I’m planning to buy.
+  *Remove Drinks from Cart - As a buyer I want to be able to remove drink kits from my shopping cart so I can get rid of things I don’t want anymore.
+  *Purchase Drink Kits in Cart - As a user I want to be able to purchase the drink kits in my shopping cart so I can use them.
 
 ### Enhancements
-> _**[Sprint 4]** Describe what enhancements you have implemented for the project._
 
+The two feature enhancements that we have implemented for this project are customizable drink kits an being able to register an account and view or purchase past orders.
+-Customize Order: The project's introduction of customization options for drink kits is a feature enhancement that significantly enriches the user experience. This feature allows customers to add a personal touch to their purchases by selecting from a variety of customization choices, aligning the product with their individual preferences. E-store owners can now dynamically update and manage these options, providing a responsive and engaging shopping platform that caters to the unique desires of each customer.
+
+-Register User/Order History: With the new registration capability, customers gain the advantage of easily managing their order history and simplifying repeat purchases. Once registered, users can review their past orders and with just a few clicks, either add select items or entire previous orders directly into their shopping cart for repurchase. This not only enhances the shopping experience by making it more efficient but also encourages customer loyalty by recognizing and facilitating their buying preferences.
 
 ## Application Domain
 
 This section describes the application domain.
 
 ![Domain Model](domain-analysis.png)
+
+MVP:
 
 Owner: This entity represents the individual or group responsible for managing the e-store. They have administrative access, enabling them to add, remove, and edit inventory items, including both products and kits.
 
@@ -71,18 +83,19 @@ Customer: Customers are the end-users of the platform, capable of browsing the i
 
 Shopping Cart: The Shopping Cart is an essential component of the online shopping experience, allowing customers to accumulate a list of items they intend to purchase. Updated to include kits, it tracks both individual products and kits, along with the total price.
 
-Customized Kits: This entity allows customers to create personalized product combinations tailored to their preferences. Customized kits empower users to design and buy kits that contain a selection of products of their choosing, providing a personalized shopping experience.
-
-Order: Represents a completed purchase by a customer. When a shopping cart's contents are finalized and paid for, an Order is generated. This entity captures all relevant details of the transaction, including the customer's information, the purchased items, and the total price.
-
-Order History: This component is a record of all past purchases made by a customer. It enables customers to view their transaction history, track previous orders, and facilitates easy repurchasing of the same products or kits. It provides a valuable reference for both the customer and the business for repurchases, customer service, and order tracking.
-
 Kit List: Contained within a Shopping Cart, the Kit List is a catalog of all the kits that a customer intends to purchase. This list details each kit's contents and price, contributing to the total price calculation for the shopping cart.
 
 Total Kit Price: This is the sum of the prices of all the kits present in a Shopping Cart. It provides a quick reference for customers to know how much the kits will cost as part of their overall purchase before final checkout.
 
 Product List: An attribute of the Kit entity, the Product List outlines all the individual products included within a kit. It serves to detail what customers will receive when purchasing a kit, ensuring transparency and allowing customers to verify the contents before making a decision.
 
+Feature Enhancements:
+
+Customized Kits: This entity allows customers to create personalized product combinations tailored to their preferences. Customized kits empower users to design and buy kits that contain a selection of products of their choosing, providing a personalized shopping experience.
+
+Order: Represents a completed purchase by a customer. When a shopping cart's contents are finalized and paid for, an Order is generated. This entity captures all relevant details of the transaction, including the customer's information, the purchased items, and the total price.
+
+Order History: This component is a record of all past purchases made by a customer. It enables customers to view their transaction history, track previous orders, and facilitates easy repurchasing of the same products or kits. It provides a valuable reference for both the customer and the business for repurchases, customer service, and order tracking.
 
 ## Architecture and Design
 
