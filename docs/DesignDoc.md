@@ -21,7 +21,7 @@ geometry: margin=1in
 
 ### Purpose
 
-This product is an e-store for a producer of custom drink kits, also known as a mixologist. It is intended to allow customers to search for and purchase drink kits as well as allow the store's administrator to easily manage and update the store's inventory. The users also have an order history which allows them to view past orders and add certain kits in the orders to the shopping cart.
+This e-commerce platform is designed for a mixologist's custom drink kits, streamlining the shopping and inventory management experience. Customers can easily find and buy their favorite drink kits, while the store admin can swiftly update inventory. The added feature of viewing past orders and re-adding items to the cart makes repeat purchases a breeze. It's a practical, efficient solution for both buyers and sellers in the world of custom drink mixology.
 
 ### Glossary and Acronyms
 
@@ -42,17 +42,19 @@ The MVP, encompassing a fundamental login system, enables both regular users and
 
 ### MVP Features
 
-Epic: Buyer -
-  *View Drink Kits - As a buyer I want to be able to browse drink kits and drinks so that I can purchase drink kits which interest me.
-  *Filter Kits - As a buyer I want to be able to search for a drink kit by name so I can find what I’m looking for quickly.
-  *Buyer Login - As a buyer I want to login to my account so I can view products and make a choice if I want to buy the product or not.
-Epic: Owner/Admin - 
-  *Edit Inventory - As an Owner I want to be able to create, update, and delete items in my inventory to keep the inventory up-to-date.
-  *Login to Admin View - As a admin of my e-store I want to login into my e-store with admin rights so that I have permissions to add, delete, and modify products in my inventory.
-Epic: Cart Management - 
-  *Add Drinks to Cart - As a buyer I want to add drink kits to my shopping cart so I can see what I’m planning to buy.
-  *Remove Drinks from Cart - As a buyer I want to be able to remove drink kits from my shopping cart so I can get rid of things I don’t want anymore.
-  *Purchase Drink Kits in Cart - As a user I want to be able to purchase the drink kits in my shopping cart so I can use them.
+## **Epic: Buyer**
+- **View Drink Kits** - As a buyer I want to be able to browse drink kits and drinks so that I can purchase drink kits which interest me.
+- **Filter Kits** - As a buyer I want to be able to search for a drink kit by name so I can find what I’m looking for quickly.
+- **Buyer Login** - As a buyer I want to login to my account so I can view products and make a choice if I want to buy the product or not.
+
+## **Epic: Owner/Admin**
+- **Edit Inventory** - As an Owner I want to be able to create, update, and delete items in my inventory to keep the inventory up-to-date.
+- **Login to Admin View** - As an admin of my e-store I want to login into my e-store with admin rights so that I have permissions to add, delete, and modify products in my inventory.
+
+## **Epic: Cart Management**
+- **Add Drinks to Cart** - As a buyer I want to add drink kits to my shopping cart so I can see what I’m planning to buy.
+- **Remove Drinks from Cart** - As a buyer I want to be able to remove drink kits from my shopping cart so I can get rid of things I don’t want anymore.
+- **Purchase Drink Kits in Cart** - As a user I want to be able to purchase the drink kits in my shopping cart so I can use them.
 
 ### Enhancements
 
