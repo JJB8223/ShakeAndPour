@@ -3,11 +3,6 @@ geometry: margin=1in
 ---
 # PROJECT Design Documentation
 
-> _The following template provides the headings for your Design
-> Documentation.  As you edit each section make sure you remove these
-> commentary 'blockquotes'; the lines that start with a > character
-> and appear in the generated PDF in italics but do so only **after** all team members agree that the requirements for that section and current Sprint have been met. **Do not** delete future Sprint expectations._
-
 ## Team Information
 * Team name: Shake And Pour
 * Team members
@@ -29,6 +24,8 @@ This e-commerce platform is designed for a mixologist's custom drink kits, strea
 |------|------------|
 | SPA | Single Page |
 | DAO | Data Access Object |
+| MVVM | Model View View-Model architecture |
+| API | Application programming interface |
 | Kit | Set of drinks in certain quantities |
 | Inventory | All currently available drinks | 
 
@@ -206,8 +203,6 @@ The Open/Closed Principle states that software entities (classes, modules, funct
 > _**[Sprint 4]** Discuss **future** refactoring and other design improvements your team would explore if the team had additional time._
 
 ## Testing
-> _This section will provide information about the testing performed
-> and the results of the testing._
 
 ### Acceptance Testing
 > _**[Sprint 4]** Report on the number of user stories that have passed all their
@@ -222,20 +217,43 @@ User Stories passing some acceptance criteria: 0
 User Stories not under testing yet: 14
 
 ### Unit Testing and Code Coverage
-> _**[Sprint 4]** Discuss your unit testing strategy. Report on the code coverage
-> achieved from unit testing of the code base. Discuss the team's
-> coverage targets, why you selected those values, and how well your
-> code coverage met your targets._
+For our project, we aimed for a target that is generally considered industry standard:
 
->_**[Sprint 2 & 4]** **Include images of your code coverage report.** If there are any anomalies, discuss
-> those._
-> **[Sprint 2 Code Coverage]**
-> ![Sprint 2 Code Coverage Overall Report](sprint-2-overall-code-coverage.png)
-> ![Sprint 2 Controller Code Coverage](sprint-2-controller-code-coverage.png)
-> The main issue with the controller coverage was with the Shopping Cart Controller. Several if statments were not tested when removing or getting kits from the cart. Resulting in the overall less code coverage.
-> ![Sprint 2 Persistence Code Coverage](sprint-2-persistence-code-coverage.png)
-> While our tests did not miss any instructions, there were some missing branches to be tested from all FileDAO classes. More tests just need to be added to account for all cases/branches in if statements of methods.
-> ![Sprint 2 Model Code Coverage](sprint-2-model-code-coverage.png)
+## Model layer:
+Strive for **100% coverage** as these are usually straightforward to test and critical for application integrity.
+
+## Persistence layer:
+Target **above 95%** because this layer interacts with storage mechanisms and is often prone to edge cases.
+
+## Controller layer:
+Aim for **at least 90% coverage** as controllers handle a lot of business logic and routing which are crucial for the correct functioning of the API endpoints.
+
+The unit test code coverage report for our project reveals the following insights:
+
+## Model layer:
+Achieved **97% coverage**, missing instructions mainly in the `Order` and `User.UserRole` elements. While not at 100%, it's very close to our target, indicating a high degree of test completeness for the foundational data structures of our application.
+
+## Persistence layer:
+Achieved **99% coverage**, surpassing our target. This suggests that our tests are effectively exercising the code responsible for data storage and retrieval operations. A closer look at missed branches, particularly in `KitFileDAO` and `InventoryFileDAO`, will be needed to ensure no critical edge cases are overlooked.
+
+## Controller layer:
+Achieved **99% coverage**, exceeding our target. This is excellent, indicating comprehensive testing of the application's business logic and request handling. The `ShoppingCartController` has slightly lower branch coverage at 93%, suggesting there may be some conditional logic that isn't fully tested.
+
+Overall, the code coverage met or exceeded our targets in most areas, reflecting a robust testing regime. However, there are some missed branches and instructions noted, which highlights areas for improvement. It's essential to review these gaps, as they may point to untested scenarios that could impact the application's stability or reveal potential bugs. Improving the test cases to cover these areas will ensure higher reliability and maintainability of the code base.
+
+
+**[Sprint 2 Code Coverage]**
+![Sprint 2 Code Coverage Overall Report](sprint-2-overall-code-coverage.png)
+![Sprint 2 Controller Code Coverage](sprint-2-controller-code-coverage.png)
+The main issue with the controller coverage was with the Shopping Cart Controller. Several if statments were not tested when removing or getting kits from the cart. Resulting in the overall less code coverage.
+![Sprint 2 Persistence Code Coverage](sprint-2-persistence-code-coverage.png)
+While our tests did not miss any instructions, there were some missing branches to be tested from all FileDAO classes. More tests just need to be added to account for all cases/branches in if statements of methods.
+![Sprint 2 Model Code Coverage](sprint-4-model-code-coverage.png)
+**[Sprint 4 Code Coverage]**
+![Sprint 4 Code Coverage Overall Report](sprint-4-overall-code-coverage.png)
+![Sprint 4 Controller Code Coverage](sprint-4-controller-code-coverage.png)
+![Sprint 4 Persistence Code Coverage](sprint-4-persistence-code-coverage.png)
+![Sprint 4 Model Code Coverage](sprint-4-model-code-coverage.png)
 
 ## Ongoing Rationale
 2024/02/19: Sprint 1 - Discussion of merging and testing of our sprint 1 demo.
