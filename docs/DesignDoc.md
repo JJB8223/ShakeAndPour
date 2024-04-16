@@ -16,7 +16,7 @@ geometry: margin=1in
 
 ### Purpose
 
-This e-commerce platform is designed for a mixologist's custom drink kits, streamlining the shopping and inventory management experience. Customers can easily find and buy their favorite drink kits, while the store admin can swiftly update inventory. The added feature of viewing past orders and re-adding items to the cart makes repeat purchases a breeze. It's a practical, efficient solution for both buyers and sellers in the world of custom drink mixology.
+This e-commerce platform is designed for a mixologist's custom drink kits, streamlining the shopping and inventory management experience. Customers can easily find and buy their favorite drink kits, while the store admin can swiftly update inventory. The added features of viewing past orders and re-adding items to the cart makes repeat purchases a breeze. It's a practical, efficient solution for both buyers and sellers in the world of custom drink mixology.
 
 ### Glossary and Acronyms
 
@@ -105,7 +105,6 @@ This section describes the application architecture.
 ### Summary
 
 The following Tiers/Layers model shows a high-level view of the webapp's architecture. 
-**NOTE**: detailed diagrams are required in later sections of this document.
 
 ![The Tiers & Layers of the Architecture](architecture-tiers-and-layers.png)
 
@@ -124,6 +123,9 @@ This section describes the web interface flow; this is how the user views and in
 
 > _Provide a summary of the application's user interface.  Describe, from the user's perspective, the flow of the pages in the web application._
 
+> _Does this also need to describe the UI flow for the store's admin?_
+
+The user is first directed to the login page. Here, they can either log into the store using a username and password that they already created or they can register with their name and their desired username and password. Upon logging in, the user will see a home page displaying their name and the option to change their username, password, name, or view their order history. Additionally, they will see a bar of buttons on the top of the page with links to pages allowing them to view the kits available for purchase, their current shopping cart status including the kits they've bought and how much they cost, the user page that they're currently on, a page to create custom kits for purchase, and an option to log out. Upon navigating to any of these pages, they will still see the top bar of buttons along with any content specific to that page.
 
 ### View Tier
 > _**[Sprint 4]** Provide a summary of the View Tier UI of your architecture.
