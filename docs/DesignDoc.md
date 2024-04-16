@@ -20,23 +20,20 @@ geometry: margin=1in
 ## Executive Summary
 
 ### Purpose
->  _**[Sprint 4]** Provide a very brief statement about the project and the most
-> important user group and user goals._
-
 This product is an e-store for a producer of custom drink kits, also known as a mixologist. It is intended to allow customers to search for and purchase drink kits as well as allow the store's administrator to easily manage and update the store's inventory.
 
 ### Glossary and Acronyms
-> _**[Sprint 4]** Provide a table of terms and acronyms._
-
 | Term | Definition |
 |------|------------|
 | SPA | Single Page |
 | DAO | Data Access Object |
-| Kit | Set of drinks in certain quantities |
+| Product | A drink with a name and price |
+| Kit | A set of products in certain quantities |
 | Inventory | All currently available drinks | 
+| User | A customer who can buy kits from the store |
+| Admin | The store owner who can update the inventory and kit listings |
 
 ## Requirements
-
 This section describes the features of the application.
 
 > _In this section you do not need to be exhaustive and list every
