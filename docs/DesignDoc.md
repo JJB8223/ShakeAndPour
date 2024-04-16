@@ -3,11 +3,6 @@ geometry: margin=1in
 ---
 # PROJECT Design Documentation
 
-> _The following template provides the headings for your Design
-> Documentation.  As you edit each section make sure you remove these
-> commentary 'blockquotes'; the lines that start with a > character
-> and appear in the generated PDF in italics but do so only **after** all team members agree that the requirements for that section and current Sprint have been met. **Do not** delete future Sprint expectations._
-
 ## Team Information
 * Team name: Shake And Pour
 * Team members
@@ -20,13 +15,17 @@ geometry: margin=1in
 ## Executive Summary
 
 ### Purpose
-This product is an e-store for a producer of custom drink kits, also known as a mixologist. It is intended to allow customers to search for and purchase drink kits as well as allow the store's administrator to easily manage and update the store's inventory.
+
+This e-commerce platform is designed for a mixologist's custom drink kits, streamlining the shopping and inventory management experience. Customers can easily find and buy their favorite drink kits, while the store admin can swiftly update inventory. The added feature of viewing past orders and re-adding items to the cart makes repeat purchases a breeze. It's a practical, efficient solution for both buyers and sellers in the world of custom drink mixology.
 
 ### Glossary and Acronyms
+
 | Term | Definition |
 |------|------------|
 | SPA | Single Page |
 | DAO | Data Access Object |
+| MVVM | Model View View-Model architecture |
+| API | Application programming interface |
 | Product | A drink with a name and price |
 | Kit | A set of products in certain quantities |
 | Inventory | All currently available drinks | 
@@ -36,30 +35,40 @@ This product is an e-store for a producer of custom drink kits, also known as a 
 ## Requirements
 This section describes the features of the application.
 
-> _In this section you do not need to be exhaustive and list every
-> story.  Focus on top-level features from the Vision document and
-> maybe Epics and critical Stories._
-
 ### Definition of MVP
-> _**[Sprint 4]** Provide a simple description of the Minimum Viable Product._
 
-The MVP consists of a basic login system to allow users and an admin to log into the e-store. The admin will be able to modify the contents of the inventory, while the user will be able to find, view, and purchase drink kits. All of these actions will be reflected by changes to the data stored on the server.
+The MVP, encompassing a fundamental login system, enables both regular users and an administrator to access the e-store with distinct capabilities. Upon successful login, the admin is empowered to manage the inventory — adding, updating, or removing products and/or drink kits as necessary. Conversely, users are provided with functionalities to browse, search, and select drink kits, which they can then add or remove from their shopping cart to purchase. These interactions, from administrative adjustments to user purchases, are directly mirrored in the server's data files, ensuring persistence and consistency of the e-store's state across sessions. This setup lays the groundwork for a streamlined and user-friendly online shopping environment, prioritizing essential features while setting the stage for future enhancements.
 
 ### MVP Features
->  _**[Sprint 4]** Provide a list of top-level Epics and/or Stories of the MVP._
+
+## **Epic: Buyer**
+- **View Drink Kits** - As a buyer I want to be able to browse drink kits and drinks so that I can purchase drink kits which interest me.
+- **Filter Kits** - As a buyer I want to be able to search for a drink kit by name so I can find what I’m looking for quickly.
+- **Buyer Login** - As a buyer I want to login to my account so I can view products and make a choice if I want to buy the product or not.
+
+## **Epic: Owner/Admin**
+- **Edit Inventory** - As an Owner I want to be able to create, update, and delete items in my inventory to keep the inventory up-to-date.
+- **Login to Admin View** - As an admin of my e-store I want to login into my e-store with admin rights so that I have permissions to add, delete, and modify products in my inventory.
+
+## **Epic: Cart Management**
+- **Add Drinks to Cart** - As a buyer I want to add drink kits to my shopping cart so I can see what I’m planning to buy.
+- **Remove Drinks from Cart** - As a buyer I want to be able to remove drink kits from my shopping cart so I can get rid of things I don’t want anymore.
+- **Purchase Drink Kits in Cart** - As a user I want to be able to purchase the drink kits in my shopping cart so I can use them.
 
 ### Enhancements
-> _**[Sprint 4]** Describe what enhancements you have implemented for the project._
 
+The two feature enhancements that we have implemented for this project are customizable drink kits an being able to register an account and view or purchase past orders.
+-Customize Order: The project's introduction of customization options for drink kits is a feature enhancement that significantly enriches the user experience. This feature allows customers to add a personal touch to their purchases by selecting from a variety of customization choices, aligning the product with their individual preferences. E-store owners can now dynamically update and manage these options, providing a responsive and engaging shopping platform that caters to the unique desires of each customer.
+
+-Register User/Order History: With the new registration capability, customers gain the advantage of easily managing their order history and simplifying repeat purchases. Once registered, users can review their past orders and with just a few clicks, either add select items or entire previous orders directly into their shopping cart for repurchase. This not only enhances the shopping experience by making it more efficient but also encourages customer loyalty by recognizing and facilitating their buying preferences.
 
 ## Application Domain
-> _**[Sprint 4]** Provide a high-level overview of the domain for this application. You
-> can discuss the more important domain entities and their relationship
-> to each other._
 
 This section describes the application domain.
 
-![Domain Model](sprint-3-domain-analysis.drawio.png)
+![Domain Model](domain-analysis.png)
+
+MVP:
 
 Owner: This entity represents the individual or group responsible for managing the e-store. They have administrative access, enabling them to add, remove, and edit inventory items, including both products and kits.
 
@@ -71,12 +80,23 @@ Product: Individual items for sale, each with its own price. Products can be sol
 
 Kit: A significant addition to the model, a Kit is a bundled group of products sold together at a specific price. Each Kit includes a list of products, making it a convenient option for customers looking for package deals or themed collections.
 
-Customer: Customers are the end-users of the platform, capable of browsing the inventory, adding products and kits to their shopping cart, and making purchases. They interact with the e-store by logging in, searching for items, and checking out.
+Customer: Customers are the end-users of the platform, capable of browsing the inventory, adding kits to their shopping cart, and making purchases. They interact with the e-store by logging in, searching for items, and checking out.
 
 Shopping Cart: The Shopping Cart is an essential component of the online shopping experience, allowing customers to accumulate a list of items they intend to purchase. Updated to include kits, it tracks both individual products and kits, along with the total price.
 
-Payment Method: This entity facilitates the transaction process, offering customers various options to complete their purchases, including Credit Card, Paypal, and Apple Pay.
+Kit List: Contained within a Shopping Cart, the Kit List is a catalog of all the kits that a customer intends to purchase. This list details each kit's contents and price, contributing to the total price calculation for the shopping cart.
 
+Total Kit Price: This is the sum of the prices of all the kits present in a Shopping Cart. It provides a quick reference for customers to know how much the kits will cost as part of their overall purchase before final checkout.
+
+Product List: An attribute of the Kit entity, the Product List outlines all the individual products included within a kit. It serves to detail what customers will receive when purchasing a kit, ensuring transparency and allowing customers to verify the contents before making a decision.
+
+Feature Enhancements:
+
+Customized Kits: This entity allows customers to create personalized product combinations tailored to their preferences. Customized kits empower users to design and buy kits that contain a selection of products of their choosing, providing a personalized shopping experience.
+
+Order: Represents a completed purchase by a customer. When a shopping cart's contents are finalized and paid for, an Order is generated. This entity captures all relevant details of the transaction, including the customer's information, the purchased items, and the total price.
+
+Order History: This component is a record of all past purchases made by a customer. It enables customers to view their transaction history, track previous orders, and facilitates easy repurchasing of the same products or kits. It provides a valuable reference for both the customer and the business for repurchases, customer service, and order tracking.
 
 ## Architecture and Design
 
@@ -165,16 +185,16 @@ Pure fabrication is the concept that in order to achieve a simple and easy to un
 We use pure fabrication throughout our system and it can be seen in our tiers and layers diagram. Our View tier uses services to manage API calls, which are not a stated domain entity. However, by using angular services to manage these calls we allow the functionality to be reused by multiple components. This makes editing and testing code in the View tier much easier. In the ViewModel tier we do the same thing. Controller classes are not domain entities, but by using them we are able to manage calls to the API in a much more structured way. Finally, in the Model Tier, we use FileDAO classes to manage data on the server side. These are again not domain entities, but allows the system to easily handle data management.
 
 ### 3. Dependency Inversion 
-
+![Dependency Inversion](Dependency_Inversion.png)
 Dependency inversion is the idea that high-level modules should not depend on low-level modules, and that both should depend on abstractions. Moreover, abstractions should not depend on details; details should depend on abstractions. This leads to a design where the higher-level logic can be indifferent to the low-level module implementation details, promoting module reusability and a more testable system.
 
 Our system’s architecture embodies the Dependency Inversion Principle across its tiers. For example, in the Service tier, rather than depending directly on DAO classes, we define an interface for data operations. This allows the Service layer to interact with any data source that implements these interfaces, which makes our system more flexible and easier to test. In the Model tier, our business objects like Kit, Product, and ShoppingCart are designed to be indifferent towards the specific type of persistence they are used with. This is evident as the Persistence layer uses interfaces to define the necessary operations for data storage and retrieval. This way, the actual file-based DAO implementations in the Persistence tier are details that the Model does not rely on, allowing the potential for different storage mechanisms to be used without significant changes to the Model.
 
 For Sprint 3, we improved our submission by adding a design principle UML diagram that clearly describes how our project adheres to Object Oriented principles. We didn't have a diagram in the last sprint, and our explanations for each principle were a bit unclear. We fixed this by discussing how to elaborate on our decisions, and made a diagram together to submit for sprint 3. 
 
-> _**[Sprint 3 & 4]** Will eventually address upto **4 key OO Principles** in your final design. Follow guidance in augmenting those completed in previous Sprints as indicated to you by instructor. Be sure to include any diagrams (or clearly refer to ones elsewhere in your Tier sections above) to support your claims._
+### 4. Open/Closed
 
-> _**[Sprint 3 & 4]** OO Design Principles should span across **all tiers.**_
+The Open/Closed Principle states that software entities (classes, modules, functions, etc.) should be open for extension but closed for modification. This means that the behavior of a module can be extended without modifying its source code, which is often achieved by using interfaces or abstract classes that can be subclassed. In the persistence layer, the use of Data Access Object classes such as InventoryFileDAO, KitFileDAO, and UserFileDAO shows a design where the concrete implementation of how data is persisted can vary, but the interface remains consistent. If the system were to transition from file storage to database storage, for instance, new DAO classes could be created to extend the current functionality without changing the client code that relies on these DAOs. The services interfacing with the DAOs adhere to a set of interfaces that define the contract for interaction. The system can introduce new service implementations for different contexts, which extend the base service functionality without altering the existing service interface or its consumers. The Model tier, which includes domain classes like Kit, Product, and ShoppingCart, is designed in such a way that it can easily adapt to changes in the way objects are created or managed. For example, if a new type of Product needs to be introduced, it can be done by creating a new subclass that inherits from the Product class, thus extending its functionality without altering the original Product class. By adjourning to the Open/Closed principle, the software architecture is more flexible and can adapt to new classes without having to change existing ones. This also reduces the risk of bugs while changing older classes.
 
 ## Static Code Analysis/Future Design Improvements
 > _**[Sprint 4]** With the results from the Static Code Analysis exercise, 
@@ -185,8 +205,6 @@ For Sprint 3, we improved our submission by adding a design principle UML diagra
 > _**[Sprint 4]** Discuss **future** refactoring and other design improvements your team would explore if the team had additional time._
 
 ## Testing
-> _This section will provide information about the testing performed
-> and the results of the testing._
 
 ### Acceptance Testing
 > _**[Sprint 4]** Report on the number of user stories that have passed all their
@@ -201,23 +219,45 @@ User Stories passing some acceptance criteria: 0
 User Stories not under testing yet: 14
 
 ### Unit Testing and Code Coverage
-> _**[Sprint 4]** Discuss your unit testing strategy. Report on the code coverage
-> achieved from unit testing of the code base. Discuss the team's
-> coverage targets, why you selected those values, and how well your
-> code coverage met your targets._
+For our project, we aimed for a target that is generally considered industry standard:
 
->_**[Sprint 2 & 4]** **Include images of your code coverage report.** If there are any anomalies, discuss
-> those._
-> **[Sprint 2 Code Coverage]**
-> ![Sprint 2 Code Coverage Overall Report](sprint-2-overall-code-coverage.png)
-> ![Sprint 2 Controller Code Coverage](sprint-2-controller-code-coverage.png)
-> The main issue with the controller coverage was with the Shopping Cart Controller. Several if statments were not tested when removing or getting kits from the cart. Resulting in the overall less code coverage.
-> ![Sprint 2 Persistence Code Coverage](sprint-2-persistence-code-coverage.png)
-> While our tests did not miss any instructions, there were some missing branches to be tested from all FileDAO classes. More tests just need to be added to account for all cases/branches in if statements of methods.
-> ![Sprint 2 Model Code Coverage](sprint-2-model-code-coverage.png)
+## Model layer:
+Strive for **100% coverage** as these are usually straightforward to test and critical for application integrity.
+
+## Persistence layer:
+Target **above 95%** because this layer interacts with storage mechanisms and is often prone to edge cases.
+
+## Controller layer:
+Aim for **at least 90% coverage** as controllers handle a lot of business logic and routing which are crucial for the correct functioning of the API endpoints.
+
+The unit test code coverage report for our project reveals the following insights:
+
+## Model layer:
+Achieved **97% coverage**, missing instructions mainly in the `Order` and `User.UserRole` elements. While not at 100%, it's very close to our target, indicating a high degree of test completeness for the foundational data structures of our application.
+
+## Persistence layer:
+Achieved **99% coverage**, surpassing our target. This suggests that our tests are effectively exercising the code responsible for data storage and retrieval operations. A closer look at missed branches, particularly in `KitFileDAO` and `InventoryFileDAO`, will be needed to ensure no critical edge cases are overlooked.
+
+## Controller layer:
+Achieved **99% coverage**, exceeding our target. This is excellent, indicating comprehensive testing of the application's business logic and request handling. The `ShoppingCartController` has slightly lower branch coverage at 93%, suggesting there may be some conditional logic that isn't fully tested.
+
+Overall, the code coverage met or exceeded our targets in most areas, reflecting a robust testing regime. However, there are some missed branches and instructions noted, which highlights areas for improvement. It's essential to review these gaps, as they may point to untested scenarios that could impact the application's stability or reveal potential bugs. Improving the test cases to cover these areas will ensure higher reliability and maintainability of the code base.
+
+
+**[Sprint 2 Code Coverage]**
+![Sprint 2 Code Coverage Overall Report](sprint-2-overall-code-coverage.png)
+![Sprint 2 Controller Code Coverage](sprint-2-controller-code-coverage.png)
+The main issue with the controller coverage was with the Shopping Cart Controller. Several if statments were not tested when removing or getting kits from the cart. Resulting in the overall less code coverage.
+![Sprint 2 Persistence Code Coverage](sprint-2-persistence-code-coverage.png)
+While our tests did not miss any instructions, there were some missing branches to be tested from all FileDAO classes. More tests just need to be added to account for all cases/branches in if statements of methods.
+![Sprint 2 Model Code Coverage](sprint-2-model-code-coverage.png)
+**[Sprint 4 Code Coverage]**
+![Sprint 4 Code Coverage Overall Report](sprint-4-overall-code-coverage.png)
+![Sprint 4 Controller Code Coverage](sprint-4-controller-code-coverage.png)
+![Sprint 4 Persistence Code Coverage](sprint-4-persistence-code-coverage.png)
+![Sprint 4 Model Code Coverage](sprint-4-model-code-coverage.png)
 
 ## Ongoing Rationale
->_**[Sprint 1, 2, 3 & 4]** Throughout the project, provide a time stamp **(yyyy/mm/dd): Sprint # and description** of any _**major**_ team decisions or design milestones/changes and corresponding justification._
 2024/02/19: Sprint 1 - Discussion of merging and testing of our sprint 1 demo.
 2024/02/20: Sprint 1 - We initially discussed and implemented the tiers and layers diagram with the product classes. This was because it was the main aspect of our implementation in sprint 1 ensuring that the backend can supply. This was however incorrect as we changed it to inventory classes for the API and services.
 2024/02/27: Sprint 2 - We met up to clarify our responsibilities for the sprint 2 and discussed our system design for how to implement the user stories. We justified having controllers for Kits, Users, and the Shopping Cart so that their classes hold single responsibility and specify API requests for their individual controllers in the viewmodel.
