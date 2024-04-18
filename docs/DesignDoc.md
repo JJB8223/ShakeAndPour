@@ -135,6 +135,23 @@ Upon logging in as an admin, the store owner is directed to the administrator da
 > responsibilities.  This should be a narrative description, i.e. it has
 > a flow or "story line" that the reader can follow._
 
+
+The View Tier of the Shake and Pour website consists of sixteen components, each with specific roles in managing the user interface and interactions. These components handle tasks such as user authentication, product management, order history, shopping cart management, and debugging. Together, they form a cohesive system that facilitates user navigation and interaction within the e-store environment.
+
+ To begin, there are the admin, user, and login components. Both admin and user components share similar functionalities, facilitating communication with the backend to modify personal details and view order histories. They also handle routing to other pages or components for seamless navigation. However, the admin component additionally interacts with the backend to manage kits, while the login component manages user authentication.
+
+Next, the register and custom-kit components facilitate the creation of new user accounts or custom kits, respectively. They gather necessary information and communicate with the backend to add this data.
+
+For admins, the products, product-detail, and product-search components come into play. The products component showcases each product and manages backend interactions for adding and deleting products. The product-detail component displays detailed information about each product, while the product-search component handles search functionality and result display.
+
+Kits serve as the cornerstone of the e-store, facilitating product purchases. The kit, kit-search, and kit-display components are involved. The kit component retrieves kit information, while kit-search enables product searches and displays results accordingly. Kit-display focuses solely on presenting kits, all of which are showcased on the dashboard component, the central hub for Shake and Pour users.
+
+Every user has access to their order history, managed by the orders and order-search components. Orders communicates with the backend to retrieve and display past orders, while order-search offers search functionality and result display.
+
+The shopping cart component contains selected kits and manages interactions exclusively for users. It communicates with the backend to add or remove items and dictates cart display.
+
+Lastly, the message component serves primarily for debugging during development, functioning akin to a console log. While it can be easily re-enabled for development purposes, it is disabled in the live version of Shake and Pour.
+
 > _**[Sprint 4]** You must  provide at least **2 sequence diagrams** as is relevant to a particular aspects 
 > of the design that you are describing.  (**For example**, in a shopping experience application you might create a 
 > sequence diagram of a customer searching for an item and adding to their cart.)
