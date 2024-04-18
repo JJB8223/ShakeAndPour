@@ -128,9 +128,10 @@ Upon logging in as an ordinary user, the user will see a home page displaying th
 Upon logging in as an admin, the store owner is directed to the administrator dashboard. Here they are presented with the option to add a new product, edit an existing product, or delete an existing product. These 3 options also exist for drink kits. Similar to an ordinary, the admin also has a bar of buttons displayed at the top of the page to allow them to navigate the store. They can visit the dashboard, which contains products and has the ability to search for a product by name. They can visit a special products page which allows them to quickly view, add, and delete products in the inventory. They can also go to the admin dashboard, the same page they are directed to on logging in, and they can log out.
 
 ### View Tier
+
 The View Tier of the Shake and Pour website consists of sixteen components, each with specific roles in managing the user interface and interactions. These components handle tasks such as user authentication, product management, order history, shopping cart management, and debugging. Together, they form a cohesive system that facilitates user navigation and interaction within the e-store environment.
 
- To begin, there are the admin, user, and login components. Both admin and user components share similar functionalities, facilitating communication with the backend to modify personal details and view order histories. They also handle routing to other pages or components for seamless navigation. However, the admin component additionally interacts with the backend to manage kits, while the login component manages user authentication.
+To begin, there are the admin, user, and login components. Both admin and user components share similar functionalities, facilitating communication with the backend to modify personal details and view order histories. They also handle routing to other pages or components for seamless navigation. However, the admin component additionally interacts with the backend to manage kits, while the login component manages user authentication.
 
 Next, the register and custom-kit components facilitate the creation of new user accounts or custom kits, respectively. They gather necessary information and communicate with the backend to add this data.
 
@@ -153,6 +154,7 @@ Lastly, the message component serves primarily for debugging during development,
 
 
 ### ViewModel Tier
+
 Our ViewModel Tier is implemented through Java and the REST API ProductController class. The controller 
 interacts with the ProductDAO class, which is the service for the project. 
 
@@ -227,6 +229,7 @@ interacts with the ProductDAO class, which is the service for the project.
 ![User Controller UML](UserController-uml.png)
 
 ### Model Tier
+
 The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, User, and Order classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files.
 
 **Product Model**: The product model is the core model that is used to build a kit model. The product model represents a singular product in our estore. The product model contains the following information about a certain product: products name, price, the quantity of the product in inventory, and the id of the product. The model also contains methods to access of this said information as well as update the name, price, and the quantity of the product in inventory.
@@ -255,7 +258,6 @@ The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit
 rt, see if a kit exists in the current shopping cart, and get the total price of all the kits in the shopping cart. 
 #### The UML for the ShoppingCart Model
 ![shopping cart model diagram](shopping-cart-uml.png)
-
 
 **ShoppingCartKit Model**: The ShoppingCartKit model was designed as a helper class so that information that we did not want to show the user was hidden. With the ShoppingCart model class every ascpect and infomration about a kit was shown in the actual shopping cart, this includes the products that make up the kit. We did not want users to see these products as it may confuse. Thus a design decision was made to hide this information from the front end by modifiying the backend. The ShoppingCartKit model class has methods to retreive the kit name, kit price, and quantity of this specific kit within the shopping cart itself. However, it does not have any methods to modify these values. 
 #### The UML For the ShoppingCartKit Model
@@ -321,6 +323,7 @@ If our team had additional time there are several elements of the code which we 
 ## Testing
 
 ### Acceptance Testing
+
 End of Sprint 2 Acceptance Testing (All stories for sprints 1 & 2 are passing their acceptance criteria)
 User Stories passing all acceptance criteria: 14
 User Stories passing some acceptance criteria: 0
@@ -332,15 +335,19 @@ User Stories passing some acceptance criteria: 0
 User Stories not under testing yet: 0 
 
 ### Unit Testing and Code Coverage
+
 For our project, we aimed for a target that is generally considered industry standard. We aimed for a complete code coverage of 95% or higher for this application. The follwoing sections break down the code coverage for each area of our application's code. 
 
 #### Model layer:
+
 Our target goal for this Layer was 100%. We achieved **97% coverage**, missing instructions mainly in the `Order` and `User.UserRole` elements. While not at 100%, it's very close to our target, indicating a high degree of test completeness for the foundational data structures of our application.
 
 #### Persistence layer:
+
 Our target goal for this layer was 95%. We achieved **99% coverage**, surpassing our target. This suggests that our tests are effectively exercising the code responsible for data storage and retrieval operations. A closer look at missed branches, particularly in `KitFileDAO` and `InventoryFileDAO`, will be needed to ensure no critical edge cases are overlooked.
 
 #### Controller layer:
+
 Our target for this layer was 90%. We achieved **99% coverage**, exceeding our target. This is excellent, indicating comprehensive testing of the application's business logic and request handling. The `ShoppingCartController` has slightly lower branch coverage at 93%, suggesting there may be some conditional logic that isn't fully tested.
 
 Overall, the code coverage met or exceeded our targets in most areas, reflecting a robust testing regime. Our overall code coverage well exceeded the 90% target set for this application. However, there are some missed branches and instructions noted, which highlights areas for improvement. It's essential to review these gaps, as they may point to untested scenarios that could impact the application's stability or reveal potential bugs. Improving the test cases to cover these areas will ensure higher reliability and maintainability of the code base.
@@ -360,6 +367,7 @@ While our tests did not miss any instructions, there were some missing branches 
 ![Sprint 4 Model Code Coverage](sprint-4-model-code-coverage.png)
 
 ## Ongoing Rationale
+
 - 2024/02/19: Sprint 1 - Discussion of merging and testing of our sprint 1 demo.
 - 2024/02/20: Sprint 1 - We initially discussed and implemented the tiers and layers diagram with the product classes. This was because it was the main aspect of our implementation in sprint 1 ensuring that the backend can supply. This was however incorrect as we changed it to inventory classes for the API and services.
 - 2024/02/27: Sprint 2 - We met up to clarify our responsibilities for the sprint 2 and discussed our system design for how to implement the user stories. We justified having controllers for Kits, Users, and the Shopping Cart so that their classes hold single responsibility and specify API requests for their individual controllers in the viewmodel.
