@@ -159,7 +159,7 @@ Lastly, the message component serves primarily for debugging during development,
 ![Login Sequence Diagram](Login-Seqence-Diagram.png)
 
 #### Add to Cart Functionality Sequence Diagram
-![Add to cart sequence diagram](add-to-shopping-cart-diagram.png)
+![Add to cart sequence diagram](Shopping-Cart-Sequence-Diagram.png)
 
 > _**[Sprint 4]** To adequately show your system, you will need to present the **class diagrams** where relevant in your design. Some additional tips:_
  >* _Class diagrams only apply to the **ViewModel** and **Model** Tier_
