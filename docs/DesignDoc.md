@@ -167,6 +167,8 @@ interacts with the ProductDAO class, which is the service for the project.
       - GET /inventory: Get every product in the inventory
       - GET /inventory/product/{id}: get a specific product based on its id, if it exists
       - DELETE /inventory/product/{id}: delete a specific product based on its id, if it exists
+#### The UML for the Inventory Controller
+![Iventory Controller UML](InventoryController-uml.png)
 
 - Kit Controller
   * Kit Controller handles HTTP requests relating to the management of the kits in our e-store.
@@ -179,16 +181,21 @@ interacts with the ProductDAO class, which is the service for the project.
       - GET /kits/{id}: get a specific kit based on its id, if it exists
       - PUT /kits: update a kit with new information (as a new kit class object)
       - DELETE /kits/{id}: delete a specific kit based on its id, if it exists
-        
+#### The UML for the Kit Controller
+![Kit Controller UML](KitController-uml.png)
+
 - Order Controller
   * Order Controller handles HTTP requests relating to the management of orders and order history in our e-store. This manages updating and getting a customer's order history for a specified user.
-  * The controller includes request to get the order history of a user, searching thorugh that user's order history, added to a user's order history, and getting a specific order by id.
+  * The controller includes request to g
+  et the order history of a user, searching thorugh that user's order history, added to a user's order history, and getting a specific order by id.
   * **Endpoints:**
       - POST /orders/create?username=&kitsJson=: create a new order for a user based on their username and kits that were purchased in that order (saved as a json string through the front end)
       - GET /orders/{name}/?user=: search all the orders and a user's order history through their username with a specific substring of text provided by that user
       - GET /orders?user=: get all the orders and a user's order history based on their username
       - GET /orders/getSpecific/{id}: get a specific order based on its id, if it exists
-   
+#### The UML for the Order Controller
+![Order Controller UML](OrderController-uml.png)
+
 - Shopping Cart Controller
   * Shopping Cart Controller handles all operations for a user's shopping cart.
   * This includes methods to add a kit to a user's cart, remove from cart, get kits in the cart, caluculate total cost, and clearing the cart
@@ -199,7 +206,9 @@ interacts with the ProductDAO class, which is the service for the project.
       - GET /cart/fullkits/{userId}: Retrienve a user's kits in cart, including all relevant information of the kit, including all products within the kit
       - GET /cart/total/{userId}: Calculate the total cost of a user's cart based on all the kits currently in their cart
       - DELETE /cart/clear/{userId}: clear out a user's cart to be empty, if it is not already empty
-   
+#### The UML for the Shopping Cart Controller
+![Shopping Cart Controller UML](ShoppingCartController-uml.png)   
+
 - User Controller
   * User Controller handles all requests and operations that pertain to a single user in the e-store. This includes being able to register or sign in to the store account, editing information about the user, and getting/deleting users from the e-store
   * **Endpoints:**
@@ -214,7 +223,8 @@ interacts with the ProductDAO class, which is the service for the project.
   * Inside the User Controller, we also created a login response that helps return a message to the front end UI when a user attempts to login:
       - LoginResponse (constructor): creates a new LoginResponse object based on the login HTTP method
       - GETTERS: getUserId, getUserType (needed to display correct page), getMessage
-
+#### The UML for the User Controller
+![User Controller UML](UserController-uml.png)
 
 ### Model Tier
 The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, User, and Order classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files.
@@ -231,7 +241,18 @@ The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit
 #### The UML for the User Model
 ![User Model Diagram](user-uml.png)
 
-**ShoppingCart Model**: The shopping cart model represents the estore's actual shopping cart. User's will add different instances of the kit model to the ShoppingCart model. The ShoppingCart model will then hold these kit instance in a map with the Kit instance being the key and the integer being the quantity of this kit in the shopping cart. The ShoppingCart has methods which allow you to add kits to the shopping cart, remove kits from the shopping cart, clear the shopping cart, see if a kit exists in the current shopping cart, and get the total price of all the kits in the shopping cart. 
+**ShoppingCart Model**: The shopping cart model represents the estore's actual shopping cart. User's will add different instances of the kit model to the ShoppingCart model. The ShoppingCart model will then hold these kit instance in a map with the Kit instance being the key and the integer being the quantity of this kit in the shopping cart. The ShoppingCart has methods which allow you to add kits to the shopping cart, remove kits from the shopping cart, clear the shopping ca
+
+
+
+
+
+
+
+
+
+
+rt, see if a kit exists in the current shopping cart, and get the total price of all the kits in the shopping cart. 
 #### The UML for the ShoppingCart Model
 ![shopping cart model diagram](shopping-cart-uml.png)
 
