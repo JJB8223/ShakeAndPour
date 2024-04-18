@@ -66,7 +66,7 @@ The two feature enhancements that we have implemented for this project are custo
 
 This section describes the application domain.
 
-![Domain Model](domain-analysis.png)
+![Domain Model](FinalDomainAnalysis.png)
 
 MVP:
 
@@ -118,10 +118,7 @@ Both the ViewModel and Model are built using Java and Spring Framework. Details 
 
 
 ### Overview of User Interface
-
-This section describes the web interface flow; this is how the user views and interacts with the web application.
-
-> _Provide a summary of the application's user interface.  Describe, from the user's perspective, the flow of the pages in the web application._
+<!-- _Provide a summary of the application's user interface.  Describe, from the user's perspective, the flow of the pages in the web application.-->
 
 The user is first directed to the login page. Here, they can either log into the store using a username and password that they already created or they can register with their name and their desired username and password. Ordinary users log in with their own credentials, but the store owner can log in using the reserved username "admin" and their own password. 
 
@@ -130,10 +127,10 @@ Upon logging in as an ordinary user, the user will see a home page displaying th
 Upon logging in as an admin, the store owner is directed to the administrator dashboard. Here they are presented with the option to add a new product, edit an existing product, or delete an existing product. These 3 options also exist for drink kits. Similar to an ordinary, the admin also has a bar of buttons displayed at the top of the page to allow them to navigate the store. They can visit the dashboard, which contains products and has the ability to search for a product by name. They can visit a special products page which allows them to quickly view, add, and delete products in the inventory. They can also go to the admin dashboard, the same page they are directed to on logging in, and they can log out.
 
 ### View Tier
-> _**[Sprint 4]** Provide a summary of the View Tier UI of your architecture.
+<!-- _**[Sprint 4]** Provide a summary of the View Tier UI of your architecture.
 > Describe the types of components in the tier and describe their
 > responsibilities.  This should be a narrative description, i.e. it has
-> a flow or "story line" that the reader can follow._
+> a flow or "story line" that the reader can follow._-->
 
 
 The View Tier of the Shake and Pour website consists of sixteen components, each with specific roles in managing the user interface and interactions. These components handle tasks such as user authentication, product management, order history, shopping cart management, and debugging. Together, they form a cohesive system that facilitates user navigation and interaction within the e-store environment.
@@ -158,6 +155,12 @@ Lastly, the message component serves primarily for debugging during development,
 > As these can span multiple tiers, be sure to include an relevant HTTP requests from the client-side to the server-side 
 > to help illustrate the end-to-end flow._
 
+#### The Login Functionality Sequence Diagram
+![Login Sequence Diagram](Login-Seqence-Diagram.png)
+
+#### Add to Cart Functionality Sequence Diagram
+![Add to cart sequence diagram](add-to-shopping-cart-diagram.png)
+
 > _**[Sprint 4]** To adequately show your system, you will need to present the **class diagrams** where relevant in your design. Some additional tips:_
  >* _Class diagrams only apply to the **ViewModel** and **Model** Tier_
 >* _A single class diagram of the entire system will not be effective. You may start with one, but will be need to break it down into smaller sections to account for requirements of each of the Tier static models below._
@@ -168,26 +171,86 @@ Lastly, the message component serves primarily for debugging during development,
 Our ViewModel Tier is implemented through Java and the REST API ProductController class. The controller 
 interacts with the ProductDAO class, which is the service for the project. 
 
-> _**[Sprint 4]** Provide a summary of this tier of your architecture. This
+- Inventory Controller
+  * Inventory Controller handles HTTP requests relating to the management of the inventory of all products in our e-store.
+  * For a User, the Inventory Controller handles requests for searching and getting products that are available.
+  * For the admin, the Inventory Controller handles requests relating to the creation, deletion , and updating of products in the store.
+  * **Endpoints:**
+      - GET /inventory?name=: searches for any products that have the following text or name
+      - POST /inventory/product: create a new product and add it to the store
+      - PUT /inventory: update a product with new information (used as a new product class object)
+      - GET /inventory: Get every product in the inventory
+      - GET /inventory/product/{id}: get a specific product based on its id, if it exists
+      - DELETE /inventory/product/{id}: delete a specific product based on its id, if it exists
+
+- Kit Controller
+  * Kit Controller handles HTTP requests relating to the management of the kits in our e-store.
+  * For a User, the Kit Controller handles requests for searching, creating (custom kits), and get kits that are available.
+  * For the admin, the Kit Controller handles requests relating to the creation, deletion, and updating of kits in the store.
+  * **Endpoints:**
+      - POST /kits/create: Create a new kit object and add to inventory or to cart (if user makes a custom kit)
+      - GET /kits?name=: searches for any kits that have the following text or name
+      - GET /kits: get every kit that is on the store/site
+      - GET /kits/{id}: get a specific kit based on its id, if it exists
+      - PUT /kits: update a kit with new information (as a new kit class object)
+      - DELETE /kits/{id}: delete a specific kit based on its id, if it exists
+        
+- Order Controller
+  * Order Controller handles HTTP requests relating to the management of orders and order history in our e-store. This manages updating and getting a customer's order history for a specified user.
+  * The controller includes request to get the order history of a user, searching thorugh that user's order history, added to a user's order history, and getting a specific order by id.
+  * **Endpoints:**
+      - POST /orders/create?username=&kitsJson=: create a new order for a user based on their username and kits that were purchased in that order (saved as a json string through the front end)
+      - GET /orders/{name}/?user=: search all the orders and a user's order history through their username with a specific substring of text provided by that user
+      - GET /orders?user=: get all the orders and a user's order history based on their username
+      - GET /orders/getSpecific/{id}: get a specific order based on its id, if it exists
+   
+- Shopping Cart Controller
+  * Shopping Cart Controller handles all operations for a user's shopping cart.
+  * This includes methods to add a kit to a user's cart, remove from cart, get kits in the cart, caluculate total cost, and clearing the cart
+  * **Endpoints:**
+      - POST /cart/add/{userId}/{id}/{quantity}: add a kit to a user's specific shopping cart based on the quantity requsted by the user
+      - DELETE /cart/remove/{userId}/{id}/{quantity}: remove a specific amount of a kit from the user's shopping cart, if it already exists in the shop
+      - GET /cart/{userid}: Retrienve a user's kits in cart, excluding the products within the cart
+      - GET /cart/fullkits/{userId}: Retrienve a user's kits in cart, including all relevant information of the kit, including all products within the kit
+      - GET /cart/total/{userId}: Calculate the total cost of a user's cart based on all the kits currently in their cart
+      - DELETE /cart/clear/{userId}: clear out a user's cart to be empty, if it is not already empty
+   
+- User Controller
+  * User Controller handles all requests and operations that pertain to a single user in the e-store. This includes being able to register or sign in to the store account, editing information about the user, and getting/deleting users from the e-store
+  * **Endpoints:**
+      - POST /users/register?username=&password=&name=: Register a new user to the e-store provided with a username (must be unique), password, and name
+      - GET /users/getById/{id}: get a specific user based on their user ID
+      - GET /users/getByUsername/{username}: get a specific user based on their username
+      - PUT /users/update/{id}/u?username=: update a user's username, provided that it does not already exist in the store
+      - PUT /users/update/{id}/p?password=: update a user's password
+      - PUT /users/update/{id}/n?name=: update the name of the user
+      - DELETE /users/delete/{id}: delete a user from the store based on their user id
+      - POST /users/login?username=&password=: attempt to login a user to the store, provided they input their correct username and password
+  * Inside the User Controller, we also created a login response that helps return a message to the front end UI when a user attempts to login:
+      - LoginResponse (constructor): creates a new LoginResponse object based on the login HTTP method
+      - GETTERS: getUserId, getUserType (needed to display correct page), getMessage
+
+<!-- _**[Sprint 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
 > Tier above._
 
 > _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
 > static models (UML class diagrams) with some details such as critical attributes and methods._
-> 
-![Replace with your ViewModel Tier class diagram 1, etc.](model-placeholder.png)
+> -->
 
 ### Model Tier
-The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, and User classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files. 
+The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, and User classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files.
 
-> _**[Sprint 3 & 4]** Provide a summary of this tier of your architecture. This
-> section will follow the same instructions that are given for the View
-> Tier above._
+**Product Model**: The product model is the core model that is used to build a kit model. The product model represents a singular product in our estore. The product model contains the following information about a certain product: products name, price, the quantity of the product in inventory, and the id of the product. The model also contains methods to access of this said information as well as update the name, price, and the quantity of the product in inventory.
 
-> _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
-> static models (UML class diagrams) with some details such as critical attributes and methods._
-> 
-![Replace with your Model Tier class diagram 1, etc.](model-placeholder.png)
+**Kit Model**: A kit on the estore is made up of one or more products and this is reflected in the design of the kit model class. While the kit model class does not hold any actual product models, it contains the ids of the products which you would reviece if you where to order a kit. The kit model class contains the following information, the id of the kit, the name of the kit, the price of the kit, the quantity of the kit remaining in inventory, and the ids' of the products that make up the kit. There are methods to access the kit's name, price, quantity in inventory, and the ids' of the products that make up that kit. There are also methods to modify the name of the kit, its price, quantity in inventory, and the products that make up the kit.
+
+**User Model**: The user is the person who uses the estore and depending on their role they can do a range of things from adding items to shopping cart to modifying inventory. The user model contains the following information: the user id, the username, the user's password, the user's name, the and role of the user. There are methods which allows one to access all the preivously stated information about the user. There are also methods to modify and set the user's name, password, username, and role. 
+
+**ShoppingCart Model**: The shopping cart model represents the estore's actual shopping cart. User's will add different instances of the kit model to the ShoppingCart model. The ShoppingCart model will then hold these kit instance in a map with the Kit instance being the key and the integer being the quantity of this kit in the shopping cart. The ShoppingCart has methods which allow you to add kits to the shopping cart, remove kits from the shopping cart, clear the shopping cart, see if a kit exists in the current shopping cart, and get the total price of all the kits in the shopping cart. 
+
+**ShoppingCartKit Model**: The ShoppingCartKit model was designed as a helper class so that information that we did not want to show the user was hidden. With the ShoppingCart model class every ascpect and infomration about a kit was shown in the actual shopping cart, this includes the products that make up the kit. We did not want users to see these products as it may confuse. Thus a design decision was made to hide this information from the front end by modifiying the backend. The ShoppingCartKit model class has methods to retreive the kit name, kit price, and quantity of this specific kit within the shopping cart itself. However, it does not have any methods to modify these values. 
+
 
 ## OO Design Principles
 
@@ -256,29 +319,18 @@ User Stories passing some acceptance criteria: 0
 User Stories not under testing yet: 0 
 
 ### Unit Testing and Code Coverage
-For our project, we aimed for a target that is generally considered industry standard:
+For our project, we aimed for a target that is generally considered industry standard. We aimed for a complete code coverage of 95% or higher for this application. The follwoing sections break down the code coverage for each area of our application's code. 
 
-## Model layer:
-Strive for **100% coverage** as these are usually straightforward to test and critical for application integrity.
+#### Model layer:
+Our target goal for this Layer was 100%. We achieved **97% coverage**, missing instructions mainly in the `Order` and `User.UserRole` elements. While not at 100%, it's very close to our target, indicating a high degree of test completeness for the foundational data structures of our application.
 
-## Persistence layer:
-Target **above 95%** because this layer interacts with storage mechanisms and is often prone to edge cases.
+#### Persistence layer:
+Our target goal for this layer was 95%. We achieved **99% coverage**, surpassing our target. This suggests that our tests are effectively exercising the code responsible for data storage and retrieval operations. A closer look at missed branches, particularly in `KitFileDAO` and `InventoryFileDAO`, will be needed to ensure no critical edge cases are overlooked.
 
-## Controller layer:
-Aim for **at least 90% coverage** as controllers handle a lot of business logic and routing which are crucial for the correct functioning of the API endpoints.
+#### Controller layer:
+Our target for this layer was 90%. We achieved **99% coverage**, exceeding our target. This is excellent, indicating comprehensive testing of the application's business logic and request handling. The `ShoppingCartController` has slightly lower branch coverage at 93%, suggesting there may be some conditional logic that isn't fully tested.
 
-The unit test code coverage report for our project reveals the following insights:
-
-## Model layer:
-Achieved **97% coverage**, missing instructions mainly in the `Order` and `User.UserRole` elements. While not at 100%, it's very close to our target, indicating a high degree of test completeness for the foundational data structures of our application.
-
-## Persistence layer:
-Achieved **99% coverage**, surpassing our target. This suggests that our tests are effectively exercising the code responsible for data storage and retrieval operations. A closer look at missed branches, particularly in `KitFileDAO` and `InventoryFileDAO`, will be needed to ensure no critical edge cases are overlooked.
-
-## Controller layer:
-Achieved **99% coverage**, exceeding our target. This is excellent, indicating comprehensive testing of the application's business logic and request handling. The `ShoppingCartController` has slightly lower branch coverage at 93%, suggesting there may be some conditional logic that isn't fully tested.
-
-Overall, the code coverage met or exceeded our targets in most areas, reflecting a robust testing regime. However, there are some missed branches and instructions noted, which highlights areas for improvement. It's essential to review these gaps, as they may point to untested scenarios that could impact the application's stability or reveal potential bugs. Improving the test cases to cover these areas will ensure higher reliability and maintainability of the code base.
+Overall, the code coverage met or exceeded our targets in most areas, reflecting a robust testing regime. Our overall code coverage well exceeded the 90% target set for this application. However, there are some missed branches and instructions noted, which highlights areas for improvement. It's essential to review these gaps, as they may point to untested scenarios that could impact the application's stability or reveal potential bugs. Improving the test cases to cover these areas will ensure higher reliability and maintainability of the code base.
 
 
 **[Sprint 2 Code Coverage]**
