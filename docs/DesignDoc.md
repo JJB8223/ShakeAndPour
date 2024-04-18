@@ -230,14 +230,13 @@ interacts with the ProductDAO class, which is the service for the project.
       - LoginResponse (constructor): creates a new LoginResponse object based on the login HTTP method
       - GETTERS: getUserId, getUserType (needed to display correct page), getMessage
 
-> _**[Sprint 4]** Provide a summary of this tier of your architecture. This
+<!-- _**[Sprint 4]** Provide a summary of this tier of your architecture. This
 > section will follow the same instructions that are given for the View
 > Tier above._
 
 > _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
 > static models (UML class diagrams) with some details such as critical attributes and methods._
-> 
-![Replace with your ViewModel Tier class diagram 1, etc.](model-placeholder.png)
+> -->
 
 ### Model Tier
 The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, and User classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files.
@@ -252,14 +251,6 @@ The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit
 
 **ShoppingCartKit Model**: The ShoppingCartKit model was designed as a helper class so that information that we did not want to show the user was hidden. With the ShoppingCart model class every ascpect and infomration about a kit was shown in the actual shopping cart, this includes the products that make up the kit. We did not want users to see these products as it may confuse. Thus a design decision was made to hide this information from the front end by modifiying the backend. The ShoppingCartKit model class has methods to retreive the kit name, kit price, and quantity of this specific kit within the shopping cart itself. However, it does not have any methods to modify these values. 
 
-> _**[Sprint 3 & 4]** Provide a summary of this tier of your architecture. This
-> section will follow the same instructions that are given for the View
-> Tier above._
-
-> _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
-> static models (UML class diagrams) with some details such as critical attributes and methods._
-> 
-![Replace with your Model Tier class diagram 1, etc.](model-placeholder.png)
 
 ## OO Design Principles
 
@@ -328,29 +319,18 @@ User Stories passing some acceptance criteria: 0
 User Stories not under testing yet: 0 
 
 ### Unit Testing and Code Coverage
-For our project, we aimed for a target that is generally considered industry standard:
+For our project, we aimed for a target that is generally considered industry standard. We aimed for a complete code coverage of 95% or higher for this application. The follwoing sections break down the code coverage for each area of our application's code. 
 
-## Model layer:
-Strive for **100% coverage** as these are usually straightforward to test and critical for application integrity.
+#### Model layer:
+Our target goal for this Layer was 100%. We achieved **97% coverage**, missing instructions mainly in the `Order` and `User.UserRole` elements. While not at 100%, it's very close to our target, indicating a high degree of test completeness for the foundational data structures of our application.
 
-## Persistence layer:
-Target **above 95%** because this layer interacts with storage mechanisms and is often prone to edge cases.
+#### Persistence layer:
+Our target goal for this layer was 95%. We achieved **99% coverage**, surpassing our target. This suggests that our tests are effectively exercising the code responsible for data storage and retrieval operations. A closer look at missed branches, particularly in `KitFileDAO` and `InventoryFileDAO`, will be needed to ensure no critical edge cases are overlooked.
 
-## Controller layer:
-Aim for **at least 90% coverage** as controllers handle a lot of business logic and routing which are crucial for the correct functioning of the API endpoints.
+#### Controller layer:
+Our target for this layer was 90%. We achieved **99% coverage**, exceeding our target. This is excellent, indicating comprehensive testing of the application's business logic and request handling. The `ShoppingCartController` has slightly lower branch coverage at 93%, suggesting there may be some conditional logic that isn't fully tested.
 
-The unit test code coverage report for our project reveals the following insights:
-
-## Model layer:
-Achieved **97% coverage**, missing instructions mainly in the `Order` and `User.UserRole` elements. While not at 100%, it's very close to our target, indicating a high degree of test completeness for the foundational data structures of our application.
-
-## Persistence layer:
-Achieved **99% coverage**, surpassing our target. This suggests that our tests are effectively exercising the code responsible for data storage and retrieval operations. A closer look at missed branches, particularly in `KitFileDAO` and `InventoryFileDAO`, will be needed to ensure no critical edge cases are overlooked.
-
-## Controller layer:
-Achieved **99% coverage**, exceeding our target. This is excellent, indicating comprehensive testing of the application's business logic and request handling. The `ShoppingCartController` has slightly lower branch coverage at 93%, suggesting there may be some conditional logic that isn't fully tested.
-
-Overall, the code coverage met or exceeded our targets in most areas, reflecting a robust testing regime. However, there are some missed branches and instructions noted, which highlights areas for improvement. It's essential to review these gaps, as they may point to untested scenarios that could impact the application's stability or reveal potential bugs. Improving the test cases to cover these areas will ensure higher reliability and maintainability of the code base.
+Overall, the code coverage met or exceeded our targets in most areas, reflecting a robust testing regime. Our overall code coverage well exceeded the 90% target set for this application. However, there are some missed branches and instructions noted, which highlights areas for improvement. It's essential to review these gaps, as they may point to untested scenarios that could impact the application's stability or reveal potential bugs. Improving the test cases to cover these areas will ensure higher reliability and maintainability of the code base.
 
 
 **[Sprint 2 Code Coverage]**
