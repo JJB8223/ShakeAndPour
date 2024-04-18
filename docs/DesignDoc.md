@@ -110,15 +110,16 @@ The following Tiers/Layers model shows a high-level view of the webapp's archite
 
 The web application, is built using the Model–View–ViewModel (MVVM) architecture pattern. 
 
-The Model stores the application data objects including any functionality to provide persistance. 
+The Model stores the application data objects including any functionality to provide persistance. This is done using classes to represent data, such as Kits and Products, and with DAO classes to save and read that data. The DAO classes also interact with the ViewModel tier. 
 
-The View is the client-side SPA built with Angular utilizing HTML, CSS and TypeScript. The ViewModel provides RESTful APIs to the client (View) as well as any logic required to manipulate the data objects from the Model.
+The View is the client-side SPA built with Angular utilizing HTML, CSS and TypeScript. This is accomplished using angular components to display the UI to users, and angular services to interact with the ViewModel tier.
+
+The ViewModel provides RESTful APIs to the client (View) as well as any logic required to manipulate the data objects from the Model. This is accomplished using controller classes that accept requests from the View tier and accesses DAO classes in the model tier through dependency injection.
 
 Both the ViewModel and Model are built using Java and Spring Framework. Details of the components within these tiers are supplied below.
 
 
 ### Overview of User Interface
-<!-- _Provide a summary of the application's user interface.  Describe, from the user's perspective, the flow of the pages in the web application.-->
 
 The user is first directed to the login page. Here, they can either log into the store using a username and password that they already created or they can register with their name and their desired username and password. Ordinary users log in with their own credentials, but the store owner can log in using the reserved username "admin" and their own password. 
 
@@ -127,11 +128,6 @@ Upon logging in as an ordinary user, the user will see a home page displaying th
 Upon logging in as an admin, the store owner is directed to the administrator dashboard. Here they are presented with the option to add a new product, edit an existing product, or delete an existing product. These 3 options also exist for drink kits. Similar to an ordinary, the admin also has a bar of buttons displayed at the top of the page to allow them to navigate the store. They can visit the dashboard, which contains products and has the ability to search for a product by name. They can visit a special products page which allows them to quickly view, add, and delete products in the inventory. They can also go to the admin dashboard, the same page they are directed to on logging in, and they can log out.
 
 ### View Tier
-<!-- _**[Sprint 4]** Provide a summary of the View Tier UI of your architecture.
-> Describe the types of components in the tier and describe their
-> responsibilities.  This should be a narrative description, i.e. it has
-> a flow or "story line" that the reader can follow._-->
-
 
 The View Tier of the Shake and Pour website consists of sixteen components, each with specific roles in managing the user interface and interactions. These components handle tasks such as user authentication, product management, order history, shopping cart management, and debugging. Together, they form a cohesive system that facilitates user navigation and interaction within the e-store environment.
 
