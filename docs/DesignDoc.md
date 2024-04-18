@@ -239,18 +239,32 @@ interacts with the ProductDAO class, which is the service for the project.
 > -->
 
 ### Model Tier
-The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, and User classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files.
+The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, User, and Order classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files.
 
 **Product Model**: The product model is the core model that is used to build a kit model. The product model represents a singular product in our estore. The product model contains the following information about a certain product: products name, price, the quantity of the product in inventory, and the id of the product. The model also contains methods to access of this said information as well as update the name, price, and the quantity of the product in inventory.
-
+#### The UML for the Product Model
+![Product Model UML Diagram](product-uml.png)
+ 
 **Kit Model**: A kit on the estore is made up of one or more products and this is reflected in the design of the kit model class. While the kit model class does not hold any actual product models, it contains the ids of the products which you would reviece if you where to order a kit. The kit model class contains the following information, the id of the kit, the name of the kit, the price of the kit, the quantity of the kit remaining in inventory, and the ids' of the products that make up the kit. There are methods to access the kit's name, price, quantity in inventory, and the ids' of the products that make up that kit. There are also methods to modify the name of the kit, its price, quantity in inventory, and the products that make up the kit.
+#### The UML for the Kit Model
+![Kit UML Diagram](kit-uml.png)
 
 **User Model**: The user is the person who uses the estore and depending on their role they can do a range of things from adding items to shopping cart to modifying inventory. The user model contains the following information: the user id, the username, the user's password, the user's name, the and role of the user. There are methods which allows one to access all the preivously stated information about the user. There are also methods to modify and set the user's name, password, username, and role. 
+#### The UML for the User Model
+![User Model Diagram](user-uml.png)
 
 **ShoppingCart Model**: The shopping cart model represents the estore's actual shopping cart. User's will add different instances of the kit model to the ShoppingCart model. The ShoppingCart model will then hold these kit instance in a map with the Kit instance being the key and the integer being the quantity of this kit in the shopping cart. The ShoppingCart has methods which allow you to add kits to the shopping cart, remove kits from the shopping cart, clear the shopping cart, see if a kit exists in the current shopping cart, and get the total price of all the kits in the shopping cart. 
+#### The UML for the ShoppingCart Model
+![shopping cart model diagram](shopping-cart-uml.png)
+
 
 **ShoppingCartKit Model**: The ShoppingCartKit model was designed as a helper class so that information that we did not want to show the user was hidden. With the ShoppingCart model class every ascpect and infomration about a kit was shown in the actual shopping cart, this includes the products that make up the kit. We did not want users to see these products as it may confuse. Thus a design decision was made to hide this information from the front end by modifiying the backend. The ShoppingCartKit model class has methods to retreive the kit name, kit price, and quantity of this specific kit within the shopping cart itself. However, it does not have any methods to modify these values. 
+#### The UML For the ShoppingCartKit Model
+![Shopping Cart Kit Model Diagram](shoppingcartkit-uml.png)
 
+**Order Model**: The order model represent the past orders/shopping carts a specicfic user ordered. The class has the following follwing information the id of the order, the name of the user who ordered that order, and the kits within that order. There are methods within the class to access all the previously stated information. There are also methods which can set the name of the user who purchased the order, clear kits from the order, and add kits to the order. 
+#### The UML for the Order Model
+![The order model uml](order-uml.png)
 
 ## OO Design Principles
 
@@ -288,7 +302,7 @@ The Open/Closed Principle states that software entities (classes, modules, funct
 
 ### Static Code Analysis Area 1
 ![Sprint 4 Static Code Analysis Image 1](sprint-4-STA-3.png)
-The first major issue that SonarQube detected was the issue that we see in the screenshot above. The variable nextId keeps track of the id number for the next product that we add to the inventory. This number should remain constant throughout every instance of the KitFileDAO class. As a result, this variable is static. However, the method shown above is not static, which can cause issues if this class is instantiated multiple times. We did not notice this issue when developing the application because we only had to instantiate this class once. This issue is present in all DAO classes in the project and should be fixed the next time the code is refactored. The simplest and most effective solution to this is to give nextId an initial value in the class declaration and remove the assignment from the load() method.
+The first major issue that SonarQube detected was the issue that we see in the screenshot above. The variable nextId keeps track of the id number for the next product that we add to the inventory. This number should remain constant throughout every instance of the KitFileDAO class. As a result, this variable is static. However, the load() is not static, which can cause issues if this class is instantiated multiple times. We did not notice this issue when developing the application because we only had to instantiate this class once. This issue is present in all DAO classes in the project and should be fixed the next time the code is refactored. The simplest and most effective solution to this is to give nextId an initial value in the class declaration and remove the assignment from the load() method.
 
 ### Static Code Analysis Area 2
 ![Sprint 4 Static Code Analysis Image 2](sprint-4-STA-2.png)
