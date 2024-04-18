@@ -127,12 +127,6 @@ Upon logging in as an ordinary user, the user will see a home page displaying th
 Upon logging in as an admin, the store owner is directed to the administrator dashboard. Here they are presented with the option to add a new product, edit an existing product, or delete an existing product. These 3 options also exist for drink kits. Similar to an ordinary, the admin also has a bar of buttons displayed at the top of the page to allow them to navigate the store. They can visit the dashboard, which contains products and has the ability to search for a product by name. They can visit a special products page which allows them to quickly view, add, and delete products in the inventory. They can also go to the admin dashboard, the same page they are directed to on logging in, and they can log out.
 
 ### View Tier
-<!-- _**[Sprint 4]** Provide a summary of the View Tier UI of your architecture.
-> Describe the types of components in the tier and describe their
-> responsibilities.  This should be a narrative description, i.e. it has
-> a flow or "story line" that the reader can follow._-->
-
-
 The View Tier of the Shake and Pour website consists of sixteen components, each with specific roles in managing the user interface and interactions. These components handle tasks such as user authentication, product management, order history, shopping cart management, and debugging. Together, they form a cohesive system that facilitates user navigation and interaction within the e-store environment.
 
  To begin, there are the admin, user, and login components. Both admin and user components share similar functionalities, facilitating communication with the backend to modify personal details and view order histories. They also handle routing to other pages or components for seamless navigation. However, the admin component additionally interacts with the backend to manage kits, while the login component manages user authentication.
@@ -149,11 +143,6 @@ The shopping cart component contains selected kits and manages interactions excl
 
 Lastly, the message component serves primarily for debugging during development, functioning akin to a console log. While it can be easily re-enabled for development purposes, it is disabled in the live version of Shake and Pour.
 
-> _**[Sprint 4]** You must  provide at least **2 sequence diagrams** as is relevant to a particular aspects 
-> of the design that you are describing.  (**For example**, in a shopping experience application you might create a 
-> sequence diagram of a customer searching for an item and adding to their cart.)
-> As these can span multiple tiers, be sure to include an relevant HTTP requests from the client-side to the server-side 
-> to help illustrate the end-to-end flow._
 
 #### The Login Functionality Sequence Diagram
 ![Login Sequence Diagram](Login-Seqence-Diagram.png)
@@ -161,11 +150,6 @@ Lastly, the message component serves primarily for debugging during development,
 #### Add to Cart Functionality Sequence Diagram
 ![Add to cart sequence diagram](add-to-shopping-cart-diagram.png)
 
-> _**[Sprint 4]** To adequately show your system, you will need to present the **class diagrams** where relevant in your design. Some additional tips:_
- >* _Class diagrams only apply to the **ViewModel** and **Model** Tier_
->* _A single class diagram of the entire system will not be effective. You may start with one, but will be need to break it down into smaller sections to account for requirements of each of the Tier static models below._
- >* _Correct labeling of relationships with proper notation for the relationship type, multiplicities, and navigation information will be important._
- >* _Include other details such as attributes and method signatures that you think are needed to support the level of detail in your discussion._
 
 ### ViewModel Tier
 Our ViewModel Tier is implemented through Java and the REST API ProductController class. The controller 
@@ -230,13 +214,6 @@ interacts with the ProductDAO class, which is the service for the project.
       - LoginResponse (constructor): creates a new LoginResponse object based on the login HTTP method
       - GETTERS: getUserId, getUserType (needed to display correct page), getMessage
 
-<!-- _**[Sprint 4]** Provide a summary of this tier of your architecture. This
-> section will follow the same instructions that are given for the View
-> Tier above._
-
-> _At appropriate places as part of this narrative provide **one** or more updated and **properly labeled**
-> static models (UML class diagrams) with some details such as critical attributes and methods._
-> -->
 
 ### Model Tier
 The Model tier is represented by our Kit, Product, ShoppingCart, ShoppingCartKit, User, and Order classes. These represent data given by the ViewModel tier. These classes create Java objects that are then stored by their corresponding FileDAO classes that then store the data in JSON files.
