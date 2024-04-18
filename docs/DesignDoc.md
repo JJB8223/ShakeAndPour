@@ -226,16 +226,15 @@ If our team had additional time there are several elements of the code which we 
 ## Testing
 
 ### Acceptance Testing
-> _**[Sprint 4]** Report on the number of user stories that have passed all their
-> acceptance criteria tests, the number that have some acceptance
-> criteria tests failing, and the number of user stories that
-> have not had any testing yet. Highlight the issues found during
-> acceptance testing and if there are any concerns._
-
-Note: All stories for sprints 1 & 2 are passing their acceptance criteria
+End of Sprint 2 Acceptance Testing (All stories for sprints 1 & 2 are passing their acceptance criteria)
 User Stories passing all acceptance criteria: 14
 User Stories passing some acceptance criteria: 0
 User Stories not under testing yet: 14
+
+Sprint 4 Acceptance Testing: 
+User Stories passing all acceptance criteria: 28
+User Stories passing some acceptance criteria: 0
+User Stories not under testing yet: 0 
 
 ### Unit Testing and Code Coverage
 For our project, we aimed for a target that is generally considered industry standard:
