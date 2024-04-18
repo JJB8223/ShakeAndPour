@@ -66,7 +66,7 @@ The two feature enhancements that we have implemented for this project are custo
 
 This section describes the application domain.
 
-![Domain Model](domain-analysis.png)
+![Domain Model](FinalDomainAnalysis.png)
 
 MVP:
 
