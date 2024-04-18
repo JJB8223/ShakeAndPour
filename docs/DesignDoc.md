@@ -148,7 +148,7 @@ Lastly, the message component serves primarily for debugging during development,
 ![Login Sequence Diagram](Login-Seqence-Diagram.png)
 
 #### Add to Cart Functionality Sequence Diagram
-![Add to cart sequence diagram](add-to-shopping-cart-diagram.png)
+![Add to cart sequence diagram](Shopping-Cart-Sequence-Diagram.png)
 
 
 ### ViewModel Tier
